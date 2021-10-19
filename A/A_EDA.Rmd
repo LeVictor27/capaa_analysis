@@ -1,0 +1,88 @@
+---
+title: 'Section A: Student-level Changes during COVID-19'
+author: "Alex Liu"
+date: "`r format(Sys.Date(), format = '%B %d, %Y')`"
+output: html_document
+        toc: true
+        toc_float: true
+        fig_width: 8
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      comment = NA, 
+                      cache = TRUE,
+                      warning = FALSE,
+                      message = FALSE, 
+                      cache.lazy = FALSE,
+                      fig.align = "center"
+                      )
+```
+
+# Introduction
+
+```{r data, include=FALSE}
+library(tidyverse)
+library(googledrive)
+
+id_enrollment <- drive_get(as_id("https://drive.google.com/file/d/1hfVC_BgnUF6lBJYcGf6lhtMQOxEdig2v/view?usp=sharing"))
+id_graduation_pathways <- drive_get(as_id("https://drive.google.com/file/d/1hgO_VNQ2DdDtPBAa_Mtdkq1JhwPSD4uI/view?usp=sharing"))
+id_reopening_survey <- drive_get(as_id("https://drive.google.com/file/d/1YbyBi1LfHz36aLyVItJs6mJ4nNWxuUkd/view?usp=sharing"))
+id_course_outcomes_by_student <- drive_get(as_id("https://drive.google.com/file/d/1hfA_RgRAldfsLXzH6hg776kV_x96xDgI/view?usp=sharing"))
+id_course_outcomes_by_outcome <- drive_get(as_id("https://drive.google.com/file/d/1hcUTvX5xYIVyejpyS73z0Xo-64w2uRCZ/view?usp=sharing"))
+
+df_enrollment = id_enrollment %>%
+  drive_read_string() %>%
+  read_csv(col_names=TRUE)
+#https://data.wa.gov/Education/OSPI-Enrollment-Changes-2019-20-to-2020-21/5u4d-iirb
+
+df_graduation_pathways = id_graduation_pathways %>%
+  drive_read_string() %>%
+  read_csv(col_names=TRUE)
+#https://data.wa.gov/Education/Data-Displays-Graduation-Pathways-OSPI/nxmy-bggx
+
+df_reopening_survey = id_reopening_survey %>%
+  drive_read_string() %>%
+  read_csv(col_names=TRUE)
+#https://data.wa.gov/dataset/School-Facility-ReOpening-Survey/9i5d-c2m8
+
+df_course_outcomes_by_student = id_course_outcomes_by_student %>%
+  drive_read_string() %>%
+  read_csv(col_names=TRUE)
+#https://data.wa.gov/Education/Student-Course-Outcomes-by-Student/f4u4-uezp
+
+df_course_outcomes_by_outcome = id_course_outcomes_by_outcome %>%
+  drive_read_string() %>%
+  read_csv(col_names=TRUE)
+#https://data.wa.gov/dataset/Student-Course-Outcomes-by-Outcome/cjza-wqsm
+
+```
+
+
+```{r enrollment, include=FALSE}
+
+df_enrollment
+
+```
+
+
+```{r graduation, include=FALSE}
+
+df_graduation_pathways
+
+```
+
+
+```{r reopening, include=FALSE}
+
+df_reopening_survey
+
+```
+
+
+```{r course_outcomes, include=FALSE}
+
+df_course_outcomes_by_student
+
+df_course_outcomes_by_outcome
+```
