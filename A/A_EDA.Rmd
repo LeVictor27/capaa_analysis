@@ -30,31 +30,39 @@ id_graduation_pathways <- drive_get(as_id("https://drive.google.com/file/d/1hgO_
 id_reopening_survey <- drive_get(as_id("https://drive.google.com/file/d/1YbyBi1LfHz36aLyVItJs6mJ4nNWxuUkd/view?usp=sharing"))
 id_course_outcomes_by_student <- drive_get(as_id("https://drive.google.com/file/d/1hfA_RgRAldfsLXzH6hg776kV_x96xDgI/view?usp=sharing"))
 id_course_outcomes_by_outcome <- drive_get(as_id("https://drive.google.com/file/d/1hcUTvX5xYIVyejpyS73z0Xo-64w2uRCZ/view?usp=sharing"))
+id_discipline <- drive_get(as_id("https://drive.google.com/file/d/1hkh1eV3QJ0ZkJRRB1VIlUIaJDE4yYoYF/view?usp=sharing"))
 
-df_enrollment = id_enrollment %>%
+df_enrollment <- id_enrollment %>%
   drive_read_string() %>%
   read_csv(col_names=TRUE)
 #https://data.wa.gov/Education/OSPI-Enrollment-Changes-2019-20-to-2020-21/5u4d-iirb
 
-df_graduation_pathways = id_graduation_pathways %>%
+df_graduation_pathways <- id_graduation_pathways %>%
   drive_read_string() %>%
   read_csv(col_names=TRUE)
 #https://data.wa.gov/Education/Data-Displays-Graduation-Pathways-OSPI/nxmy-bggx
 
-df_reopening_survey = id_reopening_survey %>%
+df_reopening_survey <- id_reopening_survey %>%
   drive_read_string() %>%
   read_csv(col_names=TRUE)
 #https://data.wa.gov/dataset/School-Facility-ReOpening-Survey/9i5d-c2m8
 
-df_course_outcomes_by_student = id_course_outcomes_by_student %>%
+df_course_outcomes_by_student <- id_course_outcomes_by_student %>%
   drive_read_string() %>%
   read_csv(col_names=TRUE)
 #https://data.wa.gov/Education/Student-Course-Outcomes-by-Student/f4u4-uezp
 
-df_course_outcomes_by_outcome = id_course_outcomes_by_outcome %>%
+df_course_outcomes_by_outcome <- id_course_outcomes_by_outcome %>%
   drive_read_string() %>%
   read_csv(col_names=TRUE)
 #https://data.wa.gov/dataset/Student-Course-Outcomes-by-Outcome/cjza-wqsm
+
+df_discpline <- id_discipline %>%
+  drive_read_string() %>%
+  read_csv(col_name=TRUE)
+
+#OSPI Suppression Rules
+#https://k12.wa.us/sites/default/files/public/StudentInformation/SuppressionRulesforPublicReporting.pdf
 
 ```
 
