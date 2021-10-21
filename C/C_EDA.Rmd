@@ -1,0 +1,66 @@
+---
+title: 'Section C: Distribution of Teacher Resources in Washington'
+author: "Pooya Almasi"
+date: "`r format(Sys.Date(), format = '%B %d, %Y')`"
+output: html_document
+        toc: true
+        toc_float: true
+        fig_width: 8
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      comment = NA, 
+                      cache = TRUE,
+                      warning = FALSE,
+                      message = FALSE, 
+                      cache.lazy = FALSE,
+                      fig.align = "center"
+                      )
+```
+
+
+```{r data, include=FALSE}
+
+library(tidyverse)
+library(googledrive)
+library(haven)
+
+id_s275_2015_2019 <- drive_get(as_id("https://drive.google.com/file/d/1wV5hiz5lJvHC-FljTl4Np1UynNoLTP88/view?usp=sharing"))
+
+id_s275_2020<- drive_get(as_id("https://drive.google.com/file/d/1weEr_ZuFLyKYxPE_raj_6pWnov-2yJd2/view?usp=sharing"))
+
+df_s275_2015_2019 <- id_s275_2015_2019 %>%
+  drive_read_raw() %>%
+  read_dta()
+
+df_s275_2020 <- id_s275_2020 %>%
+  drive_read_raw() %>%
+  read_dta()
+
+df_s275_raw <- bind_rows(df_s275_2015_2019, df_s275_2020)
+
+#https://www.k12.wa.us/sites/default/files/public/safs/ins/per/2122/B079-21Attach1.pdf
+
+df_s275 <- df_s275_raw %>%
+  filter(droot == 31 | droot == 32 | droot == 33 | droot == 34) %>%
+  filter(certfte > 0.5) %>%
+  mutate(cou_s = str_pad(as.character(cou), 2, pad="0"),
+         dis_s = str_pad(as.character(dis), 3, pad="0"),
+         coudis_s=paste(cou_s, dis_s, sep=""),
+         lname = str_to_lower(str_trim(LastName)),
+         fname = str_to_lower(str_trim(FirstName)),
+         mname = str_to_lower(str_trim(MiddleName))) %>%
+  distinct_at(vars(schyear, lname, fname, mname, certfte, exp, othersal, 
+                   tfinsal, certbase, clasbase, cert, coudis_s), 
+              .keep_all = TRUE) 
+
+```
+
+```{r distribution}
+
+```
+
+```{r turnover}
+
+```
