@@ -1,0 +1,106 @@
+---
+title: 'Section B: State of Washington School Finance Systems and Structures'
+author: "Katherine Chang"
+date: "`r format(Sys.Date(), format = '%B %d, %Y')`"
+output: html_document
+        toc: true
+        toc_float: true
+        fig_width: 8
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      comment = NA, 
+                      cache = TRUE,
+                      warning = FALSE,
+                      message = FALSE, 
+                      cache.lazy = FALSE,
+                      fig.align = "center"
+                      )
+```
+
+# Introduction
+
+```{r data, include=FALSE}
+library(tidyverse)
+library(googledrive)
+library(haven)
+
+id_f196 <- drive_get(as_id("https://drive.google.com/file/d/1sGIIj3hplOHq7qPL7S7YTmQByzuCcHVU/view?usp=sharing"))
+
+df_f196 <- id_f196 %>%
+  drive_read_raw() %>%
+  read_dta()
+
+df_f196 %>% count(schyear)
+
+df_f196_trim <- df_f196%>%
+  select(
+    "coudis",
+    "schyear",
+    "rev_stloc_18d_Capital",         
+    "rev_stloc_18d_Debt",             
+    "rev_stloc_18d_General",          
+    "rev_stloc_18d_Transport",       
+    "rev_stloc_18d_Total",            
+    "rev_st_18d_Capital",             
+    "rev_st_18d_Debt",               
+    "rev_st_18d_General",             
+    "rev_st_18d_Transport",           
+    "rev_st_18d_Total",
+    "staterev_staffsal_r19_2019_18d", 
+    "staterev_cissal_r19_2019_18d",  
+    "staterev_tchsal_r19_2019_18d",   
+    "staterev_tchsalsm_r19_2019_18d", 
+    "staterev_staffsal_r20_2019_18d",
+    "staterev_cissal_r20_2019_18d",   
+    "localrev_201819Spring",          
+    "localrev_201819Spring_18d", 
+    "dis_enroll",
+    "cpi18")                          
+
+```
+
+Our guiding research questions include:
+
+- How have Washington public schools been funded in the past few years (NEED YEARS), particularly for districts serving high-poverty and students of color? 
+- How have McCleary school finance reforms changed schools funding sources per pupil? 
+- How have these changes varied across districts? 
+- How do schools spend their resources?
+
+
+```{r revenue, include=FALSE}
+
+
+
+```
+
+
+```{r expenditures, include=FALSE}
+
+
+
+```
+
+
+```{r mccleary, include=FALSE}
+
+
+
+```
+
+
+```{r demographics, include=FALSE}
+
+
+
+```
+
+
+```{r maps, include=FALSE}
+
+library(tidycensus)
+library(tigris)
+
+```
+
