@@ -30,6 +30,10 @@ id_s275_2015_2019 <- drive_get(as_id("https://drive.google.com/file/d/1wV5hiz5lJ
 
 id_s275_2020<- drive_get(as_id("https://drive.google.com/file/d/1weEr_ZuFLyKYxPE_raj_6pWnov-2yJd2/view?usp=sharing"))
 
+id_f196 <- drive_get(as_id("https://drive.google.com/file/d/1sGIIj3hplOHq7qPL7S7YTmQByzuCcHVU/view?usp=sharing"))
+
+id_demos <- drive_get(as_id("https://drive.google.com/file/d/1C2Kt_DsoYlz2eB-8z9SB97d5-G2jmYKc/view?usp=sharing"))
+
 df_s275_2015_2019 <- id_s275_2015_2019 %>%
   drive_read_raw() %>%
   read_dta()
@@ -38,17 +42,29 @@ df_s275_2020 <- id_s275_2020 %>%
   drive_read_raw() %>%
   read_dta()
 
+df_f196 <- id_f196 %>%
+  drive_read_raw() %>%
+  read_dta()
+
+df_demos <- id_demos %>%
+  drive_read_raw() %>%
+  read_dta()
+
 df_s275_raw <- bind_rows(df_s275_2015_2019, df_s275_2020)
 
-#https://www.k12.wa.us/sites/default/files/public/safs/ins/per/2122/B079-21Attach1.pdf
+df_s275_raw <- df_s275_raw %>%
+  mutate(cou_s = str_pad(as.character(cou), 2, side="left", pad="0"),
+         dis_s = str_pad(as.character(dis), 3, side="left", pad="0"),
+         coudis_s=paste(cou_s, dis_s, sep=""))
+
+df_s275_raw <- full_join(df_s275_raw, df_f196, by=c("coudis_s"="coudis", "schyear"="schyear"))
+
+df_s275_raw <- full_join(df_s275_raw, df_demos, by=c("coudis_s"="coudis_s", "schyear"="schyr"))
 
 df_s275 <- df_s275_raw %>%
   filter(droot == 31 | droot == 32 | droot == 33 | droot == 34) %>%
-  filter(certfte > 0.5) %>%
-  mutate(cou_s = str_pad(as.character(cou), 2, pad="0"),
-         dis_s = str_pad(as.character(dis), 3, pad="0"),
-         coudis_s=paste(cou_s, dis_s, sep=""),
-         lname = str_to_lower(str_trim(LastName)),
+  filter(certfte > 0.5) %>% 
+  mutate(lname = str_to_lower(str_trim(LastName)),
          fname = str_to_lower(str_trim(FirstName)),
          mname = str_to_lower(str_trim(MiddleName))) %>%
   distinct_at(vars(schyear, lname, fname, mname, certfte, exp, othersal, 
@@ -57,10 +73,30 @@ df_s275 <- df_s275_raw %>%
 
 ```
 
-```{r distribution}
+```{r C1}
 
 ```
 
-```{r turnover}
+```{r C2}
+
+```
+
+```{r C3}
+
+```
+
+```{r C4}
+
+```
+
+```{r C5}
+
+```
+
+```{r C6}
+
+```
+
+```{r C7}
 
 ```
