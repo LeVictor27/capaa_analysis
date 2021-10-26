@@ -66,14 +66,30 @@ df_discpline <- id_discipline %>%
 
 ```
 
+```{r libraries}
+#library(tidyverse)
+library(ggplot2)
+
+```
+
+# Enrollment
+## plot I: counts; year 2021; sorted by races; sorted by income levels; bar = month; grades = kindergaiden & 6th & 9th
 
 ```{r enrollment, include=FALSE}
 
 df_enrollment
-
+all_enrollment <- df_enrollment 
 ```
 
+## plot II: pie charts? datatype: % = each race/all student; year 2021; each monthly; comparison across different grades
 
+## plot III: splitted bar w/ % changes; low-income vs. non-low-income; sorted by years or races?
+
+# Absent
+
+## plot I: datatype?? year 2021 by races; grades: kindergargen, 3, 6, 8, 9, 10; same as the enrollment plot I
+
+## plot II: datatype: % changed; 2019 vs 2021 (ignore 2020); grades: kindergargen, 3, 6, 8, 9, 10; sorted by races and income levels
 ```{r graduation, include=FALSE}
 
 df_graduation_pathways
@@ -87,10 +103,17 @@ df_reopening_survey
 
 ```
 
+# Course Taking 
+## plot I: counts; only use "non-passing grades"; (sorted by races (Excluding Asian); sorted by income levels; )??? sorted by years; bar = race; w/ and w/o reference; reference = state ave
 
+### for II and III, need district shape data, follow instruction on Googledoc
+## plot II: spatial; 
+
+## plot III: spatial;
 ```{r course_outcomes, include=FALSE}
 
 df_course_outcomes_by_student
 
 df_course_outcomes_by_outcome
 ```
+
