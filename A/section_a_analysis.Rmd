@@ -81,7 +81,7 @@ library(reshape2)
 ```
 
 # Enrollment
-### Have trouble with grade-specific df, need to work on scrape from nested pdf (doable but need time consuming). once the datasets ready, the plot I &II code can be used with minimal editing 10/26
+### Have trouble with grade-specific df, need to work on scrape from nested pdf (do-able but time consuming). once the datasets ready, the plot I &II codes can be used with minimal editing 10/26
 
 ## plot I: counts; year 2021; sorted by races; sorted by income levels; bar = month; grades = kindergaiden & 6th & 9th
 
