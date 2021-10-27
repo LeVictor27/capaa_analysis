@@ -2,13 +2,15 @@
 title: 'Section B: State of Washington School Finance Systems and Structures'
 author: "Katherine Chang"
 date: "`r format(Sys.Date(), format = '%B %d, %Y')`"
-output: html_document
-        toc: true
-        toc_float: true
-        fig_width: 8
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    fig_width: 10
+knit: (function(input, encoding) rmarkdown::render(input, output_file = "index.html"))
 ---
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,
                       comment = NA, 
                       cache = TRUE,
@@ -28,36 +30,49 @@ library(haven)
 
 id_f196 <- drive_get(as_id("https://drive.google.com/file/d/1sGIIj3hplOHq7qPL7S7YTmQByzuCcHVU/view?usp=sharing"))
 
+id_f196_expenditures <- drive_get(as_id("https://drive.google.com/file/d/17FERYE8eHgc1WPRoMZV42UC5aeE17SGC/view?usp=sharing")) #2015-2020
+
+id_demos <- drive_get(as_id("https://drive.google.com/file/d/1coJ9kMZUpRmxNyli6xZ31WITaZdyJXIk/view?usp=sharing"))
+
 df_f196 <- id_f196 %>%
   drive_read_raw() %>%
   read_dta()
 
-df_f196 %>% count(schyear)
+df_f196_expenditures <- id_f196_expenditures %>%
+  drive_read_raw() %>%
+  read_dta()
 
-df_f196_trim <- df_f196%>%
-  select(
-    "coudis",
-    "schyear",
-    "rev_stloc_18d_Capital",         
-    "rev_stloc_18d_Debt",             
-    "rev_stloc_18d_General",          
-    "rev_stloc_18d_Transport",       
-    "rev_stloc_18d_Total",            
-    "rev_st_18d_Capital",             
-    "rev_st_18d_Debt",               
-    "rev_st_18d_General",             
-    "rev_st_18d_Transport",           
-    "rev_st_18d_Total",
-    "staterev_staffsal_r19_2019_18d", 
-    "staterev_cissal_r19_2019_18d",  
-    "staterev_tchsal_r19_2019_18d",   
-    "staterev_tchsalsm_r19_2019_18d", 
-    "staterev_staffsal_r20_2019_18d",
-    "staterev_cissal_r20_2019_18d",   
-    "localrev_201819Spring",          
-    "localrev_201819Spring_18d", 
-    "dis_enroll",
-    "cpi18")                          
+df_demos <- id_demos %>%
+  drive_read_raw() %>%
+  read_dta()
+
+
+df_demos_dist <- df_demos %>%
+  mutate(coudis_s = str_pad(as.character(CountyDistrictNumber), 5, side="left", pad="0"),
+         schyear = paste("20", gsub("[0-9]+-", "", SchoolYear), sep=""))%>%
+  group_by(coudis_s, schyear)%>%
+  summarise_at(c("TotalEnrollment",
+                 "NumberAmericanIndianOrAlaskan",
+                 "NumberAsian",
+                 "NumberBlack",
+                 "NumberHispanic",
+                 "NumberAsianPacificIslander",
+                 "NumberMultirac",
+                 "NumberWhite"), 
+               sum)%>% 
+  mutate(schyear=as.numeric(schyear))
+
+df_e_merge_raw <- full_join(df_f196_expenditures, df_demos_dist, by=c("coudis_s"="coudis_s", "schyear"="schyear"))
+
+df_e_merge <- df_e_merge_raw %>%
+  mutate(dist_nstu_soc = rowSums(.[c("NumberAsian", "NumberBlack", "NumberHispanic", "NumberAmericanIndianOrAlaskan", "NumberAsianPacificIslander", "NumberMultirac")], na.rm=TRUE),
+         dist_pctstu_soc = as.numeric(dist_nstu_soc/TotalEnrollment),
+         dist_group_soc = case_when(dist_pctstu_soc >= 0  & dist_pctstu_soc < 0.25 ~ '1',
+                                    dist_pctstu_soc >= 0.25  & dist_pctstu_soc < 0.50 ~ '2',
+                                    dist_pctstu_soc >= 0.50  & dist_pctstu_soc < 0.75 ~ '3',
+                                    dist_pctstu_soc >= 0.75  & dist_pctstu_soc <= 1 ~ '4')
+  )
+
 
 ```
 
@@ -68,39 +83,102 @@ Our guiding research questions include:
 - How have these changes varied across districts? 
 - How do schools spend their resources?
 
-
-```{r revenue, include=FALSE}
-
-
-
-```
-
-
-```{r expenditures, include=FALSE}
+# B1: Revenue source for high- and low-poverty districts
+```{r B1_revenue_poverty, include=FALSE}
 
 
 
 ```
 
+Federal, state, and local revenue source for high- and low-poverty districts
 
-```{r mccleary, include=FALSE}
+# B2: Revenue source for districts serving students of color
 
-
-
-```
-
-
-```{r demographics, include=FALSE}
+```{r B2_revenue_soc, include=FALSE}
 
 
 
 ```
 
+Federal, state, and local revenue source for districts serving students of color
 
-```{r maps, include=FALSE}
+# B3: Spatial distribution of school funding
 
+```{r B3_maps, include=FALSE}
 library(tidycensus)
 library(tigris)
 
+
 ```
+
+Maps of (1) state revenue per pupil; (2) federal revenue per pupil; and (3) local revenue per pupil; (4) total expenditure per-pupil
+
+% change in revenue per pupil over 3 year period (2015-16, 2016-17, 2017-18, 3 year average) to difference of the two year average (2018-19 and 19-2020), divided by average of pre-McCleary as base to get percentage change
+
+# B4: Expenditure categories 
+
+```{r B4_expenditures}
+
+df_e_2020 <- df_e_merge%>%
+  filter(schyear == 2020)%>% 
+  drop_na(dist_group_soc)%>%
+  mutate(dist_group_soc = as.factor(dist_group_soc),
+         amount_pp = (amount/TotalEnrollment))
+
+levels(df_e_2020$dist_group_soc) <- c("0-24%","25-49%","50-74%", "75-100%")
+
+df_e_2020%>%
+  filter(program!=1)%>% #Remove basic education program
+  ggplot(
+    aes(reorder(prog_desc, amount_pp, sum), 
+        amount_pp)) +
+  geom_bar(position="dodge", stat="identity")+
+  coord_flip()+
+  theme(panel.background = element_blank(), 
+        axis.line.x = element_line(color = "#D3D3D3"),
+        panel.grid.major.x = element_line(color = "#D3D3D3"),
+        plot.title.position = "plot"
+        ) +
+  labs(title="Figure. Per-Student Dollar Amount by Expenditure Category, 2019-2020")+
+  xlab("") + 
+  ylab("")
+
+#REVIEW: 
+#Which expenditure category to focus on (filter by federal, state, others)? 
+#Do we want to cut off the categories with minimal amounts? (Traffic Safety and below)
+#There are negative values for the minimum within a category
+
+df_e_2020%>%
+  filter(program!=1)%>% #Remove basic education program
+  ggplot(
+    aes(reorder(prog_desc, amount_pp, sum), 
+        amount_pp, 
+        group=dist_group_soc,
+        fill=dist_group_soc)) +
+  geom_bar(position="dodge", stat="identity")+
+  coord_flip()+
+  theme(panel.background = element_blank(), 
+        axis.line.x = element_line(color = "#D3D3D3"),
+        panel.grid.major.x = element_line(color = "#D3D3D3"),
+        plot.title.position = "plot",
+        legend.position="none") +
+  labs(title = "Figure. Per-Student Dollar Amount by Expenditure Category, 2019-2020",
+       subtitle = "By District Percentage Student of Color ")+
+  xlab("") + 
+  ylab("") +
+  facet_wrap(~dist_group_soc,
+             nrow=1)
+
+#REVIEW:
+#Same questions as above.
+#I separated OSC into quartiles, do we want to categorize them differently? What's both interesting and consumable? 
+
+
+
+```
+
+In Section B4, we present information about expenditure category by two students groups: low- and high-poverty and students of color and white students.
+
+We focus on the 2019-2020 school year, the second year of the McCleary reform.
+
 
