@@ -75,6 +75,7 @@ df_discpline <- id_discipline %>%
 library(tidyverse)
 library(ggplot2)
 library(formattable)
+library(reshape2)
 #library(rJava)
 #library(tabulizer) 
 ```
@@ -86,27 +87,37 @@ library(formattable)
 
 ```{r enrollment, include=FALSE}
 
+months_in_df <- c("October", "November", "December", "January")
+
 enrollment_by_races <- df_enrollment %>%
   filter(StudentGroupType == "Race" | StudentGroupType == "All") %>%
   filter(Measure == "2021 Enrolled") %>%
   select(!c(StudentGroupType, Measure)) 
+  
+long_enroll_by_races <- melt(enrollment_by_races, 
+                             id.vars = "StudentGroup",
+                             measure.vars = months_in_df,
+                             variable.name = "Month",
+                             value.name="EnrollmentCounts") %>%
+  arrange(StudentGroup, Month) 
 
-enrollment_by_races <- as.data.frame(t(enrollment_by_races)) 
-names(enrollment_by_races) <- enrollment_by_races[1, ]
-enrollment_by_races <- enrollment_by_races[-1, ] 
+#enrollment_by_races <- as.data.frame(t(enrollment_by_races)) 
+#names(enrollment_by_races) <- enrollment_by_races[1, ]
+#enrollment_by_races <- enrollment_by_races[-1, ] 
 
-chars <- sapply(enrollment_by_races, is.character)
-enrollment_by_races[ , chars] <- as.data.frame(apply(enrollment_by_races[ , chars], 
-                                                     2, as.numeric))
+#sapply(long_enroll_by_races, class)
+#chars <- sapply(long_enroll_by_races, is.character)
+#long_enroll_by_races[ , chars] <- as.data.frame(apply(long_enroll_by_races[ , chars], 
+#                                                     2, as.numeric))
 
-ggplot(enrollment_by_races,
-       aes(fill= ,
-                          x= `Student Group`, 
-                          y=`All Non-Passing Grades`)) + 
+plot_enroll_count <- long_enroll_by_races %>%
+  filter(StudentGroup != "All Students") %>%
+  ggplot(aes(fill = Month, x = StudentGroup, y = EnrollmentCounts)) + 
   geom_bar(position="dodge", stat="identity") +
-  geom_hline(yintercept = state_ave_18_19) + 
   theme_minimal() +
   coord_flip()
+
+plot_enroll_count
   
 ```
 
@@ -119,11 +130,29 @@ enrollment_perc_races <- data.frame(matrix(NA,
 dimnames(enrollment_perc_races) <- list(rownames(enrollment_by_races), 
                                         colnames(enrollment_by_races))
 
-for (i in 1:nrow(enrollment_by_races)) {
-  for (j in ncol(enrollment_by_races):1) {
-    enrollment_perc_races[i, j] = percent(enrollment_by_races[i, j]/enrollment_by_races[i,1]*100)
+
+for (j in 2:ncol(enrollment_by_races)) {
+  for (i in nrow(enrollment_by_races):1) {
+    enrollment_perc_races[i, j] = percent(enrollment_by_races[i, j]/enrollment_by_races[1,j]*100)
+    enrollment_perc_races[i, 1] = enrollment_by_races[i, 1]
   }
 }
+
+long_enroll_perc_races <- melt(enrollment_perc_races, 
+                             id.vars = "StudentGroup",
+                             measure.vars = months_in_df,
+                             variable.name = "Month",
+                             value.name="EnrollmentPercentage") %>%
+  arrange(StudentGroup, Month) 
+
+plot_enroll_perc <- long_enroll_perc_races %>%
+  filter(StudentGroup != "All Students") %>%
+  ggplot(aes(fill = Month, x = StudentGroup, y = EnrollmentPercentage)) + 
+  geom_bar(position="dodge", stat="identity") +
+  theme_minimal() +
+  coord_flip()
+
+plot_enroll_perc
 
 #add col "other" for pie charts
 
@@ -231,7 +260,7 @@ ggplot(course_by_race,
 
 
 ### for II and III, need district shape data, follow instruction on Googledoc
-### found shapefiles and uploaaded to googledrive 10/26
+### found shapefiles (https://geo.wa.gov/datasets/k12wa::washington-school-district-boundaries/about) and uploaaded to googledrive 10/26
 ## plot II: spatial; 
 
 
