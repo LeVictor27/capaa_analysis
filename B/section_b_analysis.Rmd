@@ -127,11 +127,19 @@ df_e_2020 <- df_e_merge%>%
 
 levels(df_e_2020$dist_group_soc) <- c("0-24%","25-49%","50-74%", "75-100%")
 
-df_e_2020%>%
-  filter(program!=1)%>% #Remove basic education program
+df_e_2020_sum = df_e_2020%>%
+  group_by(coudis_s, prog_desc, dist_group_soc)%>%
+  summarize(amount_pp_total=sum(amount_pp))
+
+df_e_2020_avg = df_e_2020_sum %>%
+  group_by(dist_group_soc, prog_desc)%>%
+  summarize(amount_pp_avg=mean(amount_pp_total))
+
+df_e_2020_avg%>%
+  filter(prog_desc!="Basic Education" & prog_desc!="Districtwide Support")%>% #Remove basic education program and Districtwide support
   ggplot(
-    aes(reorder(prog_desc, amount_pp, sum), 
-        amount_pp)) +
+    aes(reorder(prog_desc, amount_pp_avg, sum), 
+        amount_pp_avg)) +
   geom_bar(position="dodge", stat="identity")+
   coord_flip()+
   theme(panel.background = element_blank(), 
@@ -139,20 +147,19 @@ df_e_2020%>%
         panel.grid.major.x = element_line(color = "#D3D3D3"),
         plot.title.position = "plot"
         ) +
-  labs(title="Figure. Per-Student Dollar Amount by Expenditure Category, 2019-2020")+
+  labs(title="Figure. Average Per-Student Dollar Amount by Expenditure Category, 2019-2020")+
   xlab("") + 
   ylab("")
 
 #REVIEW: 
 #Which expenditure category to focus on (filter by federal, state, others)? 
-#Do we want to cut off the categories with minimal amounts? (Traffic Safety and below)
-#There are negative values for the minimum within a category
+#Do we want to cut off the categories with minimal amounts? 
 
-df_e_2020%>%
-  filter(program!=1)%>% #Remove basic education program
+df_e_2020_avg%>%
+  filter(prog_desc!="Basic Education" & prog_desc!="Districtwide Support")%>% #Remove basic education program and Districtwide support
   ggplot(
-    aes(reorder(prog_desc, amount_pp, sum), 
-        amount_pp, 
+    aes(reorder(prog_desc, amount_pp_avg, sum), 
+        amount_pp_avg, 
         group=dist_group_soc,
         fill=dist_group_soc)) +
   geom_bar(position="dodge", stat="identity")+
@@ -162,19 +169,15 @@ df_e_2020%>%
         panel.grid.major.x = element_line(color = "#D3D3D3"),
         plot.title.position = "plot",
         legend.position="none") +
-  labs(title = "Figure. Per-Student Dollar Amount by Expenditure Category, 2019-2020",
+  labs(title = "Figure. Average Per-Student Dollar Amount by Expenditure Category, 2019-2020",
        subtitle = "By District Percentage Student of Color ")+
   xlab("") + 
   ylab("") +
   facet_wrap(~dist_group_soc,
              nrow=1)
-
 #REVIEW:
 #Same questions as above.
-#I separated OSC into quartiles, do we want to categorize them differently? What's both interesting and consumable? 
-
-
-
+#I separated SOC into quartiles, do we want to categorize them differently? What's both interesting and consumable? 
 ```
 
 In Section B4, we present information about expenditure category by two students groups: low- and high-poverty and students of color and white students.
