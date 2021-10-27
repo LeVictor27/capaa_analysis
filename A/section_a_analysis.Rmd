@@ -19,6 +19,11 @@ knitr::opts_chunk$set(echo = FALSE,
                       )
 ```
 
+#Notes
+## 10/26 
+### issues: obtain grade level df (affect enrollment and absences)
+### to-do: ask about reference line; generalize codes; touch up plots; work on spatial plots.
+
 # Introduction
 
 ```{r data, include=FALSE}
@@ -66,13 +71,17 @@ df_discpline <- id_discipline %>%
 
 ```
 
-```{r libraries}
+```{r libraries, include=FALSE}
 library(tidyverse)
 library(ggplot2)
-
+library(formattable)
+#library(rJava)
+#library(tabulizer) 
 ```
 
 # Enrollment
+### Have trouble with grade-specific df, need to work on scrape from nested pdf (doable but need time consuming). once the datasets ready, the plot I &II code can be used with minimal editing 10/26
+
 ## plot I: counts; year 2021; sorted by races; sorted by income levels; bar = month; grades = kindergaiden & 6th & 9th
 
 ```{r enrollment, include=FALSE}
@@ -90,8 +99,14 @@ chars <- sapply(enrollment_by_races, is.character)
 enrollment_by_races[ , chars] <- as.data.frame(apply(enrollment_by_races[ , chars], 
                                                      2, as.numeric))
 
-#sapply(enrollment_by_races, class)
-#ggplot + geom_bar()
+ggplot(enrollment_by_races,
+       aes(fill= ,
+                          x= `Student Group`, 
+                          y=`All Non-Passing Grades`)) + 
+  geom_bar(position="dodge", stat="identity") +
+  geom_hline(yintercept = state_ave_18_19) + 
+  theme_minimal() +
+  coord_flip()
   
 ```
 
@@ -106,7 +121,7 @@ dimnames(enrollment_perc_races) <- list(rownames(enrollment_by_races),
 
 for (i in 1:nrow(enrollment_by_races)) {
   for (j in ncol(enrollment_by_races):1) {
-    enrollment_perc_races[i, j] = enrollment_by_races[i, j]/enrollment_by_races[i,1]*100
+    enrollment_perc_races[i, j] = percent(enrollment_by_races[i, j]/enrollment_by_races[i,1]*100)
   }
 }
 
@@ -118,6 +133,8 @@ for (i in 1:nrow(enrollment_by_races)) {
 ## plot III: splitted bar w/ % changes; low-income vs. non-low-income; sorted by years or races?
 
 # Absent
+
+### same issue with scraping 10/26
 
 ## plot I: year 2021 by races; grades: kindergargen, 3, 6, 8, 9, 10; same as the enrollment plot I
 
@@ -141,7 +158,6 @@ df_reopening_survey
 ###state ave of all grades? or each grade?? dfs do not have income variables
 ```{r course taking}
 #code need to be generalized and plots need to be touched up
-library(formattable)
 
 course_by_race <- df_course_outcomes_by_outcome %>%
   filter(`Organization Name` == "Washington State" 
@@ -215,6 +231,7 @@ ggplot(course_by_race,
 
 
 ### for II and III, need district shape data, follow instruction on Googledoc
+### found shapefiles and uploaaded to googledrive 10/26
 ## plot II: spatial; 
 
 
