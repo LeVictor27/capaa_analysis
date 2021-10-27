@@ -67,7 +67,7 @@ df_discpline <- id_discipline %>%
 ```
 
 ```{r libraries}
-#library(tidyverse)
+library(tidyverse)
 library(ggplot2)
 
 ```
@@ -77,17 +77,49 @@ library(ggplot2)
 
 ```{r enrollment, include=FALSE}
 
-df_enrollment
-all_enrollment <- df_enrollment 
+enrollment_by_races <- df_enrollment %>%
+  filter(StudentGroupType == "Race" | StudentGroupType == "All") %>%
+  filter(Measure == "2021 Enrolled") %>%
+  select(!c(StudentGroupType, Measure)) 
+
+enrollment_by_races <- as.data.frame(t(enrollment_by_races)) 
+names(enrollment_by_races) <- enrollment_by_races[1, ]
+enrollment_by_races <- enrollment_by_races[-1, ] 
+
+chars <- sapply(enrollment_by_races, is.character)
+enrollment_by_races[ , chars] <- as.data.frame(apply(enrollment_by_races[ , chars], 
+                                                     2, as.numeric))
+
+#sapply(enrollment_by_races, class)
+#ggplot + geom_bar()
+  
 ```
 
-## plot II: pie charts? datatype: % = each race/all student; year 2021; each monthly; comparison across different grades
+## plot II: try pie charts? datatype: % = each race/all student; year 2021; each monthly; comparison across different grades
+```{r enrollment, include=FALSE}
+enrollment_perc_races <- data.frame(matrix(NA,    
+                          nrow = nrow(enrollment_by_races),
+                          ncol = ncol(enrollment_by_races)))
+
+dimnames(enrollment_perc_races) <- list(rownames(enrollment_by_races), 
+                                        colnames(enrollment_by_races))
+
+for (i in 1:nrow(enrollment_by_races)) {
+  for (j in ncol(enrollment_by_races):1) {
+    enrollment_perc_races[i, j] = enrollment_by_races[i, j]/enrollment_by_races[i,1]*100
+  }
+}
+
+#add col "other" for pie charts
+
+```
+
 
 ## plot III: splitted bar w/ % changes; low-income vs. non-low-income; sorted by years or races?
 
 # Absent
 
-## plot I: datatype?? year 2021 by races; grades: kindergargen, 3, 6, 8, 9, 10; same as the enrollment plot I
+## plot I: year 2021 by races; grades: kindergargen, 3, 6, 8, 9, 10; same as the enrollment plot I
 
 ## plot II: datatype: % changed; 2019 vs 2021 (ignore 2020); grades: kindergargen, 3, 6, 8, 9, 10; sorted by races and income levels
 ```{r graduation, include=FALSE}
@@ -104,10 +136,87 @@ df_reopening_survey
 ```
 
 # Course Taking 
-## plot I: counts; only use "non-passing grades"; (sorted by races (Excluding Asian); sorted by income levels; )??? sorted by years; bar = race; w/ and w/o reference; reference = state ave
+## plot I: counts; only use "non-passing grades"; (sorted by races (Excluding Asian); sorted by income levels; 2020-21; bar; w/ and w/o reference; reference = state ave 
+
+###state ave of all grades? or each grade?? dfs do not have income variables
+```{r course taking}
+#code need to be generalized and plots need to be touched up
+library(formattable)
+
+course_by_race <- df_course_outcomes_by_outcome %>%
+  filter(`Organization Name` == "Washington State" 
+         & `School Year` == "2020-21" 
+         & `Student Group` != "Asian"
+         & !is.na(`All Non-Passing Grades`)) %>%
+  select_if(~!all(is.na(.))) %>%
+  mutate(`All Non-Passing Grades` =  percent(`All Non-Passing Grades`))
+
+state_ave_20_21 <- percent('11.0%')
+  
+course_by_race$`Grade Level` <- 
+  factor(course_by_race$`Grade Level`, levels = c("9", "10", "11", "12", "All Grades"))
+
+ggplot(course_by_race,
+       aes(fill= `Grade Level`,
+                          x= `Student Group`, 
+                          y=`All Non-Passing Grades`)) + 
+  geom_bar(position="dodge", stat="identity") +
+  geom_hline(yintercept = state_ave_20_21) + 
+  theme_minimal() +
+  coord_flip()
+
+
+course_by_race <- df_course_outcomes_by_outcome %>%
+  filter(`Organization Name` == "Washington State" 
+         & `School Year` == "2019-20" 
+         & `Student Group` != "Asian"
+         & !is.na(`All Non-Passing Grades`)) %>%
+  select_if(~!all(is.na(.))) %>%
+  mutate(`All Non-Passing Grades` =  percent(`All Non-Passing Grades`))
+
+state_ave_19_20 <- percent('4.8%')
+  
+course_by_race$`Grade Level` <- 
+  factor(course_by_race$`Grade Level`, levels = c("9", "10", "11", "12", "All Grades"))
+
+ggplot(course_by_race,
+       aes(fill= `Grade Level`,
+                          x= `Student Group`, 
+                          y=`All Non-Passing Grades`)) + 
+  geom_bar(position="dodge", stat="identity") +
+  geom_hline(yintercept = state_ave_19_20) + 
+  theme_minimal() +
+  coord_flip()
+
+
+course_by_race <- df_course_outcomes_by_outcome %>%
+  filter(`Organization Name` == "Washington State" 
+         & `School Year` == "2018-19" 
+         & `Student Group` != "Asian"
+         & !is.na(`All Non-Passing Grades`)) %>%
+  select_if(~!all(is.na(.))) %>%
+  mutate(`All Non-Passing Grades` =  percent(`All Non-Passing Grades`))
+
+state_ave_18_19 <- percent('7.4%')
+  
+course_by_race$`Grade Level` <- 
+  factor(course_by_race$`Grade Level`, levels = c("9", "10", "11", "12", "All Grades"))
+
+ggplot(course_by_race,
+       aes(fill= `Grade Level`,
+                          x= `Student Group`, 
+                          y=`All Non-Passing Grades`)) + 
+  geom_bar(position="dodge", stat="identity") +
+  geom_hline(yintercept = state_ave_18_19) + 
+  theme_minimal() +
+  coord_flip()
+```
+
+
 
 ### for II and III, need district shape data, follow instruction on Googledoc
 ## plot II: spatial; 
+
 
 ## plot III: spatial;
 ```{r course_outcomes, include=FALSE}
