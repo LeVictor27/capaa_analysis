@@ -2,10 +2,11 @@
 title: 'Section A: Student-level Changes during COVID-19'
 author: "Alex Liu"
 date: "`r format(Sys.Date(), format = '%B %d, %Y')`"
-output: html_document
-toc_float: true
-toc: true
-fig_width: 8
+output: 
+  html_document:
+  toc: true
+  toc_float: true
+  fig_width: 8
 ---
 
 ```{r include=FALSE}
@@ -76,8 +77,8 @@ library(tidyverse)
 library(ggplot2)
 library(formattable)
 library(reshape2)
-#library(grid)
-#library(gridExtra)
+library(grid)
+library(gridExtra)
 #library(rJava)
 #library(tabulizer) 
 ```
@@ -113,13 +114,19 @@ long_enroll_by_races <- melt(enrollment_by_races,
 
 plot_enroll_count <- long_enroll_by_races %>%
   filter(StudentGroup != "All Students") %>%
-  ggplot(aes(fill = Month, x = StudentGroup, y = EnrollmentCounts)) + 
+  ggplot(aes(fill = Month, 
+             x = StudentGroup, 
+             y = EnrollmentCounts)) + 
   geom_bar(position="dodge", stat="identity") +
+  ggtitle("Enrollment Counts for SY2020-21") +
+        labs(x = "Student Groups", 
+             y = "Enrollment Counts") +
+  theme(axis.text.y = element_text(angle = 45)) +
   theme_minimal() +
   coord_flip()
 
+
 plot_enroll_count #need to reorder fill
-  
 ```
 
 ## plot II: try pie charts? datatype: % = each race/all student; year 2021; each monthly; comparison across different grades
