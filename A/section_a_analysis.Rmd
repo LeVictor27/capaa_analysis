@@ -3,9 +3,9 @@ title: 'Section A: Student-level Changes during COVID-19'
 author: "Alex Liu"
 date: "`r format(Sys.Date(), format = '%B %d, %Y')`"
 output: html_document
-        toc: true
-        toc_float: true
-        fig_width: 8
+toc_float: true
+toc: true
+fig_width: 8
 ---
 
 ```{r include=FALSE}
@@ -76,6 +76,8 @@ library(tidyverse)
 library(ggplot2)
 library(formattable)
 library(reshape2)
+#library(grid)
+#library(gridExtra)
 #library(rJava)
 #library(tabulizer) 
 ```
@@ -85,7 +87,7 @@ library(reshape2)
 
 ## plot I: counts; year 2021; sorted by races; sorted by income levels; bar = month; grades = kindergaiden & 6th & 9th
 
-```{r enrollment, include=FALSE}
+```{r enrollment 1}
 
 months_in_df <- c("October", "November", "December", "January")
 
@@ -107,8 +109,7 @@ long_enroll_by_races <- melt(enrollment_by_races,
 
 #sapply(long_enroll_by_races, class)
 #chars <- sapply(long_enroll_by_races, is.character)
-#long_enroll_by_races[ , chars] <- as.data.frame(apply(long_enroll_by_races[ , chars], 
-#                                                     2, as.numeric))
+#long_enroll_by_races[ , chars] <- as.data.frame(apply(long_enroll_by_races[ , chars], 2, as.numeric))
 
 plot_enroll_count <- long_enroll_by_races %>%
   filter(StudentGroup != "All Students") %>%
@@ -117,12 +118,12 @@ plot_enroll_count <- long_enroll_by_races %>%
   theme_minimal() +
   coord_flip()
 
-plot_enroll_count
+plot_enroll_count #need to reorder fill
   
 ```
 
 ## plot II: try pie charts? datatype: % = each race/all student; year 2021; each monthly; comparison across different grades
-```{r enrollment, include=FALSE}
+```{r enrollment 2}
 enrollment_perc_races <- data.frame(matrix(NA,    
                           nrow = nrow(enrollment_by_races),
                           ncol = ncol(enrollment_by_races)))
@@ -189,10 +190,10 @@ df_reopening_survey
 #code need to be generalized and plots need to be touched up
 
 course_by_race <- df_course_outcomes_by_outcome %>%
-  filter(`Organization Name` == "Washington State" 
-         & `School Year` == "2020-21" 
-         & `Student Group` != "Asian"
-         & !is.na(`All Non-Passing Grades`)) %>%
+  filter(`Organization Name` == "Washington State" & 
+           `School Year` == "2020-21" & 
+           `Student Group` != "Asian" & 
+           !is.na(`All Non-Passing Grades`)) %>%
   select_if(~!all(is.na(.))) %>%
   mutate(`All Non-Passing Grades` =  percent(`All Non-Passing Grades`))
 
@@ -200,6 +201,8 @@ state_ave_20_21 <- percent('11.0%')
   
 course_by_race$`Grade Level` <- 
   factor(course_by_race$`Grade Level`, levels = c("9", "10", "11", "12", "All Grades"))
+
+#p <- list()
 
 ggplot(course_by_race,
        aes(fill= `Grade Level`,
@@ -212,10 +215,10 @@ ggplot(course_by_race,
 
 
 course_by_race <- df_course_outcomes_by_outcome %>%
-  filter(`Organization Name` == "Washington State" 
-         & `School Year` == "2019-20" 
-         & `Student Group` != "Asian"
-         & !is.na(`All Non-Passing Grades`)) %>%
+  filter(`Organization Name` == "Washington State" & 
+           `School Year` == "2019-20" & 
+           `Student Group` != "Asian"& 
+           !is.na(`All Non-Passing Grades`)) %>%
   select_if(~!all(is.na(.))) %>%
   mutate(`All Non-Passing Grades` =  percent(`All Non-Passing Grades`))
 
@@ -235,10 +238,10 @@ ggplot(course_by_race,
 
 
 course_by_race <- df_course_outcomes_by_outcome %>%
-  filter(`Organization Name` == "Washington State" 
-         & `School Year` == "2018-19" 
-         & `Student Group` != "Asian"
-         & !is.na(`All Non-Passing Grades`)) %>%
+  filter(`Organization Name` == "Washington State" & 
+           `School Year` == "2018-19" & 
+           `Student Group` != "Asian" & 
+           !is.na(`All Non-Passing Grades`)) %>%
   select_if(~!all(is.na(.))) %>%
   mutate(`All Non-Passing Grades` =  percent(`All Non-Passing Grades`))
 
@@ -255,6 +258,10 @@ ggplot(course_by_race,
   geom_hline(yintercept = state_ave_18_19) + 
   theme_minimal() +
   coord_flip()
+
+#g_three_year <- arrangeGrob(p[[1]], p[[2]], p[[3]], nrow = 3)
+
+#g_three_year
 ```
 
 
