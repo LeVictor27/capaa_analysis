@@ -1,0 +1,24 @@
+"StudentGroup","October","November","December","January","February"
+"All Students",0.008,0.007,0.006,0.007,0.004
+"English Language Learners ",-0.034,-0.038,-0.04,-0.039,-0.05
+"Non-English Language Learners ",0.012,0.012,0.011,0.012,0.01
+"Low-Income ",-0.005,-0.005,-0.006,-0.005,-0.008
+"Non-Low Income ",0.019,0.017,0.017,0.017,0.015
+"Female ",0.006,0.006,0.005,0.006,0.004
+"Gender X ",1.656,1.621,1.621,1.692,1.664
+"Male ",0.005,0.004,0.003,0.003,0
+"Homeless ",-0.164,-0.163,-0.166,-0.157,-0.168
+"Non-Homeless ",0.013,0.012,0.011,0.012,0.009
+"American Indian/ Alaskan Native ",0.058,0.056,0.064,0.047,0.046
+"Asian ",-0.009,-0.011,-0.013,-0.013,-0.018
+"Black/ African American ",0.04,0.038,0.039,0.039,0.03
+"Hispanic/ Latino of any race(s) ",0.039,0.04,0.039,0.041,0.038
+"Native Hawaian/ Other Pacific Islander ",-0.048,-0.052,-0.047,-0.043,-0.039
+"Two or More Races ",0.066,0.066,0.064,0.067,0.066
+"White ",-0.015,-0.016,-0.017,-0.017,-0.018
+"Non Section 504",0.003,0.002,0.002,0.002,0
+"Section 504",0.084,0.082,0.079,0.081,0.078
+"Students with Disabilities ",0.024,0.026,0.028,0.03,0.027
+"Students without Disabilities ",0.006,0.005,0.003,0.004,0.001
+"Non-Unaccompanied Youth ",0.01,0.009,0.008,0.009,0.007
+"Unaccompanied Youth ",-0.328,-0.325,-0.326,-0.31,-0.335
