@@ -30,12 +30,10 @@ library(haven)
 
 
 id_s275_2015_2019 <- drive_get(as_id("https://drive.google.com/file/d/1wV5hiz5lJvHC-FljTl4Np1UynNoLTP88/view?usp=sharing"))
-
 id_s275_2020<- drive_get(as_id("https://drive.google.com/file/d/1weEr_ZuFLyKYxPE_raj_6pWnov-2yJd2/view?usp=sharing"))
-
 id_f196 <- drive_get(as_id("https://drive.google.com/file/d/1sGIIj3hplOHq7qPL7S7YTmQByzuCcHVU/view?usp=sharing"))
-
 id_demos <- drive_get(as_id("https://drive.google.com/file/d/1C2Kt_DsoYlz2eB-8z9SB97d5-G2jmYKc/view?usp=sharing"))
+id_cwi_2015_2019 <- drive_get(as_id("https://drive.google.com/file/d/1LgEEEMkArFmzhlFmM1qwhfwuV6YIsfPn/view?usp=sharing"))
 
 df_s275_2015_2019 <- id_s275_2015_2019 %>%
   drive_read_raw() %>%
@@ -53,6 +51,12 @@ df_demos <- id_demos %>%
   drive_read_raw() %>%
   read_dta()
 
+df_cwi_2015_2019 <- id_cwi_2015_2019 %>%
+  drive_read_raw() %>%
+  read_csv() %>% 
+  filter(year == 2019) %>% 
+  mutate(dist_id = as.numeric(dist_id))
+
 df_s275_raw <- bind_rows(df_s275_2015_2019, df_s275_2020)
 
 df_s275_raw <- df_s275_raw %>%
@@ -63,6 +67,8 @@ df_s275_raw <- df_s275_raw %>%
 df_s275_raw <- full_join(df_s275_raw, df_f196, by=c("coudis_s"="coudis", "schyear"="schyear"))
 
 df_s275_raw <- full_join(df_s275_raw, df_demos, by=c("coudis_s"="coudis_s", "schyear"="schyr"))
+
+
 
 df_s275 <- df_s275_raw %>%
   filter(droot == 31 | droot == 32 | droot == 33 | droot == 34) %>%
@@ -154,16 +160,139 @@ df_s275 %>%
 
 ```
 
+C.2. Regionalization correlated with teacher salary adjusted local non-teacher wages (which is in the cost index database). Use either bar graph as above, or use the correlation scatter plot similar as below (regionalization factor will be in the x-axis, while average teacher salary for each district in 2019-20 [adjusted for local non-teacher wages] will be in the y-axis). 
 ```{r C2}
 
+df_s275 %>% 
+  filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
+  group_by(codist) %>% 
+  # mutate(avg_dist_salary = mean(staterev_cissal_r19_2019_18d, na.rm = TRUE)) %>% 
+  # mutate(avg_dist_salary = mean(staterev_tchsal_r19_2019_18d, na.rm = TRUE)) %>%
+  mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE),
+         rfactor = as.numeric(as.character(rfactor_cis_2019))) %>%
+  slice_head() %>% 
+  ungroup() %>% 
+  ggplot(aes(x = rfactor, y = avg_dist_salary)) + 
+  geom_text(aes(label = if_else(rfactor == 1 & (avg_dist_salary < 50000 | avg_dist_salary > 85200), as.character(dis_name),
+                                if_else(rfactor == 1.06 & (avg_dist_salary < 70000 | avg_dist_salary > 87000), as.character(dis_name), 
+                                        if_else(dis_name %in% c("Seattle Public Schools", "Lake Washington School District", "Tahoma School District",
+                                                                "Spokane School District", "Tacoma School District"), as.character(dis_name),
+                                                if_else(rfactor == 1.12 & (avg_dist_salary < 70000 | avg_dist_salary > 93000), as.character(dis_name),
+                                                        if_else(rfactor == 1.18 & (avg_dist_salary < 82100 | avg_dist_salary > 95700), as.character(dis_name),
+                                                                if_else(rfactor == 1.24 & avg_dist_salary > 94000, as.character(dis_name),
+                                                                        ''))))))),
+            hjust=0, vjust=0, size = 3, position = position_jitter(width = 0.01, height = 0, seed = 99)) +
+  geom_point(position = position_jitter(width = 0.01, height = 0, seed = 99)) +
+  scale_x_continuous("Regionalization Factor", limits = c(.99, 1.28), breaks = c(1.00, 1.06, 1.12, 1.18, 1.24)) +
+  scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
+  theme_classic() +
+  theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  labs(title = "Scatterplot of (unadjusted) teacher salary and regionalization factor for school districts during AY 2018-2019")
+
+
+
+df_s275 %>% 
+  filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
+  left_join(df_cwi_2015_2019, by = c("codist" = "dist_id")) %>% 
+  group_by(codist) %>% 
+  # mutate(avg_dist_salary = mean(staterev_cissal_r19_2019_18d, na.rm = TRUE)) %>% 
+  # mutate(avg_dist_salary = mean(staterev_tchsal_r19_2019_18d, na.rm = TRUE)) %>%
+  mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE)/cwi,
+         rfactor = as.numeric(as.character(rfactor_cis_2019))) %>%
+  slice_head() %>% 
+  ungroup() %>% 
+  ggplot(aes(x = rfactor, y = avg_dist_salary)) + 
+  # geom_text(aes(label = if_else(rfactor == 1 & (avg_dist_salary < 50000 | avg_dist_salary > 85200), as.character(dis_name),
+  #                               if_else(rfactor == 1.06 & (avg_dist_salary < 70000 | avg_dist_salary > 87000), as.character(dis_name), 
+  #                                       if_else(dis_name %in% c("Seattle Public Schools", "Lake Washington School District", "Tahoma School District",
+  #                                                               "Spokane School District", "Tacoma School District"), as.character(dis_name),
+  #                                               if_else(rfactor == 1.12 & (avg_dist_salary < 70000 | avg_dist_salary > 93000), as.character(dis_name),
+  #                                                       if_else(rfactor == 1.18 & (avg_dist_salary < 82100 | avg_dist_salary > 95700), as.character(dis_name),
+  #                                                               if_else(rfactor == 1.24 & avg_dist_salary > 94000, as.character(dis_name),
+  #                                                                       ''))))))),
+  #           hjust=0, vjust=0, size = 3, position = position_jitter(width = 0.01, height = 0, seed = 99)) +
+  geom_point(position = position_jitter(width = 0.01, height = 0, seed = 99)) +
+  scale_x_continuous("Regionalization Factor", limits = c(.99, 1.28), breaks = c(1.00, 1.06, 1.12, 1.18, 1.24)) +
+  scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
+  theme_classic() +
+  theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  labs(title = "Scatterplot of (adjusted) teacher salary and regionalization factor for school districts during AY 2018-2019",
+       subtitle = "normalized by cost of wage index for each school district")
+
 ```
 
+C.3. Poverty-level correlated with teacher salary adjusted local non-teacher wages (which is in the cost index database). use the correlation scatter plot similar as above in C.2 (poverty rate will be in the x-axis, while average teacher salary for each district for the average of 2018-19 and 2019-20 [adjusted for local non-teacher wages] will be in the y-axis). 
 ```{r C3}
 
-```
+df_s275 %>% 
+  filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
+  group_by(codist) %>% 
+  mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE)) %>% 
+  slice_head() %>%
+  ungroup() %>%
+  ggplot(aes(x = dis_pctstu_frl, y = avg_dist_salary)) + 
+  geom_point() + 
+  geom_smooth(method='lm', formula= y~x) +
+  scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
+  theme_classic() +
+  theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  labs(x = "Share of students receiving FRPL",
+       title = "Scatterplot of (unadjusted) teacher salary and share of FRPL for school districts during AY 2018-2019")
 
+df_s275 %>% 
+  filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
+  left_join(df_cwi_2015_2019, by = c("codist" = "dist_id")) %>% 
+  group_by(codist) %>% 
+  mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE)/cwi) %>% 
+  slice_head() %>%
+  ungroup() %>%
+  ggplot(aes(x = dis_pctstu_frl, y = avg_dist_salary)) + 
+  geom_point() + 
+  geom_smooth(method='lm', formula= y~x) +
+  scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
+  theme_classic() +
+  theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  labs(x = "Share of students receiving FRPL",
+       title = "Scatterplot of (adjusted) teacher salary and share of FRPL for school districts during AY 2018-2019",
+       subtitle = "normalized by cost of wage index for each school district")
+
+```
+C.4. Share of Students of color is correlated with teacher salary adjusted local non-teacher wages (which is in the cost index database). use the correlation scatter plot similar as above in C.2 (percentage points of students of color will be in the x-axis, while average teacher salary for each district the average of 2018-19 and 2019-20 [adjusted for local non-teacher wages] will be in the y-axis). 
 ```{r C4}
 
+df_s275 %>% 
+  filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
+  group_by(codist) %>% 
+  mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE),
+         pctstu_nonwhite = mean(1 - dis_pctstu_white, na.rm = TRUE)) %>% 
+  slice_head() %>%
+  ungroup() %>%
+  ggplot(aes(x = pctstu_nonwhite, y = avg_dist_salary)) + 
+  geom_point() + 
+  geom_smooth(method='lm', formula= y~x) +
+  scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
+  theme_classic() +
+  theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  labs(x = "Share of non-white students",
+       title = "Scatterplot of (unadjusted) teacher salary and share of students of color for school districts during AY 2018-2019")
+
+df_s275 %>% 
+  filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
+  left_join(df_cwi_2015_2019, by = c("codist" = "dist_id")) %>% 
+  group_by(codist) %>% 
+  mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE)/cwi,
+         pctstu_nonwhite = mean(1 - dis_pctstu_white, na.rm = TRUE)) %>% 
+  slice_head() %>%
+  ungroup() %>%
+  ggplot(aes(x = pctstu_nonwhite, y = avg_dist_salary)) + 
+  geom_point() + 
+  geom_smooth(method='lm', formula= y~x) +
+  scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
+  theme_classic() +
+  theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  labs(x = "Share of non-white students",
+       title = "Scatterplot of (adjusted) teacher salary and share of students of color for school districts during AY 2018-2019",
+       subtitle = "normalized by cost of wage index for each school district")
 ```
 
 ```{r C5}
