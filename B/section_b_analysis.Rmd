@@ -115,10 +115,9 @@ Federal, state, and local revenue source for districts serving students of color
 #library(tidycensus)
 #library(tigris)
 #library(tmap)
-#library(sf)
 
 library(leaidr)
-library(leaflet)
+library(sf)
 
 wa <- lea_get("wa")
 
@@ -133,7 +132,6 @@ df_f196_merge <- df_f196_merge%>%
 #What percentage higher than lower than state average for the state/local revenue
 #map demographics, native + latinx student populations
 #native, majority belong to multiracial group
-
 #Distribution of dollars -> district that serve large % of SOC/low-income
 
 ref <- df_f196_merge%>%
