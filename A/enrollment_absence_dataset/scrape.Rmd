@@ -1,0 +1,301 @@
+---
+title: "pdf scrape"
+author: "Alex Liu"
+date: "10/29/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r wd}
+setwd("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset")
+```
+
+```{r packages}
+library(tidyverse)
+library(rJava)
+library(tabulizer)
+library(exploratory)
+#library(formattable)
+library(scales)
+```
+
+```{r enroll six}
+df <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/6th_Monthly Enrollment.pdf",
+                     output = "data.frame",
+                     guess = FALSE)
+
+#write.csv(df[[1]], 
+#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_enrollment_six.csv",
+#          row.names=FALSE)
+
+enroll_six <- df[[1]] %>%
+  slice(6:29)
+
+
+colmn1 <- c("October", "October_6th", "November", "November_6th")
+colmn2 <- c("December", "December_6th", "January", "January_6th")
+colmn3 <- c("February", "February_6th")
+
+enroll_six <- separate(data = enroll_six,
+                 col = Select.View.,
+                 sep = " ",
+                 into = colmn1,
+                 remove = TRUE) 
+enroll_six <- separate(data = enroll_six, 
+                       col = Filter.by.Grade.Levels, 
+                       sep = " ", 
+                       into = colmn2, 
+                       remove = TRUE)
+
+enroll_six <- separate(data = enroll_six,
+                       col = X.1,
+                       sep = " ",
+                       into = colmn3,
+                       remove = TRUE)
+
+for (i in 2: ncol(enroll_six)) {
+  enroll_six[i] <- lapply(enroll_six[i],
+                          function(x){as.numeric(as.character(gsub(",", "", x)))})
+}
+
+
+enrollment_six <- write.csv(enroll_six, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/enrollment_six.csv",
+                            row.names=FALSE)
+
+```
+
+```{r not used}
+#test <- as.character(enroll_six$Select.View.) %>%
+#  str_split(pattern = " ")
+```
+
+
+```{r enroll_nine}
+df <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/9th_Monthly Enrollment.pdf",
+                     output = "data.frame",
+                     guess = FALSE)
+
+#write.csv(df[[1]], 
+#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_enrollment_nine.csv",
+#          row.names=FALSE)
+
+enroll_nine <- df[[1]] %>%
+  slice(6:29)
+
+colmn1 <- c("October", "October_9th", "November", "November_9th")
+colmn2 <- c("December", "December_9th", "January", "January_9th")
+colmn3 <- c("February", "February_9th")
+
+enroll_nine <- separate(data = enroll_nine,
+                 col = Select.View.,
+                 sep = " ",
+                 into = colmn1,
+                 remove = TRUE) 
+enroll_nine <- separate(data = enroll_nine, 
+                       col = Filter.by.Grade.Levels, 
+                       sep = " ", 
+                       into = colmn2, 
+                       remove = TRUE)
+
+enroll_nine <- separate(data = enroll_nine,
+                       col = X.1,
+                       sep = " ",
+                       into = colmn3,
+                       remove = TRUE)
+
+for (i in 2: ncol(enroll_nine)) {
+  enroll_nine[i] <- lapply(enroll_nine[i],
+                          function(x){as.numeric(as.character(gsub(",", "", x)))})
+}
+
+
+enrollment_nine <- write.csv(enroll_nine, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/enrollment_nine.csv",
+                            row.names=FALSE)
+```
+
+
+```{r enroll kindergarden}
+df <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/Kindergarden_Monthly Enrollment.pdf",
+                     output = "data.frame",
+                     guess = FALSE)
+
+#write.csv(df[[1]], 
+#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_enrollment_kindergargen.csv",
+#          row.names=FALSE)
+
+enroll_kindergarden <- df[[1]] %>%
+  slice(6:29)
+
+colmn1 <- c("October", "October_9th", "November", "November_9th", "December")
+colmn2 <- c("December_9th", "January", "January_9th")
+colmn3 <- c("February", "February_9th")
+
+enroll_kindergarden <- separate(data = enroll_kindergarden,
+                                col = Select.View.,
+                                sep = " ",
+                                into = colmn1,
+                                remove = TRUE) 
+enroll_kindergarden <- separate(data = enroll_kindergarden, 
+                                col = Filter.by.Grade.Levels, 
+                                sep = " ", 
+                                into = colmn2, 
+                                remove = TRUE)
+
+enroll_kindergarden <- separate(data = enroll_kindergarden,
+                                col = X.1,
+                                sep = " ",
+                                into = colmn3,
+                                remove = TRUE)
+
+for (i in 2: ncol(enroll_kindergarden)) {
+  enroll_kindergarden[i] <- lapply(enroll_kindergarden[i],
+                          function(x){as.numeric(as.character(gsub(",", "", x)))})
+}
+
+# the row "Gender X" need to be corrected
+#is.na(enroll_kindergarden)
+enroll_kindergarden[8,2:11] <- c(42, 61, 43, 60, 44, 60, 45, 60, 43, 60)
+write.csv(enroll_kindergarden, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/enrollment_kindergarden.csv",
+                            row.names=FALSE)
+
+```
+
+
+```{r change_enroll_six}
+df1 <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/6th_Monthly Enrollment Change.pdf",
+                     output = "data.frame",
+                     guess = FALSE)
+
+#write.csv(df1[[1]], 
+#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_change_enrollment_six.csv",
+#          row.names=FALSE)
+
+change_enroll_six <- df1[[1]] %>%
+  slice(6:28)
+
+colmn1 <- c("StudentGroup", "October", "November")
+colmn2 <- c("December", "January")
+
+change_enroll_six <- separate(data = change_enroll_six, 
+                                col = Filter.by.Grade.Levels, 
+                                sep = " ", 
+                                into = colmn2, 
+                                remove = TRUE) 
+names(change_enroll_six)[names(change_enroll_six) == "X"] <- "February"
+
+change_enroll_six <- separate(data = change_enroll_six,
+                                col = Select.View.,
+                                sep = "(?<=[ ])(?=[0-9 -])",
+                                into = colmn1,
+                                remove = TRUE) 
+
+change_enroll_six[18, 1:3] <- c("Non Section 504", "-4.8%", "-4.9%")
+change_enroll_six[19, 1:3] <- c("Section 504", "-6.9%", "-7.3%")
+change_enroll_six[1, 1] <- "All Students"
+
+change_enroll_six[2:6] <- sapply(change_enroll_six[2:6], 
+                                 function(x) as.numeric(sub("%","",x))/100)
+
+
+#change_enroll_six[2:6] <- sapply(change_enroll_six[2:6], 
+#                                 function(x) percent(x, accuracy=0.1))
+
+
+write.csv(change_enroll_six, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/change_enrollment_six.csv",
+                            row.names=FALSE)
+```
+
+
+```{r change_enroll_nine}
+df1 <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/9th_Monthly Enrollment Change.pdf",
+                     output = "data.frame",
+                     guess = FALSE)
+
+#write.csv(df1[[1]], 
+#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_change_enrollment_nine.csv",
+#          row.names=FALSE)
+
+change_enroll_nine <- df1[[1]] %>%
+  slice(6:28)
+
+colmn1 <- c("StudentGroup", "October", "November")
+colmn2 <- c("December", "January")
+
+change_enroll_nine <- separate(data = change_enroll_nine, 
+                                col = Filter.by.Grade.Levels, 
+                                sep = " ", 
+                                into = colmn2, 
+                                remove = TRUE) 
+names(change_enroll_nine)[names(change_enroll_nine) == "X"] <- "February"
+
+change_enroll_nine <- separate(data = change_enroll_nine,
+                                col = Select.View.,
+                                sep = "(?<=[ ])(?=[0-9 -])",
+                                into = colmn1,
+                                remove = TRUE) 
+
+change_enroll_nine[18, 1:3] <- c("Non Section 504", "0.3%", "0.2%")
+change_enroll_nine[19, 1:3] <- c("Section 504", "8.4%", "8.2%")
+change_enroll_nine[1, 1] <- "All Students"
+
+change_enroll_nine[2:6] <- sapply(change_enroll_nine[2:6], 
+                                 function(x) as.numeric(sub("%","",x))/100)
+
+#change_enroll_nine[2:6] <- sapply(change_enroll_nine[2:6], 
+#                                 function(x) percent(x, accuracy=0.1))
+
+
+write.csv(change_enroll_nine, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/change_enrollment_nine.csv",
+                            row.names=FALSE)
+
+
+```
+
+
+```{r change_enroll_kindergarden}
+df1 <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/Kindergarden_Monthly Enrollment Change.pdf",
+                     output = "data.frame",
+                     guess = FALSE)
+
+#write.csv(df1[[1]], 
+#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_change_enrollment_kindergarden.csv",
+#          row.names=FALSE)
+
+change_enroll_kid <- df1[[1]] %>%
+  slice(6:28)
+
+colmn1 <- c("StudentGroup", "October", "November")
+colmn2 <- c("December", "January")
+
+change_enroll_kid <- separate(data = change_enroll_kid, 
+                                col = Filter.by.Grade.Levels, 
+                                sep = " ", 
+                                into = colmn2, 
+                                remove = TRUE) 
+names(change_enroll_kid)[names(change_enroll_kid) == "X"] <- "February"
+
+change_enroll_kid <- separate(data = change_enroll_kid,
+                                col = Select.View.,
+                                sep = "(?<=[ ])(?=[0-9 -])",
+                                into = colmn1,
+                                remove = TRUE) 
+
+change_enroll_kid[18, 1:3] <- c("Non Section 504", "-14.0%", "-13.9%")
+change_enroll_kid[19, 1:3] <- c("Section 504", "-20.5%", "-20.2%")
+change_enroll_kid[1, 1] <- "All Students"
+
+change_enroll_kid[2:6] <- sapply(change_enroll_kid[2:6], 
+                                 function(x) as.numeric(sub("%","",x))/100)
+
+#change_enroll_kid[2:6] <- sapply(change_enroll_kid[2:6], 
+#                                 function(x) percent(x, accuracy=0.1))
+
+
+write.csv(change_enroll_kid, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/change_enrollment_kindergarden.csv",
+                            row.names=FALSE)
+
+```
+
