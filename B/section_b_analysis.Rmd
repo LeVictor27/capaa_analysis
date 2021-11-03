@@ -46,7 +46,6 @@ df_demos <- id_demos %>%
   drive_read_raw() %>%
   read_dta()
 
-
 df_demos_dist <- df_demos %>%
   mutate(coudis_s = str_pad(as.character(CountyDistrictNumber), 5, side="left", pad="0"),
          schyear = paste("20", gsub("[0-9]+-", "", SchoolYear), sep=""))%>%
@@ -105,8 +104,10 @@ Federal, state, and local revenue source for districts serving students of color
 # B3: Spatial distribution of school funding
 
 ```{r B3_maps, include=FALSE}
-library(tidycensus)
-library(tigris)
+#library(tidycensus)
+#library(tigris)
+#library(tmap)
+#library(sf)
 
 
 ```
@@ -136,6 +137,22 @@ df_e_2020_avg = df_e_2020_sum %>%
   summarize(amount_pp_avg=mean(amount_pp_total))
 
 df_e_2020_avg%>%
+  filter(prog_desc!="NA")%>%
+  ggplot(
+    aes(reorder(prog_desc, amount_pp_avg, sum), 
+        amount_pp_avg)) +
+  geom_bar(position="dodge", stat="identity")+
+  coord_flip()+
+  theme(panel.background = element_blank(), 
+        axis.line.x = element_line(color = "#D3D3D3"),
+        panel.grid.major.x = element_line(color = "#D3D3D3"),
+        plot.title.position = "plot"
+        ) +
+  labs(title="Figure. Average Per-Student Dollar Amount by All Expenditure Categories, 2019-2020")+
+  xlab("") + 
+  ylab("")
+
+df_e_2020_avg%>%
   filter(prog_desc!="Basic Education" & prog_desc!="Districtwide Support")%>% #Remove basic education program and Districtwide support
   ggplot(
     aes(reorder(prog_desc, amount_pp_avg, sum), 
@@ -147,13 +164,35 @@ df_e_2020_avg%>%
         panel.grid.major.x = element_line(color = "#D3D3D3"),
         plot.title.position = "plot"
         ) +
-  labs(title="Figure. Average Per-Student Dollar Amount by Expenditure Category, 2019-2020")+
+  labs(title="Figure. Average Per-Student Dollar Amount by Expenditure Category, 2019-2020",
+       subtitle = "Excluding Top Two Categories (Basic Education and Districtwide Support) ")+
   xlab("") + 
   ylab("")
 
 #REVIEW: 
 #Which expenditure category to focus on (filter by federal, state, others)? 
 #Do we want to cut off the categories with minimal amounts? 
+
+df_e_2020_avg%>%
+  filter(prog_desc!="NA")%>% 
+  ggplot(
+    aes(reorder(prog_desc, amount_pp_avg, sum), 
+        amount_pp_avg, 
+        group=dist_group_soc,
+        fill=dist_group_soc)) +
+  geom_bar(position="dodge", stat="identity")+
+  coord_flip()+
+  theme(panel.background = element_blank(), 
+        axis.line.x = element_line(color = "#D3D3D3"),
+        panel.grid.major.x = element_line(color = "#D3D3D3"),
+        plot.title.position = "plot",
+        legend.position="none") +
+  labs(title = "Figure. Average Per-Student Dollar Amount by Expenditure Category, 2019-2020",
+       subtitle = "By District Percentage Student of Color")+
+  xlab("") + 
+  ylab("") +
+  facet_wrap(~dist_group_soc,
+             nrow=1)
 
 df_e_2020_avg%>%
   filter(prog_desc!="Basic Education" & prog_desc!="Districtwide Support")%>% #Remove basic education program and Districtwide support
@@ -170,7 +209,7 @@ df_e_2020_avg%>%
         plot.title.position = "plot",
         legend.position="none") +
   labs(title = "Figure. Average Per-Student Dollar Amount by Expenditure Category, 2019-2020",
-       subtitle = "By District Percentage Student of Color ")+
+       subtitle = "By District Percentage Student of Color and Excluding Top Two Categories ")+
   xlab("") + 
   ylab("") +
   facet_wrap(~dist_group_soc,
@@ -178,6 +217,7 @@ df_e_2020_avg%>%
 #REVIEW:
 #Same questions as above.
 #I separated SOC into quartiles, do we want to categorize them differently? What's both interesting and consumable? 
+
 ```
 
 In Section B4, we present information about expenditure category by two students groups: low- and high-poverty and students of color and white students.
