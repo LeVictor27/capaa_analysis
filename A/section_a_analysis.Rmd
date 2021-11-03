@@ -121,7 +121,7 @@ plot_enroll_count <- long_enroll_by_races %>%
              y = "Enrollment Counts") +
   scale_y_continuous(labels = comma) +
   scale_fill_brewer(palette = "Purples")  +
-  theme_minimal() +
+  theme_classic() +
   coord_flip() +
   theme(axis.text.x  = element_text(angle=45, vjust=0.5, size=9)) 
 
@@ -326,7 +326,7 @@ plot_enroll_perc <- long_enroll_perc_races %>%
              y = "Enrollment Percentage") +
   scale_y_continuous(labels = percent) +
   scale_fill_brewer(palette = "Purples")  +
-  theme_minimal() +
+  theme_classic() +
   coord_flip() 
 
 plot_enroll_perc
