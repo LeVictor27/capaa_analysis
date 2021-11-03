@@ -130,8 +130,14 @@ df_f196_merge <- df_f196_merge%>%
          rev_st_pp_18d=(rev_st_18d_Total/dis_enroll),
          rev_loc_pp_18d=(localrev_201819Spring_18d/dis_enroll))
 
+#What percentage higher than lower than state average for the state/local revenue
+#map demographics, native + latinx student populations
+#native, majority belong to multiracial group
+
+#Distribution of dollars -> district that serve large % of SOC/low-income
+
 ref <- df_f196_merge%>%
-  select(schyear, leaid, rev_st_18d_Total, localrev_201819Spring_18d, dis_enroll)%>%
+  select(schyear, leaid, dist_name, rev_st_18d_Total, localrev_201819Spring_18d, dis_enroll)%>%
   filter(schyear==2019)%>%
   mutate(leaid = as.character(leaid),
          rev_st_pp_18d=(rev_st_18d_Total/dis_enroll),
@@ -144,7 +150,7 @@ wa_df196 %>%
   filter(schyear==2019)%>%
   ggplot() +
   geom_sf(aes(fill = rev_st_pp_18d), size = .25) +
-  scale_fill_gradient(low = "white", high="red", name="2018 Dollars") +
+  scale_fill_gradient(low = "white", high="#4b2e83", name="2018 Dollars") +
   theme_void() +
   labs(title="Figure. State Revenue Per Pupil, 2018-2019")+
   theme(plot.title = element_text(hjust = 0.5))
@@ -154,7 +160,7 @@ wa_df196 %>%
   filter(schyear==2019)%>%
   ggplot() +
   geom_sf(aes(fill = rev_loc_pp_18d), size = .25) +
-  scale_fill_gradient(low = "white", high="red", name="2018 Dollars") +
+  scale_fill_gradient(low = "white", high="#4b2e83", name="2018 Dollars") +
   theme_void() +
   labs(title="Figure. Local Levy Revenue Per Pupil, 2018-2019")+
   theme(plot.title = element_text(hjust = 0.5))
@@ -221,6 +227,8 @@ df_e_2020_avg%>%
 #REVIEW: 
 #Which expenditure category to focus on (filter by federal, state, others)? 
 #Do we want to cut off the categories with minimal amounts? 
+#Group the bottom chunk with OTHER category
+#look a regionalization factor
 
 df_e_2020_avg%>%
   filter(prog_desc!="NA")%>% 
