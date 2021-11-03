@@ -21,9 +21,9 @@ knitr::opts_chunk$set(echo = FALSE,
 ```
 
 #Notes
-## 10/26 
-### issues: obtain grade level df (affect enrollment and absences)
-### to-do: ask about reference line; generalize codes; touch up plots; work on spatial plots.
+## 11/2 
+### need to find income indicators for course taking
+### for spatial plots: reason for missing data (grey areas): 1. missing and suppression at district level; 2. some districts have data for only one of the SYs, then the change is going to be NA; 3. some districts in the shapefile do not appear in the ospi stats 
 
 # Introduction
 
@@ -79,6 +79,9 @@ library(formattable)
 library(reshape2)
 library(grid)
 library(gridExtra)
+library(sf)
+library(spData)
+
 #library(rJava)
 #library(tabulizer) 
 ```
@@ -88,7 +91,7 @@ library(gridExtra)
 
 ## plot I: counts; year 2021; sorted by races; sorted by income levels; bar = month; grades = kindergaiden & 6th & 9th
 
-```{r enrollment 1}
+```{r enrollment counts all students, include=FALSE}
 
 months_in_df <- c("October", "November", "December", "January")
 
@@ -129,8 +132,22 @@ plot_enroll_count <- long_enroll_by_races %>%
 plot_enroll_count #need to reorder fill
 ```
 
+```{r enrollment counts kindergarden}
+
+```
+
+
+```{r enrollment counts sixth grade}
+
+```
+
+```{r enrollment counts ninth grade}
+
+```
+
+
 ## plot II: try pie charts? datatype: % = each race/all student; year 2021; each monthly; comparison across different grades
-```{r enrollment 2}
+```{r enrollment percentage all students, include=FALSE}
 enrollment_perc_races <- data.frame(matrix(NA,    
                           nrow = nrow(enrollment_by_races),
                           ncol = ncol(enrollment_by_races)))
@@ -166,40 +183,98 @@ plot_enroll_perc
 
 ```
 
+```{r enrollment percentage kindergarden}
 
-## plot III: splitted bar w/ % changes; low-income vs. non-low-income; sorted by years or races?
+```
 
-# Absent
+```{r enrollment percentage sixth grade}
 
-### same issue with scraping 10/26
+```
 
-## plot I: year 2021 by races; grades: kindergargen, 3, 6, 8, 9, 10; same as the enrollment plot I
-
-## plot II: datatype: % changed; 2019 vs 2021 (ignore 2020); grades: kindergargen, 3, 6, 8, 9, 10; sorted by races and income levels
-```{r graduation, include=FALSE}
-
-df_graduation_pathways
+```{r enrollment percentage ninth grade}
 
 ```
 
 
-```{r reopening, include=FALSE}
+## plot III: splitted bar w/ % changes; low-income vs. non-low-income; sorted by years or races?
 
-df_reopening_survey
+```{r enrollment change kindergarden}
+
+```
+
+```{r enrollment change sixth grade}
+
+```
+
+```{r enrollment change ninth grade}
+
+```
+
+
+# Absent
+##[Students of color or low income students are further disadvantaged during the pandemic in terms of abs. Particularly lower grade levels ]
+##Grade K, 3rd abs, 6th, 8th grade enrollment, 9th, 10th grade.
+
+## plot I: absence count; year 2021 by races; grades: kindergargen, 3, 6, 8, 9, 10; 
+```{r absence count kindergarden, include=FALSE}
+
+```
+
+```{r absence count 3rd grade, include=FALSE}
+
+```
+
+```{r absence count 6th grade, include=FALSE}
+
+```
+
+```{r absence count 8th grade, include=FALSE}
+
+```
+
+```{r absence count 9th grade, include=FALSE}
+
+```
+
+```{r absence count 10th grade, include=FALSE}
+
+```
+
+## plot II: absence change; datatype: % changed; 2019 vs 2021 (ignore 2020); grades: kindergargen, 3, 6, 8, 9, 10; sorted by races and income levels
+
+```{r absence change kindergarden, include=FALSE}
+
+```
+
+```{r absence change 3rd grade, include=FALSE}
+
+```
+
+```{r absence change 6th grade, include=FALSE}
+
+```
+
+```{r absence change 8th grade, include=FALSE}
+
+```
+
+```{r absence change 9th grade, include=FALSE}
+
+```
+
+```{r absence change 10th grade, include=FALSE}
 
 ```
 
 # Course Taking 
-## plot I: counts; only use "non-passing grades"; (sorted by races (Excluding Asian); sorted by income levels; 2020-21; bar; w/ and w/o reference; reference = state ave 
+## plot I: counts; only use "non-passing grades"; sorted by income levels; 2020-21; bar; w/ and w/o reference; reference = state ave 
 
-###state ave of all grades? or each grade?? dfs do not have income variables
 ```{r course taking}
 #code need to be generalized and plots need to be touched up
 
 course_by_race <- df_course_outcomes_by_outcome %>%
   filter(`Organization Name` == "Washington State" & 
            `School Year` == "2020-21" & 
-           `Student Group` != "Asian" & 
            !is.na(`All Non-Passing Grades`)) %>%
   select_if(~!all(is.na(.))) %>%
   mutate(`All Non-Passing Grades` =  percent(`All Non-Passing Grades`))
@@ -224,7 +299,6 @@ ggplot(course_by_race,
 course_by_race <- df_course_outcomes_by_outcome %>%
   filter(`Organization Name` == "Washington State" & 
            `School Year` == "2019-20" & 
-           `Student Group` != "Asian"& 
            !is.na(`All Non-Passing Grades`)) %>%
   select_if(~!all(is.na(.))) %>%
   mutate(`All Non-Passing Grades` =  percent(`All Non-Passing Grades`))
@@ -272,17 +346,220 @@ ggplot(course_by_race,
 ```
 
 
+## plot II. (for all students) 
+## i: Calculate the Difference in all non-passing grade from 2018-19 to 2020-21, separately for four groups: low-income, non-low-income, students of color (excluding Asian), and White). Then generate a map below. By this graph, we get which districts have the largest change and for which group, numerically. 
 
-### for II and III, need district shape data, follow instruction on Googledoc
-### found shapefiles (https://geo.wa.gov/datasets/k12wa::washington-school-district-boundaries/about) and uploaaded to googledrive 10/26
-## plot II: spatial; 
+```{r 3.2 differences btwn sy in non-passing by district}
+course_geo <- df_course_outcomes_by_outcome %>%
+  select(c(`Organization Name`, `School Year`, 
+           `Student Group`, `Grade Level`, 
+           `All Non-Passing Grades`)) %>%
+  filter(!is.na(`All Non-Passing Grades`) &
+           `School Year` != "2019-20") %>% 
+  mutate(`All Non-Passing Grades` =  percent(`All Non-Passing Grades`))
+
+#cannot use dcast due to uneven length for each year:
+#split the df by school year; rename `All Non-Passing Grades` column by SY; 
+course_geo_1819 <- filter(course_geo, `School Year` != "2020-21") 
+colnames(course_geo_1819)[5] <- "SY2018-19"
+  
+course_geo_2021 <- filter(course_geo, `School Year` == "2020-21")
+colnames(course_geo_2021)[5] <- "SY2020-21"
+
+#merge yearly dfs and calculate the change
+course_geo_wide <- merge(x = course_geo_2021, y = course_geo_1819, 
+                         by = c("Organization Name", "Student Group", "Grade Level"), 
+                         all = TRUE) %>%
+  select(!c("School Year.x", "School Year.y")) %>%
+  mutate(Change = `SY2018-19` - `SY2020-21` ) %>%
+  filter(!is.na(Change)) %>%
+  #filter(Change >= -1) %>%
+  mutate(Race = NA) 
+
+for (i in 1:nrow(course_geo_wide)) {
+  if (course_geo_wide[i, "Student Group"] == "White") {
+    course_geo_wide[i, "Race"] <- "White"
+  } else if (course_geo_wide[i, "Student Group"] == "Asian") {
+    course_geo_wide[i, "Race"] <- "Asian"
+  } else {
+    course_geo_wide[i, "Race"] <- "Non-white"
+  }
+}
+
+course_groupby_race <- aggregate(course_geo_wide$Change, 
+                           list(course_geo_wide$`Organization Name`, 
+                                course_geo_wide$`Grade Level`,
+                                course_geo_wide$Race), 
+                           FUN=mean)
+
+names(course_groupby_race) <- c("Districts", "Grade Level", "Race", "Change")
+course_groupby_race <- course_groupby_race %>%
+  arrange(`Grade Level`, Districts, Race) %>%
+  filter(Race != "Asian" & Districts != "Washington State") 
+
+# Shape file
+wa_district_shape <- st_read("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/Washington_School_District_Boundaries-shp")
+#wa_district_coord <- st_read("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/Washington_State_Public_Schools")
+
+all_students <- course_groupby_race %>%
+  filter(`Grade Level` == "All Grades")
+all_grades_white <- all_students %>%
+  filter(Race == "White")
+all_grades_nonwhite <- all_students %>%
+  filter(Race == "Non-white")
+
+course_white_sf <- left_join(wa_district_shape, all_grades_white, by = c("LEAName" = "Districts"))
+course_nonwhite_sf <- left_join(wa_district_shape, all_grades_nonwhite, by = c("LEAName" = "Districts"))
+
+#plot for all grade levels; white students
+ggplot()+
+  geom_sf(data = course_white_sf, aes(fill = Change))+
+  theme_bw()
+
+#plot for all grade levels; nonwhite students (exclude asians)
+ggplot()+
+  geom_sf(data = course_nonwhite_sf, aes(fill = Change))+
+  theme_bw()
 
 
-## plot III: spatial;
+
+
+ggplot() + 
+  geom_sf(data = all_grades_white, 
+          aes(fill = Change), size = .2) +
+  scale_fill_distiller(name = "change in non-passing grades", palette = "YlOrRd") + 
+  theme_bw()
+
+  theme(panel.background = element_blank(),
+        legend.title = element_text(size = 10),
+        plot.title = element_text(size = 14),
+        plot.subtitle = element_text(size = 10),
+        plot.caption = element_text(hjust = 0, size = 7, face = "italic")) +
+  labs(title="Chicago Public School Safety",
+       subtitle = "School safety and culture climate ratings in zip codes",
+       caption = "Safety ratings range from 1 to 5 from very weak to very strong. 
+Dots on map indicate schools that have not organized school climate.
+Grey areas indicate lack of data.")
+
+
+```
+
+
+```{r 3.2 match district names with shape file, include=FALSE}
+#matching district names
+df_name <- unique(course_groupby_race$Districts)
+shape_name <- sort(unique(wa_district_shape$LEAName))
+`%!in%` <- Negate(`%in%`)
+for (i in 1:length(df_name)) {
+  if (df_name[i] %!in% shape_name) {
+    print(i)
+    print(df_name[i])
+  }
+}
+for (j in 1:length(shape_name)) {
+  if (shape_name[j] %!in% df_name) {
+    print(j)
+    print(shape_name[j])
+  }
+}
+#district names need to be(can be) manually adjusted for geometry data: 
+#df_name[108]"North Beach School District No. 64" = shape_name[159] "North Beach School District"
+#df_name[151]"Seattle School District No. 1" = shape_name[220]"Seattle Public Schools"
+#df_name[187]"Wellpinit School District #49" = shape_name[279]"Wellpinit School District"
+## 7 schools in our dataset have no matches in shape file
+
+
+```
+
+
+## plot II (for all students)
+### ii Calculate the gap in all non-passing in 2020-21 between low-income and non-low income (students of color (excluding Asian) and white) for each district and graph the difference using the map below.
+
+```{r 3.3 differences btwn student types in non-passing by district}
+
+course_compare <- df_course_outcomes_by_outcome %>%
+  select(c(`Organization Name`, `School Year`, 
+           `Student Group`, `Grade Level`, 
+           `All Non-Passing Grades`)) %>%
+  filter(!is.na(`All Non-Passing Grades`) &
+           `School Year` == "2020-21") %>% 
+  mutate(`All Non-Passing Grades` =  percent(`All Non-Passing Grades`))
+
+#cannot use dcast due to uneven length for each year:
+#split the df by school year; rename `All Non-Passing Grades` column by SY; 
+course_geo_1819 <- filter(course_geo, `School Year` != "2020-21") 
+colnames(course_geo_1819)[5] <- "SY2018-19"
+  
+course_geo_2021 <- filter(course_geo, `School Year` == "2020-21")
+colnames(course_geo_2021)[5] <- "SY2020-21"
+
+#merge yearly dfs and calculate the change
+course_geo_wide <- merge(x = course_geo_2021, y = course_geo_1819, 
+                         by = c("Organization Name", "Student Group", "Grade Level"), 
+                         all = TRUE) %>%
+  select(!c("School Year.x", "School Year.y")) %>%
+  mutate(Change = `SY2018-19` - `SY2020-21` ) %>%
+  filter(!is.na(Change)) %>%
+  #filter(Change >= -1) %>%
+  mutate(Race = NA) 
+
+for (i in 1:nrow(course_geo_wide)) {
+  if (course_geo_wide[i, "Student Group"] == "White") {
+    course_geo_wide[i, "Race"] <- "White"
+  } else if (course_geo_wide[i, "Student Group"] == "Asian") {
+    course_geo_wide[i, "Race"] <- "Asian"
+  } else {
+    course_geo_wide[i, "Race"] <- "Non-white"
+  }
+}
+
+course_groupby_race <- aggregate(course_geo_wide$Change, 
+                           list(course_geo_wide$`Organization Name`, 
+                                course_geo_wide$`Grade Level`,
+                                course_geo_wide$Race), 
+                           FUN=mean)
+
+names(course_groupby_race) <- c("Districts", "Grade Level", "Race", "Change")
+course_groupby_race <- course_groupby_race %>%
+  arrange(`Grade Level`, Districts, Race) %>%
+  filter(Race != "Asian" & Districts != "Washington State") 
+
+# Shape file
+wa_district_shape <- st_read("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/Washington_School_District_Boundaries-shp")
+#wa_district_coord <- st_read("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/Washington_State_Public_Schools")
+
+all_students <- course_groupby_race %>%
+  filter(`Grade Level` == "All Grades")
+all_grades_white <- all_students %>%
+  filter(Race == "White")
+all_grades_nonwhite <- all_students %>%
+  filter(Race == "Non-white")
+
+course_white_sf <- left_join(wa_district_shape, all_grades_white, by = c("LEAName" = "Districts"))
+course_nonwhite_sf <- left_join(wa_district_shape, all_grades_nonwhite, by = c("LEAName" = "Districts"))
+
+```
+
+
+## plot III: 
+* 9th grade on track: did not get a grade of D or F. The % of students that received grades of A,B, C.
+* Regular attendance, meaning that has more than 90% attendance during the year
+* Dual credit (not prestigious): (AP/IB courses is more prestigious); therefore, less useful
+* COVID-19 modified (beginning of the school year to march, 2019-20 school year). The “modified” may indicate that. then OSPI created a fall to march dataset for multiple years of data
+
 ```{r course_outcomes, include=FALSE}
 
 df_course_outcomes_by_student
 
 df_course_outcomes_by_outcome
+```
+
+## plot IV; Graduation (the class of 2020). 
+https://www.k12.wa.us/data-reporting/data-displays/graduation-pathways-display
+Different pathways by income and students of color 
+```{r graduation, include=FALSE}
+
+df_graduation_pathways
+
 ```
 
