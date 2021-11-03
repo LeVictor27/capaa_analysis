@@ -34,6 +34,8 @@ id_f196_expenditures <- drive_get(as_id("https://drive.google.com/file/d/17FERYE
 
 id_demos <- drive_get(as_id("https://drive.google.com/file/d/1coJ9kMZUpRmxNyli6xZ31WITaZdyJXIk/view?usp=sharing"))
 
+id_cwi <- drive_get(as_id("https://drive.google.com/file/d/1TYBldsqu4qX265YUnRd6UbPTn7kHrc-F/view?usp=sharing"))
+
 df_f196 <- id_f196 %>%
   drive_read_raw() %>%
   read_dta()
@@ -45,6 +47,10 @@ df_f196_expenditures <- id_f196_expenditures %>%
 df_demos <- id_demos %>%
   drive_read_raw() %>%
   read_dta()
+
+df_cwi <- id_cwi %>%
+  drive_read_raw() %>%
+  read_csv()
 
 df_demos_dist <- df_demos %>%
   mutate(coudis_s = str_pad(as.character(CountyDistrictNumber), 5, side="left", pad="0"),
@@ -71,6 +77,8 @@ df_e_merge <- df_e_merge_raw %>%
                                     dist_pctstu_soc >= 0.50  & dist_pctstu_soc < 0.75 ~ '3',
                                     dist_pctstu_soc >= 0.75  & dist_pctstu_soc <= 1 ~ '4')
   )
+
+df_f196_merge<- full_join(df_f196, df_cwi, by=c("coudis"="dist_id", "schyear"="year"))
 
 
 ```
@@ -103,12 +111,53 @@ Federal, state, and local revenue source for districts serving students of color
 
 # B3: Spatial distribution of school funding
 
-```{r B3_maps, include=FALSE}
+```{r B3_maps}
 #library(tidycensus)
 #library(tigris)
 #library(tmap)
 #library(sf)
 
+library(leaidr)
+library(leaflet)
+
+wa <- lea_get("wa")
+
+wa <- wa %>% 
+  sf::st_as_sf() 
+
+df_f196_merge <- df_f196_merge%>%
+  mutate(leaid = as.character(leaid),
+         rev_st_pp_18d=(rev_st_18d_Total/dis_enroll),
+         rev_loc_pp_18d=(localrev_201819Spring_18d/dis_enroll))
+
+ref <- df_f196_merge%>%
+  select(schyear, leaid, rev_st_18d_Total, localrev_201819Spring_18d, dis_enroll)%>%
+  filter(schyear==2019)%>%
+  mutate(leaid = as.character(leaid),
+         rev_st_pp_18d=(rev_st_18d_Total/dis_enroll),
+         rev_loc_pp_18d=(localrev_201819Spring_18d/dis_enroll))
+
+wa_df196 <- left_join(df_f196_merge, wa, by = c("leaid" = "GEOID"), copy=TRUE) 
+
+wa_df196 %>%
+  sf::st_as_sf() %>% 
+  filter(schyear==2019)%>%
+  ggplot() +
+  geom_sf(aes(fill = rev_st_pp_18d), size = .25) +
+  scale_fill_gradient(low = "white", high="red", name="2018 Dollars") +
+  theme_void() +
+  labs(title="Figure. State Revenue Per Pupil, 2018-2019")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+wa_df196 %>%
+  sf::st_as_sf() %>% 
+  filter(schyear==2019)%>%
+  ggplot() +
+  geom_sf(aes(fill = rev_loc_pp_18d), size = .25) +
+  scale_fill_gradient(low = "white", high="red", name="2018 Dollars") +
+  theme_void() +
+  labs(title="Figure. Local Levy Revenue Per Pupil, 2018-2019")+
+  theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
