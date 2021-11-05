@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = FALSE,
 
 # Introduction
 
-```{r data, include=FALSE}
+```{r data_read, include=FALSE}
 library(tidyverse)
 library(googledrive)
 library(haven)
@@ -51,6 +51,10 @@ df_demos <- id_demos %>%
 df_cwi <- id_cwi %>%
   drive_read_raw() %>%
   read_csv()
+```
+
+
+```{r data_cleaning, include=FALSE}
 
 df_demos_dist <- df_demos %>%
   mutate(coudis_s = str_pad(as.character(CountyDistrictNumber), 5, side="left", pad="0"),
@@ -67,6 +71,17 @@ df_demos_dist <- df_demos %>%
                sum)%>% 
   mutate(schyear=as.numeric(schyear))
 
+df_demos_dist <- df_demos_dist%>%
+  mutate(PctAmericanIndianOrAlaskan = NumberAmericanIndianOrAlaskan/TotalEnrollment,
+         PctAsian = NumberAsian/TotalEnrollment,
+         PctBlack = NumberBlack/TotalEnrollment,
+         PctHispanic = NumberHispanic/TotalEnrollment,
+         PctAsianPacificIslander = NumberAsianPacificIslander/TotalEnrollment,
+         PctMultirac = NumberMultirac/TotalEnrollment,
+         PctWhite = NumberWhite/TotalEnrollment
+         )%>%
+  mutate_at(vars(PctAmericanIndianOrAlaskan:PctWhite), ~replace_na(., 0))
+
 df_e_merge_raw <- full_join(df_f196_expenditures, df_demos_dist, by=c("coudis_s"="coudis_s", "schyear"="schyear"))
 
 df_e_merge <- df_e_merge_raw %>%
@@ -78,8 +93,9 @@ df_e_merge <- df_e_merge_raw %>%
                                     dist_pctstu_soc >= 0.75  & dist_pctstu_soc <= 1 ~ '4')
   )
 
-df_f196_merge<- full_join(df_f196, df_cwi, by=c("coudis"="dist_id", "schyear"="year"))
+df_f196_merge_raw <- full_join(df_f196, df_demos_dist, by=c("coudis"="coudis_s", "schyear"="schyear"))
 
+df_f196_merge<- full_join(df_f196_merge_raw, df_cwi, by=c("coudis"="dist_id", "schyear"="year"))
 
 ```
 
@@ -112,16 +128,11 @@ Federal, state, and local revenue source for districts serving students of color
 # B3: Spatial distribution of school funding
 
 ```{r B3_maps}
-#library(tidycensus)
-#library(tigris)
-#library(tmap)
 
 library(leaidr)
 library(sf)
 
-wa <- lea_get("wa")
-
-wa <- wa %>% 
+wa <- lea_get("wa")%>% 
   sf::st_as_sf() 
 
 df_f196_merge <- df_f196_merge%>%
@@ -129,26 +140,73 @@ df_f196_merge <- df_f196_merge%>%
          rev_st_pp_18d=(rev_st_18d_Total/dis_enroll),
          rev_loc_pp_18d=(localrev_201819Spring_18d/dis_enroll))
 
+
+df_f196_merge <- df_f196_merge%>%
+  group_by(schyear)%>%
+  mutate(rev_st_mean = mean(rev_st_pp_18d, na.rm = TRUE), 
+         rev_loc_mean = mean(rev_loc_pp_18d, na.rm = TRUE))
+
+df_f196_merge <- df_f196_merge%>%
+  mutate(rev_st_diff= (rev_st_pp_18d-rev_st_mean),
+         rev_loc_diff=(rev_loc_pp_18d-rev_loc_mean))
+
 #What percentage higher than lower than state average for the state/local revenue
 #map demographics, native + latinx student populations
 #native, majority belong to multiracial group
 #Distribution of dollars -> district that serve large % of SOC/low-income
 
-ref <- df_f196_merge%>%
-  select(schyear, leaid, dist_name, rev_st_18d_Total, localrev_201819Spring_18d, dis_enroll)%>%
-  filter(schyear==2019)%>%
-  mutate(leaid = as.character(leaid),
-         rev_st_pp_18d=(rev_st_18d_Total/dis_enroll),
-         rev_loc_pp_18d=(localrev_201819Spring_18d/dis_enroll))
-
 wa_df196 <- left_join(df_f196_merge, wa, by = c("leaid" = "GEOID"), copy=TRUE) 
+
+#Demographic Maps
 
 wa_df196 %>%
   sf::st_as_sf() %>% 
   filter(schyear==2019)%>%
   ggplot() +
-  geom_sf(aes(fill = rev_st_pp_18d), size = .25) +
-  scale_fill_gradient(low = "white", high="#4b2e83", name="2018 Dollars") +
+  geom_sf(aes(fill = PctHispanic), size = .25) +
+  scale_fill_gradient2(low="#FFFFFF", high="#4b2e83", name="Percentage") +
+  theme_void() +
+  labs(title="Figure. Latinx Students Percentage of Total Student Enrollment, 2018-2019 ")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+wa_df196 %>%
+  sf::st_as_sf() %>% 
+  filter(schyear==2019)%>%
+  ggplot() +
+  geom_sf(aes(fill = PctAmericanIndianOrAlaskan), size = .25) +
+  scale_fill_gradient2(low="#FFFFFF", high="#4b2e83", name="Percentage") +
+  theme_void() +
+  labs(title="Figure. Indigenous Students Percentage of Total Student Enrollment, 2018-2019 ")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+wa_df196 %>%
+  sf::st_as_sf() %>% 
+  filter(schyear==2019)%>%
+  ggplot() +
+  geom_sf(aes(fill = PctAsian), size = .25) +
+  scale_fill_gradient2(low="#FFFFFF", high="#4b2e83", name="Percentage") +
+  theme_void() +
+  labs(title="Figure. Asian Students Percentage of Total Student Enrollment, 2018-2019 ")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+wa_df196 %>%
+  sf::st_as_sf() %>% 
+  filter(schyear==2019)%>%
+  ggplot() +
+  geom_sf(aes(fill = PctMultirac), size = .25) +
+  scale_fill_gradient2(low="#FFFFFF", high="#4b2e83", name="Percentage") +
+  theme_void() +
+  labs(title="Figure. Multiracial Students Percentage of Total Student Enrollment, 2018-2019 ")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+#Finance Maps (Need to figure out what colors work best with this map to make it pop)
+
+wa_df196 %>%
+  sf::st_as_sf() %>% 
+  filter(schyear==2019)%>%
+  ggplot() +
+  geom_sf(aes(fill = rev_st_diff), size = .25) +
+  scale_fill_gradient2(low="#85754d", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
   theme_void() +
   labs(title="Figure. State Revenue Per Pupil, 2018-2019")+
   theme(plot.title = element_text(hjust = 0.5))
@@ -157,8 +215,8 @@ wa_df196 %>%
   sf::st_as_sf() %>% 
   filter(schyear==2019)%>%
   ggplot() +
-  geom_sf(aes(fill = rev_loc_pp_18d), size = .25) +
-  scale_fill_gradient(low = "white", high="#4b2e83", name="2018 Dollars") +
+  geom_sf(aes(fill = rev_loc_diff), size = .25) +
+  scale_fill_gradient2(low="#85754d", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
   theme_void() +
   labs(title="Figure. Local Levy Revenue Per Pupil, 2018-2019")+
   theme(plot.title = element_text(hjust = 0.5))
