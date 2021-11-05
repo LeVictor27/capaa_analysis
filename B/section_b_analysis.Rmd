@@ -127,7 +127,8 @@ Federal, state, and local revenue source for districts serving students of color
 
 # B3: Spatial distribution of school funding
 
-```{r B3_maps}
+## Demographic Maps
+```{r B3_maps_data}
 
 library(leaidr)
 library(sf)
@@ -140,7 +141,6 @@ df_f196_merge <- df_f196_merge%>%
          rev_st_pp_18d=(rev_st_18d_Total/dis_enroll),
          rev_loc_pp_18d=(localrev_201819Spring_18d/dis_enroll))
 
-
 df_f196_merge <- df_f196_merge%>%
   group_by(schyear)%>%
   mutate(rev_st_mean = mean(rev_st_pp_18d, na.rm = TRUE), 
@@ -150,12 +150,17 @@ df_f196_merge <- df_f196_merge%>%
   mutate(rev_st_diff= (rev_st_pp_18d-rev_st_mean),
          rev_loc_diff=(rev_loc_pp_18d-rev_loc_mean))
 
+wa_df196 <- left_join(df_f196_merge, wa, by = c("leaid" = "GEOID"), copy=TRUE) 
+
 #What percentage higher than lower than state average for the state/local revenue
 #map demographics, native + latinx student populations
 #native, majority belong to multiracial group
 #Distribution of dollars -> district that serve large % of SOC/low-income
 
-wa_df196 <- left_join(df_f196_merge, wa, by = c("leaid" = "GEOID"), copy=TRUE) 
+```
+
+
+```{r B3_maps_demo}
 
 #Demographic Maps
 
@@ -199,14 +204,19 @@ wa_df196 %>%
   labs(title="Figure. Multiracial Students Percentage of Total Student Enrollment, 2018-2019 ")+
   theme(plot.title = element_text(hjust = 0.5))
 
-#Finance Maps (Need to figure out what colors work best with this map to make it pop)
+```
+
+## Finance Maps
+```{r B3_maps_finance}
+
+#Need to figure out what colors work best with this map to make it pop
 
 wa_df196 %>%
   sf::st_as_sf() %>% 
   filter(schyear==2019)%>%
   ggplot() +
-  geom_sf(aes(fill = rev_st_diff), size = .25) +
-  scale_fill_gradient2(low="#85754d", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
+  geom_sf(aes(fill = rev_st_pp_18d), size = .25) +
+  scale_fill_gradient2(low="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
   theme_void() +
   labs(title="Figure. State Revenue Per Pupil, 2018-2019")+
   theme(plot.title = element_text(hjust = 0.5))
@@ -215,11 +225,35 @@ wa_df196 %>%
   sf::st_as_sf() %>% 
   filter(schyear==2019)%>%
   ggplot() +
-  geom_sf(aes(fill = rev_loc_diff), size = .25) +
-  scale_fill_gradient2(low="#85754d", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
+  geom_sf(aes(fill = rev_loc_pp_18d), size = .25) +
+  scale_fill_gradient2(low="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
   theme_void() +
   labs(title="Figure. Local Levy Revenue Per Pupil, 2018-2019")+
   theme(plot.title = element_text(hjust = 0.5))
+
+wa_df196 %>%
+  sf::st_as_sf() %>% 
+  filter(schyear==2019)%>%
+  ggplot() +
+  geom_sf(aes(fill = rev_st_diff), size = .25) +
+  scale_fill_gradient2(low="#FF0000", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
+  theme_void() +
+  labs(title="Figure. State Revenue Per Pupil, 2018-2019",
+       subtitle = "Dollar Difference Against State Mean for the School Year")+
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+
+wa_df196 %>%
+  sf::st_as_sf() %>% 
+  filter(schyear==2019)%>%
+  ggplot() +
+  geom_sf(aes(fill = rev_loc_diff), size = .25) +
+  scale_fill_gradient2(low="#FF0000", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
+  theme_void() +
+  labs(title="Figure. Local Levy Revenue Per Pupil, 2018-2019",
+       subtitle = "Dollar Difference Against State Mean for the School Year")+
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
 
 ```
 
