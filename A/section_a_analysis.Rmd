@@ -20,12 +20,9 @@ knitr::opts_chunk$set(echo = FALSE,
                       )
 ```
 
-#Notes
-## 11/3 to-do
-### find income indicators for course taking 
-### fix reference line for course taking
+* Notes
+  + no income indicator for course taking
 
-# Introduction
 
 ```{r data, include=FALSE}
 library(tidyverse)
@@ -86,12 +83,13 @@ library(spData)
 #library(tabulizer) 
 ```
 
-# Enrollment
-### Have trouble with grade-specific df, need to work on scrape from nested pdf (do-able but time consuming). once the datasets ready, the plot I &II codes can be used with minimal editing 10/26
+# A.1. Student Enrollment Both Count and change
 
-## plot I: counts; year 2021; sorted by races; sorted by income levels; bar = month; grades = kindergaiden & 6th & 9th
+Students of color or low income students are further disadvantaged during the pandemic in terms of enrollment. Particularly lower grade levels
 
-```{r enrollment counts all students, include=FALSE}
+> A.1.1 Student Enrollment Count for Kindergardeners 6th and 9th Graders
+
+```{r Student Enrollment Count for All Grade Levels}
 
 month_in_df <- c("October", "November", "December", "January")
 
@@ -166,7 +164,7 @@ df_change_enrollment_nine <- id_change_enrollment_nine %>%
 ```
 
 
-```{r enrollment counts kindergarden}
+```{r A.1.i Student Enrollment Count for Kindergardeners, include=FALSE}
 
 df_enrollment_kids[2,1] <- "All Students"
 enroll_race_kids <- df_enrollment_kids %>%
@@ -197,7 +195,7 @@ long_enroll_race_kids <- melt(enroll_race_kids,
 ```
 
 
-```{r enrollment counts sixth grade}
+```{r A.1.ii Student Enrollment Count for 6th Graders, include=FALSE}
 df_enrollment_six[2,2] <- "All Students"
 enroll_race_six <- df_enrollment_six %>%
   select(c("X", "October_6th", 
@@ -226,7 +224,7 @@ long_enroll_race_six <- melt(enroll_race_six,
 ```
 
 
-```{r enrollment counts ninth grade}
+```{r A.1.iii Student Enrollment Count for 9th Graders, include=FALSE}
 
 df_enrollment_nine[2,1] <- "All Students"
 enroll_race_nine <- df_enrollment_nine %>%
@@ -255,7 +253,7 @@ long_enroll_race_nine <- melt(enroll_race_nine,
   mutate(GradeLevel = "Ninth Grade")
 ```
 
-```{r enroll grade-level plot race}
+```{r A.1.1 Student Enrollment Count for Kindergardeners 6th and 9th Graders}
 
 #"February", "January", "December", "November", "October"
 
@@ -289,8 +287,9 @@ ggsave("section_a_analysis_files/figures/plot_enroll_count_grades.png",
        width = 40, height = 20, units = "cm")
 ```
 
-## plot II: try pie charts? datatype: % = each race/all student; year 2021; each monthly; comparison across different grades
-```{r enrollment percentage all students}
+> A.1.2 Student Enrollment Percentagee for Kindergardeners 6th and 9th Graders
+
+```{r Student Enrollment Percentage for All Grader Levels}
 enrollment_perc_races <- data.frame(matrix(NA,    
                           nrow = nrow(enrollment_by_races),
                           ncol = ncol(enrollment_by_races)))
@@ -336,7 +335,7 @@ ggsave("section_a_analysis_files/figures/plot_enroll_perc.png")
 
 ```
 
-```{r enrollment percentage kindergarden}
+```{r A.1.iv Student Enrollment Percentage for Kindergardeners, include=FALSE}
 
 all_students_kids <- long_enroll_race_kids %>%
   filter(`Student Group` == "All Students") %>%
@@ -350,7 +349,7 @@ long_enroll_race_kids <- long_enroll_race_kids %>%
 
 ```
 
-```{r enrollment percentage sixth grade}
+```{r A.1.v Student Enrollment Percentage for 6th Graders, include=FALSE}
 
 all_students_six <- long_enroll_race_six %>%
   filter(`Student Group` == "All Students") %>%
@@ -363,7 +362,7 @@ long_enroll_race_six <- long_enroll_race_six %>%
   arrange(`Student Group`, Month) 
 ```
 
-```{r enrollment percentage ninth grade}
+```{r A.i.vi Student Enrollment Percentage for 9th Graders, include=FALSE}
 
 all_students_nine <- long_enroll_race_nine %>%
   filter(`Student Group` == "All Students") %>%
@@ -377,10 +376,16 @@ long_enroll_race_nine <- long_enroll_race_nine %>%
 
 ```
 
+```{r A.1.2 Student Enrollment Percentagee for Kindergardeners 6th and 9th Graders}
 
-## plot III: splitted bar w/ % changes; low-income vs. non-low-income; sorted by years or races?
+```
 
-```{r enrollment change kindergarden race}
+
+> A.1.3. Student Enrollment Change for Kindergardeners 6th and 9th Graders
+
+Change from SY 2019-20 to SY 2020-21; NO SY 2018-29 ENROLL COUNTS DATA AT GRADE LEVEL
+
+```{r Student Enrollment Change for Kindergardener sorted by races, include=FALSE}
 
 change_enroll_kids_race <- df_change_enrollment_kids %>%
   filter(StudentGroup %in% c("All Students",
@@ -403,7 +408,7 @@ long_change_enroll_kids_race <- melt(change_enroll_kids_race,
 
 ```
 
-```{r enrollment change kindergarden income}
+```{r Student Enrollment Change for Kindergardener sorted by income, include=FALSE}
 
 change_enroll_kids_income <- df_change_enrollment_kids %>%
   filter(StudentGroup %in% c("All Students",
@@ -420,7 +425,7 @@ long_change_enroll_kids_income <- melt(change_enroll_kids_income,
   mutate(GradeLevel = "Kindergarden")
 ```
 
-```{r enrollment change sixth grade race}
+```{r Student Enrollment Change for 6th Graders sorted by races, include=FALSE}
 
 change_enroll_six_race <- df_change_enrollment_six %>%
   filter(StudentGroup %in% c("All Students",
@@ -443,7 +448,7 @@ long_change_enroll_six_race <- melt(change_enroll_six_race,
 
 ```
 
-```{r enrollment change sixth grade income}
+```{r Student Enrollment Change for 6th Graders sorted by income, include=FALSE}
 
 change_enroll_six_income <- df_change_enrollment_six %>%
   filter(StudentGroup %in% c("All Students",
@@ -460,7 +465,7 @@ long_change_enroll_six_income <- melt(change_enroll_six_income,
   mutate(GradeLevel = "Sixth Grade")
 ```
 
-```{r enrollment change ninth grade race}
+```{r Student Enrollment Change for 9th Graders sorted by races, include=FALSE}
 
 change_enroll_nine_race <- df_change_enrollment_nine %>%
   filter(StudentGroup %in% c("All Students",
@@ -483,7 +488,7 @@ long_change_enroll_nine_race <- melt(change_enroll_nine_race,
 
 ```
 
-```{r enrollment change ninth grade income}
+```{r Student Enrollment Change for 9th Graders sorted by income, include=FALSE}
 
 change_enroll_nine_income <- df_change_enrollment_nine %>%
   filter(StudentGroup %in% c("All Students",
@@ -501,7 +506,7 @@ long_change_enroll_nine_income <- melt(change_enroll_nine_income,
 
 ```
 
-```{r enroll change percentage by race plot}
+```{r A.1.3.i Student Enrollment Change for Kindergardeners 6th and 9th Graders sorted by races}
 
 long_change_enroll_race_grades <- bind_rows(long_change_enroll_kids_race, 
                                             long_change_enroll_six_race, 
@@ -537,7 +542,7 @@ ggsave("section_a_analysis_files/figures/plot_change_enroll_race_grades.png",
 
 ```
 
-```{r enroll change percentage by income plot}
+```{r A.1.3.ii Student Enrollment Change for Kindergardeners 6th and 9th Graders sorted by income}
 long_change_enroll_income_grades <- bind_rows(long_change_enroll_kids_income, 
                                               long_change_enroll_six_income, 
                                               long_change_enroll_nine_income)
@@ -599,11 +604,12 @@ ggsave("section_a_analysis_files/figures/plot_change_enroll_income_grades_v.png"
 
 ```
 
-# Absent
-##[Students of color or low income students are further disadvantaged during the pandemic in terms of abs. Particularly lower grade levels ]
-##Grade K, 3rd abs, 6th, 8th grade enrollment, 9th, 10th grade.
+***
 
-## plot I: absence count; year 2021 by races; grades: kindergargen, 3, 6, 8, 9, 10; 
+# A.2. Student absence both count and change
+Students of color or low income students are further disadvantaged during the pandemic in terms of abs. Particularly lower grade levels
+Grade K, 3rd, 6th, 8th, 9th, 10th grade.
+
 ```{r absence count kindergarden, include=FALSE}
 
 ```
@@ -628,7 +634,6 @@ ggsave("section_a_analysis_files/figures/plot_change_enroll_income_grades_v.png"
 
 ```
 
-## plot II: absence change; datatype: % changed; 2019 vs 2021 (ignore 2020); grades: kindergargen, 3, 6, 8, 9, 10; sorted by races and income levels
 
 ```{r absence change kindergarden, include=FALSE}
 
@@ -654,10 +659,12 @@ ggsave("section_a_analysis_files/figures/plot_change_enroll_income_grades_v.png"
 
 ```
 
-# Course Taking 
-## plot I: counts; only use "non-passing grades"; sorted by income levels; 2020-21; bar; w/ and w/o reference; reference = state ave 
+***
 
-```{r course taking}
+# A.3. Course Taking 
+> A.3.1. Statewide breakdown by groups
+
+```{r A.3.1. Statewide breakdown by groups}
 #need to fix the reference lines
 course_by_race <- df_course_outcomes_by_outcome %>%
   filter(`Organization Name` == "Washington State" & 
@@ -703,10 +710,17 @@ ggsave("section_a_analysis_files/figures/plot_non_pass_race.png",
 ```
 
 
-## plot II. (for all students) 
-## i: Calculate the Difference in all non-passing grade from 2018-19 to 2020-21, separately for four groups: low-income, non-low-income, students of color (excluding Asian), and White). Then generate a map below. By this graph, we get which districts have the largest change and for which group, numerically. 
+> A.3.2.1 Geographical differences across districts in all non-passing grade from 2018-19 to 2020-21
 
-```{r 3.2 differences btwn sy in non-passing by district}
+students of color (excluding Asian)
+
+For spatial plots: missing data (grey areas) results from 
+
+1. missing and suppression at district level; 
+2. some districts have data for only one of the SYs, then the changes are going to be NAs; 
+3. some districts in the shapefile do not appear in the ospi data (shows in "match district names with shape file" section)
+
+```{r A.3.2.1.i The Difference in all non-passing grade from 2018-19 to 2020-21 (white vs nonwhite), echo=FALSE, message=FALSE, warning=FALSE}
 
 course_geo <- df_course_outcomes_by_outcome %>%
   select(c(`Organization Name`, `School Year`, 
@@ -806,9 +820,8 @@ plot_spatial_year_diff_nonwhite
 ggsave("section_a_analysis_files/figures/plot_spatial_year_diff_nonwhite.png")
 
 ```
-#### for spatial plots: missing data (grey areas): 1. missing and suppression at district level; 2. some districts have data for only one of the SYs, then the changes are going to be NAs; 3. some districts in the shapefile do not appear in the ospi data 
 
-```{r 3.2 match district names with shape file, include=FALSE}
+```{r 3.2 match district names with shape file, eval=FALSE, include=FALSE}
 #matching district names
 df_name <- unique(course_groupby_race$Districts)
 shape_name <- sort(unique(wa_district_shape$LEAName))
@@ -830,15 +843,16 @@ for (j in 1:length(shape_name)) {
 #df_name[151]"Seattle School District No. 1" = shape_name[220]"Seattle Public Schools"
 #df_name[187]"Wellpinit School District #49" = shape_name[279]"Wellpinit School District"
 ## 7 schools in our dataset have no matches in shape file
-
-
 ```
 
 
-## plot II (for all students)
-### ii Calculate the gap in all non-passing in 2020-21 between low-income and non-low income (students of color (excluding Asian) and white) for each district and graph the difference using the map below.
+```{r A.3.2.1.ii The Difference in all non-passing grade from 2018-19 to 2020-21 (low-income vs non-low income)}
 
-```{r 3.3 differences btwn student types in non-passing by district}
+```
+
+> A.3.2.2 The gap in all non-passing in 2020-21 between students of color and white for each district
+
+```{r A.3.2.2.i The gap in all non-passing in 2020-21 between students of color and white for each district, echo=FALSE, message=FALSE, warning=FALSE}
 
 course_compare <- df_course_outcomes_by_outcome %>%
   select(c(`Organization Name`, `School Year`, 
@@ -909,6 +923,11 @@ plot_spatial_white_nonwhite_gap <- ggplot() +
 plot_spatial_white_nonwhite_gap
 
 ggsave("section_a_analysis_files/figures/plot_spatial_white_nonwhite_gap.png")
+
+```
+
+
+```{r A.3.2.2.ii The gap in all non-passing in 2020-21 between students of low-income and non-low income for each district}
 
 ```
 
