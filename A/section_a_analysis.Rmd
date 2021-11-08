@@ -87,7 +87,7 @@ library(spData)
 
 Students of color or low income students are further disadvantaged during the pandemic in terms of enrollment. Particularly lower grade levels
 
-> A.1.1 Student Enrollment Count for Kindergardeners 6th and 9th Graders
+> A.1.1 Student Enrollment Count for Kindergarteners 6th and 9th Graders
 
 ```{r Student Enrollment Count for All Grade Levels}
 
@@ -164,7 +164,7 @@ df_change_enrollment_nine <- id_change_enrollment_nine %>%
 ```
 
 
-```{r A.1.i Student Enrollment Count for Kindergardeners, include=FALSE}
+```{r A.1.i Student Enrollment Count for Kindergarteners, include=FALSE}
 
 df_enrollment_kids[2,1] <- "All Students"
 enroll_race_kids <- df_enrollment_kids %>%
@@ -191,7 +191,7 @@ long_enroll_race_kids <- melt(enroll_race_kids,
                              variable.name = "Month",
                              value.name=c("Enrollment")) %>%
   arrange(`Student Group`, Month) %>%
-  mutate(GradeLevel = "Kindergarden")
+  mutate(GradeLevel = "Kindergarten")
 ```
 
 
@@ -253,7 +253,7 @@ long_enroll_race_nine <- melt(enroll_race_nine,
   mutate(GradeLevel = "Ninth Grade")
 ```
 
-```{r A.1.1 Student Enrollment Count for Kindergardeners 6th and 9th Graders}
+```{r A.1.1 Student Enrollment Count for Kindergarteners 6th and 9th Graders}
 
 #"February", "January", "December", "November", "October"
 
@@ -268,7 +268,7 @@ plot_enroll_count_grades <- long_enroll_race_grades %>%
 #  geom_text(aes(label = Enrollment), vjust = 0.3, color = "black",
 #            position = position_dodge(0.9), size = 3.5) +
   geom_bar(position="dodge", stat="identity") +
-  facet_grid(~factor(GradeLevel, levels=c("Kindergarden", "Sixth Grade", "Ninth Grade"))) +
+  facet_grid(~factor(GradeLevel, levels=c("Kindergarten", "Sixth Grade", "Ninth Grade"))) +
   ggtitle("Enrollment Counts for School Year 2020-21") +
         labs(x = "Student Groups", 
              y = "Enrollment Counts") +
@@ -287,7 +287,7 @@ ggsave("section_a_analysis_files/figures/plot_enroll_count_grades.png",
        width = 40, height = 20, units = "cm")
 ```
 
-> A.1.2 Student Enrollment Percentagee for Kindergardeners 6th and 9th Graders
+> A.1.2 Student Enrollment Percentagee for Kindergarteners 6th and 9th Graders
 
 ```{r Student Enrollment Percentage for All Grader Levels}
 enrollment_perc_races <- data.frame(matrix(NA,    
@@ -335,7 +335,7 @@ ggsave("section_a_analysis_files/figures/plot_enroll_perc.png")
 
 ```
 
-```{r A.1.iv Student Enrollment Percentage for Kindergardeners, include=FALSE}
+```{r A.1.iv Student Enrollment Percentage for Kindergarteners, include=FALSE}
 
 all_students_kids <- long_enroll_race_kids %>%
   filter(`Student Group` == "All Students") %>%
@@ -376,16 +376,16 @@ long_enroll_race_nine <- long_enroll_race_nine %>%
 
 ```
 
-```{r A.1.2 Student Enrollment Percentagee for Kindergardeners 6th and 9th Graders}
+```{r A.1.2 Student Enrollment Percentagee for Kindergarteners 6th and 9th Graders}
 
 ```
 
 
-> A.1.3. Student Enrollment Change for Kindergardeners 6th and 9th Graders
+> A.1.3. Student Enrollment Change for Kindergarteners 6th and 9th Graders
 
 Change from SY 2019-20 to SY 2020-21; NO SY 2018-29 ENROLL COUNTS DATA AT GRADE LEVEL
 
-```{r Student Enrollment Change for Kindergardener sorted by races, include=FALSE}
+```{r Student Enrollment Change for Kindergartener sorted by races, include=FALSE}
 
 change_enroll_kids_race <- df_change_enrollment_kids %>%
   filter(StudentGroup %in% c("All Students",
@@ -404,11 +404,11 @@ long_change_enroll_kids_race <- melt(change_enroll_kids_race,
                                      variable.name = "Month",
                                      value.name=c("Change in Enrollment")) %>%
   arrange(`StudentGroup`, Month) %>%
-  mutate(GradeLevel = "Kindergarden") 
+  mutate(GradeLevel = "Kindergarten") 
 
 ```
 
-```{r Student Enrollment Change for Kindergardener sorted by income, include=FALSE}
+```{r Student Enrollment Change for Kindergartener sorted by income, include=FALSE}
 
 change_enroll_kids_income <- df_change_enrollment_kids %>%
   filter(StudentGroup %in% c("All Students",
@@ -422,7 +422,7 @@ long_change_enroll_kids_income <- melt(change_enroll_kids_income,
                                      variable.name = "Month",
                                      value.name=c("Change in Enrollment")) %>%
   arrange(`StudentGroup`, Month) %>%
-  mutate(GradeLevel = "Kindergarden")
+  mutate(GradeLevel = "Kindergarten")
 ```
 
 ```{r Student Enrollment Change for 6th Graders sorted by races, include=FALSE}
@@ -506,14 +506,14 @@ long_change_enroll_nine_income <- melt(change_enroll_nine_income,
 
 ```
 
-```{r A.1.3.i Student Enrollment Change for Kindergardeners 6th and 9th Graders sorted by races}
+```{r A.1.3.i Student Enrollment Change for Kindergarteners 6th and 9th Graders sorted by races}
 
 long_change_enroll_race_grades <- bind_rows(long_change_enroll_kids_race, 
                                             long_change_enroll_six_race, 
                                             long_change_enroll_nine_race)
 
 long_change_enroll_race_grades$GradeLevel <- factor(long_change_enroll_race_grades$GradeLevel, 
-                                                      levels=c("Kindergarden", "Sixth Grade", "Ninth Grade"))
+                                                      levels=c("Kindergarten", "Sixth Grade", "Ninth Grade"))
 
 plot_change_enroll_race_grades <- long_change_enroll_race_grades %>%
   ggplot(aes(fill = Month, 
@@ -542,13 +542,13 @@ ggsave("section_a_analysis_files/figures/plot_change_enroll_race_grades.png",
 
 ```
 
-```{r A.1.3.ii Student Enrollment Change for Kindergardeners 6th and 9th Graders sorted by income}
+```{r A.1.3.ii Student Enrollment Change for Kindergarteners 6th and 9th Graders sorted by income}
 long_change_enroll_income_grades <- bind_rows(long_change_enroll_kids_income, 
                                               long_change_enroll_six_income, 
                                               long_change_enroll_nine_income)
 
 long_change_enroll_income_grades$GradeLevel <- factor(long_change_enroll_income_grades$GradeLevel, 
-                                                      levels=c("Kindergarden", "Sixth Grade", "Ninth Grade"))
+                                                      levels=c("Kindergarten", "Sixth Grade", "Ninth Grade"))
 
 #horizontal grid
 plot_change_enroll_income_grades_h <- long_change_enroll_income_grades %>%
@@ -610,7 +610,7 @@ ggsave("section_a_analysis_files/figures/plot_change_enroll_income_grades_v.png"
 Students of color or low income students are further disadvantaged during the pandemic in terms of abs. Particularly lower grade levels
 Grade K, 3rd, 6th, 8th, 9th, 10th grade.
 
-```{r absence count kindergarden, include=FALSE}
+```{r absence count kindergarten, include=FALSE}
 
 ```
 
@@ -635,7 +635,7 @@ Grade K, 3rd, 6th, 8th, 9th, 10th grade.
 ```
 
 
-```{r absence change kindergarden, include=FALSE}
+```{r absence change kindergarten, include=FALSE}
 
 ```
 

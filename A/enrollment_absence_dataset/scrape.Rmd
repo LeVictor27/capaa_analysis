@@ -117,48 +117,48 @@ enrollment_nine <- write.csv(enroll_nine, "/Users/alexliu/Documents/GitHub/evide
 ```
 
 
-```{r enroll kindergarden}
-df <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/Kindergarden_Monthly Enrollment.pdf",
+```{r enroll kindergarten}
+df <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/Kindergarten_Monthly Enrollment.pdf",
                      output = "data.frame",
                      guess = FALSE)
 
 #write.csv(df[[1]], 
-#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_enrollment_kindergargen.csv",
+#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_enrollment_kindergarten.csv",
 #          row.names=FALSE)
 
-enroll_kindergarden <- df[[1]] %>%
+enroll_kindergarten <- df[[1]] %>%
   slice(6:29)
 
 colmn1 <- c("October", "October_9th", "November", "November_9th", "December")
 colmn2 <- c("December_9th", "January", "January_9th")
 colmn3 <- c("February", "February_9th")
 
-enroll_kindergarden <- separate(data = enroll_kindergarden,
+enroll_kindergarten <- separate(data = enroll_kindergarten,
                                 col = Select.View.,
                                 sep = " ",
                                 into = colmn1,
                                 remove = TRUE) 
-enroll_kindergarden <- separate(data = enroll_kindergarden, 
+enroll_kindergarten <- separate(data = enroll_kindergarten, 
                                 col = Filter.by.Grade.Levels, 
                                 sep = " ", 
                                 into = colmn2, 
                                 remove = TRUE)
 
-enroll_kindergarden <- separate(data = enroll_kindergarden,
+enroll_kindergarten <- separate(data = enroll_kindergarten,
                                 col = X.1,
                                 sep = " ",
                                 into = colmn3,
                                 remove = TRUE)
 
-for (i in 2: ncol(enroll_kindergarden)) {
-  enroll_kindergarden[i] <- lapply(enroll_kindergarden[i],
+for (i in 2: ncol(enroll_kindergarten)) {
+  enroll_kindergarten[i] <- lapply(enroll_kindergarten[i],
                           function(x){as.numeric(as.character(gsub(",", "", x)))})
 }
 
 # the row "Gender X" need to be corrected
-#is.na(enroll_kindergarden)
-enroll_kindergarden[8,2:11] <- c(42, 61, 43, 60, 44, 60, 45, 60, 43, 60)
-write.csv(enroll_kindergarden, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/enrollment_kindergarden.csv",
+#is.na(enroll_kindergarten)
+enroll_kindergarten[8,2:11] <- c(42, 61, 43, 60, 44, 60, 45, 60, 43, 60)
+write.csv(enroll_kindergarten, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/enrollment_kindergarten.csv",
                             row.names=FALSE)
 
 ```
@@ -255,13 +255,13 @@ write.csv(change_enroll_nine, "/Users/alexliu/Documents/GitHub/evidenceforequity
 ```
 
 
-```{r change_enroll_kindergarden}
-df1 <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/Kindergarden_Monthly Enrollment Change.pdf",
+```{r change_enroll_kindergarten}
+df1 <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/Kindergarten_Monthly Enrollment Change.pdf",
                      output = "data.frame",
                      guess = FALSE)
 
 #write.csv(df1[[1]], 
-#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_change_enrollment_kindergarden.csv",
+#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_change_enrollment_kindergarten.csv",
 #          row.names=FALSE)
 
 change_enroll_kid <- df1[[1]] %>%
@@ -294,7 +294,7 @@ change_enroll_kid[2:6] <- sapply(change_enroll_kid[2:6],
 #                                 function(x) percent(x, accuracy=0.1))
 
 
-write.csv(change_enroll_kid, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/change_enrollment_kindergarden.csv",
+write.csv(change_enroll_kid, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/change_enrollment_kindergarten.csv",
                             row.names=FALSE)
 
 ```
