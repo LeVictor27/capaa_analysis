@@ -299,3 +299,46 @@ write.csv(change_enroll_kid, "/Users/alexliu/Documents/GitHub/evidenceforequity/
 
 ```
 
+```{r absences raw data}
+
+setwd("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset")
+absences_files <- list.files(pattern = "*Absences.pdf$")
+output <- vector("list", length(absences_files))
+df_absences <- vector("list", length(absences_files))
+grade_level <- vector("list", length(absences_files))
+
+for (i in seq_along(absences_files)) {
+  output[[i]] <- extract_tables(absences_files[[i]],
+                     output = "data.frame",
+                     guess = FALSE) 
+  df_absences[[i]] <- output[[i]][[1]]
+  grade_level[[i]] <- df_absences[[i]][1,2]
+}
+
+names(df_absences) = grade_level
+
+write.csv(df_absences[["10th Grade"]], 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_10th_Absences.csv",
+          row.names=FALSE)
+
+write.csv(df_absences[["9th Grade"]], 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_9th_Absences.csv",
+          row.names=FALSE)
+
+write.csv(df_absences[["8th Grade"]], 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_8th_Absences.csv",
+          row.names=FALSE)
+
+write.csv(df_absences[["6th Grade"]], 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_6th_Absences.csv",
+          row.names=FALSE)
+
+write.csv(df_absences[["3rd Grade"]], 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_3rd_Absences.csv",
+          row.names=FALSE)
+
+write.csv(df_absences[["Kindergarten"]], 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_Kindergarten_Absences.csv",
+          row.names=FALSE)
+```
+
