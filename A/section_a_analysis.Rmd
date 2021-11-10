@@ -20,13 +20,15 @@ knitr::opts_chunk$set(echo = FALSE,
                       )
 ```
 
-#Notes
-## 11/3 to-do
-### find income indicators for course taking 
-### fix reference line for course taking
+* Notes after 11/10 meeting
+  + In term of change, positive values indicate increase in SY2020-21 (post pandemic?) and negative values indicate decrease in SY2020-21 for all the plots in this file. 
+  + Without specific demonstration, all differences are calculated between SY2018-19 (pre pandemic) and SY2020-21
 
-# Introduction
-
+* Notes 11/09
+  + A.1 and A.2 are completed
+  + A.3 working on data for income indicators
+  + A.3 edit spatial maps after completing income plots
+  
 ```{r data, include=FALSE}
 library(tidyverse)
 library(googledrive)
@@ -73,6 +75,7 @@ df_discpline <- id_discipline %>%
 ```
 
 ```{r libraries, include=FALSE}
+library(googledrive)
 library(tidyverse)
 library(ggplot2)
 library(formattable)
@@ -86,12 +89,20 @@ library(spData)
 #library(tabulizer) 
 ```
 
-# Enrollment
-### Have trouble with grade-specific df, need to work on scrape from nested pdf (do-able but time consuming). once the datasets ready, the plot I &II codes can be used with minimal editing 10/26
+```{r uw_palette, include=FALSE}
+# from purple to gold (low=gold, high=purple)
+uw_palette <- colorRampPalette(c("#4b2e83", "#e8e3d3"))
+black_white <- colorRampPalette(c("white", "black"))
+```
 
-## plot I: counts; year 2021; sorted by races; sorted by income levels; bar = month; grades = kindergaiden & 6th & 9th
 
-```{r enrollment counts all students, include=FALSE}
+# A.1. Student Enrollment Both Count and change
+
+Students of color or low income students are further disadvantaged during the pandemic in terms of enrollment. Particularly lower grade levels
+
+> A.1.1 Student Enrollment Count for Kindergarteners 6th and 9th Graders
+
+```{r Student Enrollment Count for All Grade Levels, eval=FALSE, include=FALSE}
 
 month_in_df <- c("October", "November", "December", "January")
 
@@ -107,32 +118,42 @@ long_enroll_by_races <- melt(enrollment_by_races,
                              value.name="EnrollmentCounts") %>%
   arrange(StudentGroup, Month) 
 
+long_enroll_by_races$Month <- factor(long_enroll_by_races$Month, 
+                                     levels = c("January", "December", 
+                                                "November", "October"))
+
 plot_enroll_count <- long_enroll_by_races %>%
   filter(StudentGroup != "All Students") %>%
   ggplot(aes(fill = Month, 
              x = StudentGroup, 
              y = EnrollmentCounts)) + 
-#  geom_text(aes(label = EnrollmentCounts), vjust = 0.3, color = "black",
-#            position = position_dodge(0.9), size = 3.5) +
-  geom_bar(position="dodge", stat="identity") +
+  geom_col(position="dodge", width = 0.7) +
 #  facet_wrap(~Month, ncol =1)+
   ggtitle("Enrollment Counts for SY 2020-21 (All Grade Levels)") +
         labs(x = "Student Groups", 
              y = "Enrollment Counts") +
+#  geom_text(aes(label = `Enrollment Counts`), position=position_dodge(width=0.9), 
+#            hjust = 0.5, vjust = 0.25, colour = "black", size = 1.5) +
   scale_y_continuous(labels = comma) +
-  scale_fill_brewer(palette = "Purples")  +
-  theme_classic() +
+  scale_fill_manual(values = uw_palette(4))  +
+  theme_light() +
   coord_flip() +
-  theme(axis.text.x  = element_text(angle=45, vjust=0.5, size=9)) 
-
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+#        legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.1, 0.75),
+        axis.text.x  = element_text(angle=0, vjust=0.5, size=9),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
 
 plot_enroll_count
 
-ggsave("section_a_analysis_files/figures/plot_enroll_count.png")
+ggsave("section_a_analysis_files/figures/Student Enrollment Count for All Grade Levels.png")
 
 ``` 
 
-```{r load enrollment data, include=FALSE}
+```{r load grade_level enrollment data, include=FALSE}
 id_enrollment_kids <- drive_get(as_id("https://drive.google.com/file/d/1lCa5ap7xqWXTslj7kEqIQfCLNX0WJf0q/view?usp=sharing"))
 id_enrollment_six <- drive_get(as_id("https://drive.google.com/file/d/1KF-9IeKo7xrVJ3Ny5pUl8hKaax-expSE/view?usp=sharing"))
 id_enrollment_nine <- drive_get(as_id("https://drive.google.com/file/d/1uysRPNVca71FFiTEb36cVqTzblTiwXmK/view?usp=sharing"))
@@ -165,8 +186,7 @@ df_change_enrollment_nine <- id_change_enrollment_nine %>%
   read_csv(col_name=TRUE)
 ```
 
-
-```{r enrollment counts kindergarden}
+```{r A.1.i Student Enrollment Count for Kindergarteners, include=FALSE}
 
 df_enrollment_kids[2,1] <- "All Students"
 enroll_race_kids <- df_enrollment_kids %>%
@@ -175,7 +195,7 @@ enroll_race_kids <- df_enrollment_kids %>%
            "November_9th", "December_9th", 
            "January_9th", "February_9th")) %>%
   filter(X %in% c("All Students",
-               "American Indian/ Alaskan Native",
+                  "American Indian/ Alaskan Native",
                "Asian",
                "Black/ African American",
                "Hispanic/ Latino of any race(s)",
@@ -193,18 +213,17 @@ long_enroll_race_kids <- melt(enroll_race_kids,
                              variable.name = "Month",
                              value.name=c("Enrollment")) %>%
   arrange(`Student Group`, Month) %>%
-  mutate(GradeLevel = "Kindergarden")
+  mutate(GradeLevel = "Kindergarten")
 ```
 
-
-```{r enrollment counts sixth grade}
+```{r A.1.ii Student Enrollment Count for 6th Graders, include=FALSE}
 df_enrollment_six[2,2] <- "All Students"
 enroll_race_six <- df_enrollment_six %>%
   select(c("X", "October_6th", 
            "November_6th", "December_6th", 
            "January_6th", "February_6th")) %>%
   filter(X %in% c("All Students",
-               "American Indian/ Alaskan Native",
+                  "American Indian/ Alaskan Native",
                "Asian",
                "Black/ African American",
                "Hispanic/ Latino of any race(s)",
@@ -225,8 +244,7 @@ long_enroll_race_six <- melt(enroll_race_six,
   mutate(GradeLevel = "Sixth Grade")
 ```
 
-
-```{r enrollment counts ninth grade}
+```{r A.1.iii Student Enrollment Count for 9th Graders, include=FALSE}
 
 df_enrollment_nine[2,1] <- "All Students"
 enroll_race_nine <- df_enrollment_nine %>%
@@ -234,7 +252,7 @@ enroll_race_nine <- df_enrollment_nine %>%
            "November_9th", "December_9th", 
            "January_9th", "February_9th")) %>%
   filter(X %in% c("All Students",
-               "American Indian/ Alaskan Native",
+                  "American Indian/ Alaskan Native",
                "Asian",
                "Black/ African American",
                "Hispanic/ Latino of any race(s)",
@@ -255,42 +273,51 @@ long_enroll_race_nine <- melt(enroll_race_nine,
   mutate(GradeLevel = "Ninth Grade")
 ```
 
-```{r enroll grade-level plot race}
+```{r A.1.1 Student Enrollment Count for Kindergarteners 6th and 9th Graders}
 
 #"February", "January", "December", "November", "October"
 
 long_enroll_race_grades <- bind_rows(long_enroll_race_kids, 
                                      long_enroll_race_six, 
-                                     long_enroll_race_nine)
+                                     long_enroll_race_nine) %>%
+  filter(`Student Group` != "All Students")
 
 plot_enroll_count_grades <- long_enroll_race_grades %>%
-  ggplot(aes(fill = Month, 
-             x = `Student Group`, 
-             y = Enrollment)) + 
-#  geom_text(aes(label = Enrollment), vjust = 0.3, color = "black",
-#            position = position_dodge(0.9), size = 3.5) +
-  geom_bar(position="dodge", stat="identity") +
-  facet_grid(~factor(GradeLevel, levels=c("Kindergarden", "Sixth Grade", "Ninth Grade"))) +
-  ggtitle("Enrollment Counts for School Year 2020-21") +
+  ggplot(aes(x = `Student Group`, 
+             y = Enrollment,
+             fill = Month,
+             order = Month)) + 
+  geom_col(position = "dodge", width = 0.7) + 
+  facet_grid(~factor(GradeLevel, levels=c("Kindergarten", "Sixth Grade", "Ninth Grade"))) +
+  ggtitle("Student Enrollment Counts for School Year 2020-21") +
         labs(x = "Student Groups", 
-             y = "Enrollment Counts") +
-#  scale_y_discrete(labels = scales::label_comma()) +
-  scale_fill_brewer(palette = "Purples")  +
-  theme_grey() +
+             y = "Student Counts") +
+  scale_y_continuous(labels = comma) +
+  scale_fill_manual(values = uw_palette(5))  +
+  theme_light() +
   coord_flip() +
-  theme(axis.text.x  = element_text(angle=45, vjust=0.5, size=9),
-        axis.title.x  = element_text(size=12),
-        axis.title.y  = element_text(size=12),
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
         strip.text.x = element_text(size = 12, colour = "black")) 
 
 plot_enroll_count_grades
-
-ggsave("section_a_analysis_files/figures/plot_enroll_count_grades.png", 
-       width = 40, height = 20, units = "cm")
+  
+ggsave("section_a_analysis_files/figures/A.1.1 Student Enrollment Count for Kindergarteners 6th and 9th Graders.png")
 ```
 
-## plot II: try pie charts? datatype: % = each race/all student; year 2021; each monthly; comparison across different grades
-```{r enrollment percentage all students}
+> A.1.2 Student Enrollment Percentagee for Kindergarteners 6th and 9th Graders
+
+* percentage of student enrollment for sy2020-21
+  + percentage = student count of a student group in a certain month/student count of all students in the same month
+  + no results show minority groups have lower enroll percentage at per k level
+  + similar patterns for pre k, 6th, and 9th grade
+
+```{r Student Enrollment Percentage for All Grader Levels}
 enrollment_perc_races <- data.frame(matrix(NA,    
                           nrow = nrow(enrollment_by_races),
                           ncol = ncol(enrollment_by_races)))
@@ -311,7 +338,8 @@ long_enroll_perc_races <- melt(enrollment_perc_races,
                              measure.vars = month_in_df,
                              variable.name = "Month",
                              value.name="EnrollmentPercentage") %>%
-  arrange(StudentGroup, Month) 
+  arrange(StudentGroup, Month) %>%
+  mutate(EnrollmentPercentage = percent(EnrollmentPercentage))
 
 plot_enroll_perc <- long_enroll_perc_races %>%
   filter(StudentGroup != "All Students") %>%
@@ -319,68 +347,123 @@ plot_enroll_perc <- long_enroll_perc_races %>%
   ggplot(aes(fill = Month, 
              x = StudentGroup, 
              y = EnrollmentPercentage)) + 
-  geom_bar(position="dodge", stat="identity") +
-#  facet_wrap(~Month, ncol =1)+
+  geom_col(position="dodge", width = 0.7) +
+  geom_text(aes(label = `EnrollmentPercentage`), position=position_dodge(width=0.9), 
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
   ggtitle("Enrollment Percentage for SY 2020-21 (All Grade Levels)") +
         labs(x = "Student Groups", 
              y = "Enrollment Percentage") +
   scale_y_continuous(labels = percent) +
-  scale_fill_brewer(palette = "Purples")  +
-  theme_classic() +
-  coord_flip() 
+  scale_fill_manual(values = uw_palette(4)) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+#        legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.1, 0.75),
+        axis.text.x  = element_text(angle=0, vjust=0.5, size=9),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
+
 
 plot_enroll_perc
 
-ggsave("section_a_analysis_files/figures/plot_enroll_perc.png")
+ggsave("section_a_analysis_files/figures/Student Enrollment Percentage for All Grader Levels.png")
 
 
 ```
 
-```{r enrollment percentage kindergarden}
+```{r A.1.iv Student Enrollment Percentage for Kindergarteners, include=FALSE}
 
 all_students_kids <- long_enroll_race_kids %>%
   filter(`Student Group` == "All Students") %>%
   select("Enrollment")
 
-long_enroll_race_kids <- long_enroll_race_kids %>%
+long_enroll_perc_kids <- long_enroll_race_kids %>%
   group_by(`Student Group`) %>%
   mutate("Percentage" = Enrollment/all_students_kids) %>%
-  ungroup()  %>%
-  arrange(`Student Group`, Month) 
+#  ungroup()  %>%
+  arrange(`Student Group`, Month)
 
 ```
 
-```{r enrollment percentage sixth grade}
+```{r A.1.v Student Enrollment Percentage for 6th Graders, include=FALSE}
 
 all_students_six <- long_enroll_race_six %>%
   filter(`Student Group` == "All Students") %>%
   select("Enrollment")
 
-long_enroll_race_six <- long_enroll_race_six %>%
+long_enroll_perc_six <- long_enroll_race_six %>%
   group_by(`Student Group`) %>%
   mutate("Percentage" = Enrollment/all_students_six) %>%
-  ungroup()  %>%
+#  ungroup()  %>%
   arrange(`Student Group`, Month) 
 ```
 
-```{r enrollment percentage ninth grade}
+```{r A.i.vi Student Enrollment Percentage for 9th Graders, include=FALSE}
 
 all_students_nine <- long_enroll_race_nine %>%
   filter(`Student Group` == "All Students") %>%
   select("Enrollment")
 
-long_enroll_race_nine <- long_enroll_race_nine %>%
+long_enroll_perc_nine <- long_enroll_race_nine %>%
   group_by(`Student Group`) %>%
   mutate("Percentage" = Enrollment/all_students_nine) %>%
-  ungroup()  %>%
+#  ungroup()  %>%
   arrange(`Student Group`, Month) 
 
 ```
 
+```{r A.1.2 Student Enrollment Percentagee for Kindergarteners 6th and 9th Graders}
 
-## plot III: splitted bar w/ % changes; low-income vs. non-low-income; sorted by years or races?
+long_enroll_perc <- bind_rows(long_enroll_perc_kids,
+                                long_enroll_perc_six,
+                                long_enroll_perc_nine) %>%
+  filter(`Student Group` != "All Students") %>%
+  mutate(percentage = percent(Percentage$Enrollment)) %>%
+  select(!"Percentage")
 
-```{r enrollment change kindergarden race}
+plot_enroll_count_grades <- long_enroll_perc %>%
+  ggplot(aes(x = `Student Group`, 
+             y = percentage,
+             fill = Month,
+             order = Month)) + 
+  geom_text(aes(label = percentage), position=position_dodge(width=0.8), 
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
+  geom_col(position = "dodge", width = 0.9) + 
+  facet_grid(~factor(GradeLevel, levels=c("Kindergarten", "Sixth Grade", "Ninth Grade"))) +
+  ggtitle("Student Enrollment Percentage for School Year 2020-21") +
+        labs(x = "Student Groups", 
+             y = "Enrollment Percentage") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.6)) +
+  scale_fill_manual(values = uw_palette(5))  +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
+
+plot_enroll_count_grades
+  
+#ggsave("section_a_analysis_files/figures/A.1.2 Student Enrollment Percentagee for Kindergarteners 6th and 9th Graders.png")
+
+```
+
+> A.1.3. Student Enrollment Change for Kindergarteners 6th and 9th Graders
+
+Change from **SY 2019-20** to SY 2020-21; NO SY 2018-29 ENROLL COUNTS DATA AT GRADE LEVEL; 
+
+* positive value means increase in SY 2020-21 from SY 2019-20
+
+```{r Student Enrollment Change for Kindergartener sorted by races, include=FALSE}
 
 change_enroll_kids_race <- df_change_enrollment_kids %>%
   filter(StudentGroup %in% c("All Students",
@@ -399,11 +482,11 @@ long_change_enroll_kids_race <- melt(change_enroll_kids_race,
                                      variable.name = "Month",
                                      value.name=c("Change in Enrollment")) %>%
   arrange(`StudentGroup`, Month) %>%
-  mutate(GradeLevel = "Kindergarden") 
+  mutate(GradeLevel = "Kindergarten") 
 
 ```
 
-```{r enrollment change kindergarden income}
+```{r Student Enrollment Change for Kindergartener sorted by income, include=FALSE}
 
 change_enroll_kids_income <- df_change_enrollment_kids %>%
   filter(StudentGroup %in% c("All Students",
@@ -417,10 +500,10 @@ long_change_enroll_kids_income <- melt(change_enroll_kids_income,
                                      variable.name = "Month",
                                      value.name=c("Change in Enrollment")) %>%
   arrange(`StudentGroup`, Month) %>%
-  mutate(GradeLevel = "Kindergarden")
+  mutate(GradeLevel = "Kindergarten")
 ```
 
-```{r enrollment change sixth grade race}
+```{r Student Enrollment Change for 6th Graders sorted by races, include=FALSE}
 
 change_enroll_six_race <- df_change_enrollment_six %>%
   filter(StudentGroup %in% c("All Students",
@@ -443,7 +526,7 @@ long_change_enroll_six_race <- melt(change_enroll_six_race,
 
 ```
 
-```{r enrollment change sixth grade income}
+```{r Student Enrollment Change for 6th Graders sorted by income, include=FALSE}
 
 change_enroll_six_income <- df_change_enrollment_six %>%
   filter(StudentGroup %in% c("All Students",
@@ -460,7 +543,7 @@ long_change_enroll_six_income <- melt(change_enroll_six_income,
   mutate(GradeLevel = "Sixth Grade")
 ```
 
-```{r enrollment change ninth grade race}
+```{r Student Enrollment Change for 9th Graders sorted by races, include=FALSE}
 
 change_enroll_nine_race <- df_change_enrollment_nine %>%
   filter(StudentGroup %in% c("All Students",
@@ -483,7 +566,7 @@ long_change_enroll_nine_race <- melt(change_enroll_nine_race,
 
 ```
 
-```{r enrollment change ninth grade income}
+```{r Student Enrollment Change for 9th Graders sorted by income, include=FALSE}
 
 change_enroll_nine_income <- df_change_enrollment_nine %>%
   filter(StudentGroup %in% c("All Students",
@@ -501,164 +584,717 @@ long_change_enroll_nine_income <- melt(change_enroll_nine_income,
 
 ```
 
-```{r enroll change percentage by race plot}
+```{r A.1.3.i Student Enrollment Change for Kindergarteners 6th and 9th Graders sorted by races}
 
 long_change_enroll_race_grades <- bind_rows(long_change_enroll_kids_race, 
                                             long_change_enroll_six_race, 
-                                            long_change_enroll_nine_race)
+                                            long_change_enroll_nine_race) %>%
+  mutate(`Change in Enrollment` = percent(`Change in Enrollment`))
 
 long_change_enroll_race_grades$GradeLevel <- factor(long_change_enroll_race_grades$GradeLevel, 
-                                                      levels=c("Kindergarden", "Sixth Grade", "Ninth Grade"))
+                                                      levels=c("Kindergarten", "Sixth Grade", "Ninth Grade"))
 
 plot_change_enroll_race_grades <- long_change_enroll_race_grades %>%
   ggplot(aes(fill = Month, 
              x = `StudentGroup`, 
              y = `Change in Enrollment`)) + 
-  geom_bar(position="dodge", stat="identity") +
+  geom_col(position = "dodge", width = 0.9) + 
   facet_wrap(~GradeLevel, ncol = 3) +
-  ggtitle("Percentage Change in Enrollment for School Year 2020-21",
-           subtitle = "By student groups") +
+  ggtitle("Percentage Change in Student Enrollment",
+           subtitle = "between SY2019-20 and SY2020-21") +
   labs(x = "Student Groups", 
        y = "Percentage Change in Enrollment") +
   scale_y_continuous(labels = percent) +
   geom_hline(yintercept = 0) +
-  scale_fill_brewer(palette = "Purples")  +
-  theme_grey() +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `Change in Enrollment`), position=position_dodge(width=0.8), 
+            hjust = 0.5, vjust = 0.25, colour = "black", size = 1.5) +
+  theme_light() +
   coord_flip() +
-  theme(axis.text.x  = element_text(angle=45, vjust=0.5, size=9),
-        axis.title.x  = element_text(size=12),
-        axis.title.y  = element_text(size=12),
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
         strip.text.x = element_text(size = 12, colour = "black")) 
 
 plot_change_enroll_race_grades
 
-ggsave("section_a_analysis_files/figures/plot_change_enroll_race_grades.png", 
-       width = 40, height = 15, units = "cm")
+#ggsave("section_a_analysis_files/figures/A.1.3.i Student Enrollment Change sorted by races.png", 
+#       width = 40, height = 15, units = "cm")
+
+plot_change_enroll_race_grades_v <- long_change_enroll_race_grades %>%
+  ggplot(aes(fill = Month, 
+             x = `StudentGroup`, 
+             y = `Change in Enrollment`)) + 
+  geom_col(position = "dodge", width = 0.9) + 
+  facet_wrap(~GradeLevel, ncol = 1) +
+  ggtitle("Percentage Change in Student Enrollment",
+           subtitle = "between SY2019-20 and SY2020-21") +
+  labs(x = "Student Groups", 
+       y = "Percentage Change in Enrollment") +
+  scale_y_continuous(labels = percent) +
+  geom_hline(yintercept = 0) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `Change in Enrollment`), position=position_dodge(width=0.8), 
+            hjust = 0.5, vjust = 0.25, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
+
+plot_change_enroll_race_grades_v
+
+#ggsave("section_a_analysis_files/figures/A.1.3.i Student Enrollment Change sorted by races_v.png", 
+#       width = 20, height = 40, units = "cm")
 
 ```
 
-```{r enroll change percentage by income plot}
+```{r A.1.3.ii Student Enrollment Change for Kindergarteners 6th and 9th Graders sorted by income}
 long_change_enroll_income_grades <- bind_rows(long_change_enroll_kids_income, 
                                               long_change_enroll_six_income, 
-                                              long_change_enroll_nine_income)
+                                              long_change_enroll_nine_income)  %>%
+  mutate(`Change in Enrollment` = percent(`Change in Enrollment`))
 
 long_change_enroll_income_grades$GradeLevel <- factor(long_change_enroll_income_grades$GradeLevel, 
-                                                      levels=c("Kindergarden", "Sixth Grade", "Ninth Grade"))
+                                                      levels=c("Kindergarten", "Sixth Grade", "Ninth Grade"))
 
 #horizontal grid
 plot_change_enroll_income_grades_h <- long_change_enroll_income_grades %>%
   ggplot(aes(fill = Month, 
              x = `StudentGroup`, 
              y = `Change in Enrollment`)) + 
-  geom_bar(position="dodge", stat="identity") +
+  geom_col(position = "dodge", width = 0.7) + 
   facet_wrap(~GradeLevel, ncol = 3) +
-  ggtitle("Percentage Change in Enrollment for School Year 2020-21",
-          subtitle = "By income groups") +
+  ggtitle("Percentage Change in Student Enrollment",
+          subtitle = "between SY2019-20 and SY2020-21") +
         labs(x = "Income Groups", 
              y = "Percentage Change in Enrollment") +
   scale_y_continuous(labels = percent) +
   geom_hline(yintercept = 0) +
-  scale_fill_brewer(palette = "Purples")  +
-  theme_grey() +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `Change in Enrollment`), position=position_dodge(width=0.8), 
+            hjust = 0.5, vjust = 0.25, colour = "black", size = 1.5) +
+  theme_light() +
   coord_flip() +
-  theme(axis.text.x  = element_text(angle=45, vjust=0.5, size=9),
-        axis.title.x  = element_text(size=12),
-        axis.title.y  = element_text(size=12),
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
         strip.text.x = element_text(size = 12, colour = "black")) 
 
 plot_change_enroll_income_grades_h
 
-ggsave("section_a_analysis_files/figures/plot_change_enroll_income_grades_h.png", 
-       width = 27, height = 12, units = "cm")
+#ggsave("section_a_analysis_files/figures/A.1.3.ii Student Enrollment Change sorted by income_h.png")
 
 #vertical grid
 plot_change_enroll_income_grades_v <- long_change_enroll_income_grades %>%
   ggplot(aes(fill = Month, 
              x = `StudentGroup`, 
              y = `Change in Enrollment`)) + 
-  geom_bar(position="dodge", stat="identity") +
+  geom_col(position = "dodge", width = 0.7) + 
   facet_wrap(~GradeLevel, ncol = 1) +
-  ggtitle("Percentage Change in Enrollment for School Year 2020-21",
-          subtitle = "By income groups") +
+  ggtitle("Percentage Change in Student Enrollment",
+          subtitle = "between SY2019-20 and SY2020-21") +
         labs(x = "Income Groups", 
              y = "Percentage Change in Enrollment") +
   scale_y_continuous(labels = percent) +
   geom_hline(yintercept = 0) +
-  scale_fill_brewer(palette = "Purples")  +
-  theme_grey() +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `Change in Enrollment`), position=position_dodge(width=0.8), 
+            hjust = 0.5, vjust = 0.25, colour = "black", size = 1.5) +
+  theme_light() +
   coord_flip() +
-  theme(axis.text.x  = element_text(angle=45, vjust=0.5, size=12),
-        axis.title.x  = element_text(size=12),
-        axis.title.y  = element_text(size=12),
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
         strip.text.x = element_text(size = 12, colour = "black")) 
 
 plot_change_enroll_income_grades_v
 
-ggsave("section_a_analysis_files/figures/plot_change_enroll_income_grades_v.png", 
-       width = 20, height = 30, units = "cm")
+#ggsave("section_a_analysis_files/figures/A.1.3.ii Student Enrollment Change sorted by income_v.png")
 
 ```
 
-# Absent
-##[Students of color or low income students are further disadvantaged during the pandemic in terms of abs. Particularly lower grade levels ]
-##Grade K, 3rd abs, 6th, 8th grade enrollment, 9th, 10th grade.
+***
 
-## plot I: absence count; year 2021 by races; grades: kindergargen, 3, 6, 8, 9, 10; 
-```{r absence count kindergarden, include=FALSE}
+# A.2. Student absence both count and change
+Students of color or low income students are further disadvantaged during the pandemic in terms of abs. Particularly lower grade levels
+grade levels: Grade K, 3rd, 6th, 8th, 9th, 10th grade.
+
+* measure: average absences per student
+* for total absences
+  + higher grade levels have higher absences
+  + on average, for all the grade levels, minority groups have high absences 
+  + top absences groups: American Indian/Alaskan Native, Native Hawaiian/Other Pacific Islander, Hispanic/Latino of any race(s)
+  + low-income group has higher absences than non-low income for all the grade levels
+
+* for difference in absences between sy2018-19 and sy2020-21
+  + difference = absences in sy2018-19 (of particular student group in a certain month) - absences in sy2018-19 (of the same student group in that month)
+  + POSITIVE value means that absences in sy2020-21 is higher (an increase)
+  + for grade levels 6, 8, 9, and 10, absences in sy2020-21 is higher
+  + for kindergarten, absences decreased for group "all students" while increased for American Indian/Alaskan Native, Native Hawaiian/Other Pacific Islander, Hispanic/Latino of any race(s)
+  + for kindergarten, absences increased for low-income group while decreased for non-low income group
+  
+```{r A.2 load absences data, include=FALSE}
+id_absences_prek <- drive_get(as_id("https://drive.google.com/file/d/1WomqNkILSgSr-1vivw6yq6mt2hoYG70R/view?usp=sharing"))
+id_absences_3rd <- drive_get(as_id("https://drive.google.com/file/d/1BHSSnZzzszda-0l1AA0-T20leRUGUYJN/view?usp=sharing"))
+id_absences_6th <- drive_get(as_id("https://drive.google.com/file/d/1rnBlB9gS4l4XG7xldeGPgbsmgH_sFxIQ/view?usp=sharing"))
+id_absences_8th <- drive_get(as_id("https://drive.google.com/file/d/1sA6HAIdAliSwPNR2au37dNcXMTBdie6p/view?usp=sharing"))
+id_absences_9th <- drive_get(as_id("https://drive.google.com/file/d/1uH9xzI5jjDNn39i5yCIsNUMa_Gvipl00/view?usp=sharing"))
+id_absences_10th <- drive_get(as_id("https://drive.google.com/file/d/1jz4BXyIuvm3G53_0Z9kkOC-JnrEDiJHh/view?usp=sharing"))
+
+df_absences_prek <- id_absences_prek %>%
+  drive_read_string() %>%
+  read_csv(col_names=TRUE)
+
+df_absences_3rd <- id_absences_3rd %>%
+  drive_read_string() %>%
+  read_csv(col_names=TRUE)
+
+df_absences_6th <- id_absences_6th %>%
+  drive_read_string() %>%
+  read_csv(col_names=TRUE)
+
+df_absences_8th <- id_absences_8th %>%
+  drive_read_string() %>%
+  read_csv(col_names=TRUE)
+
+df_absences_9th <- id_absences_9th %>%
+  drive_read_string() %>%
+  read_csv(col_names=TRUE)
+
+df_absences_10th <- id_absences_10th %>%
+  drive_read_string() %>%
+  read_csv(col_name=TRUE)
+
+df_absences <- bind_rows(Kindergarten = df_absences_prek,
+                         `3rd Grade` = df_absences_3rd, 
+                         `6th Grade` = df_absences_6th,
+                         `8th Grade` = df_absences_8th,
+                         `9th Grade` = df_absences_9th, 
+                         `10th Grade` = df_absences_10th, 
+                         .id = "GradeLevel")
+```
+
+```{r A.2.1.i Student Absence Count sorted by races data, include=FALSE}
+
+months_in_df <- c("October", "November", "December", "January", "February")
+df_absences$"GradeLevel" <- factor(df_absences$"GradeLevel", 
+                                   levels = c("Kindergarten", "3rd Grade", 
+                                              "6th Grade", "8th Grade",
+                                              "9th Grade", "10th Grade"))
+  
+absences_count <- df_absences %>%
+  filter(StudentGroup == "All Students" | 
+           StudentGroup == "American Indian/ Alaskan Native"|
+           StudentGroup == "Asian"|
+           StudentGroup == "Black/ African American"|
+           StudentGroup == "Hispanic/ Latino of any race(s)"|
+           StudentGroup == "Native Hawaian/ Other Pacific Islander"|
+           StudentGroup == "Two or More Races"|
+           StudentGroup == "White") %>%
+  select(!c("10/2019", "11/2019", "12/2019", "01/2019", "02/2019",
+            "10/2020", "11/2020", "12/2020", "01/2020", "02/2020")) 
+
+colnames(absences_count) <- c("GradeLevel", "StudentGroup", months_in_df)
+
+long_absences_count <- melt(absences_count, 
+                            id.vars = c("GradeLevel", "StudentGroup"),
+                            measure.vars = months_in_df,
+                            variable.name = "Month",
+                            value.name=c("Total Absences")) %>%
+  mutate(`Total Absences` = as.numeric(`Total Absences`)) %>%
+  arrange(GradeLevel, StudentGroup, Month)
 
 ```
 
-```{r absence count 3rd grade, include=FALSE}
+```{r A.2.1.i Student Absence Count sorted by races, fig.height=12, fig.width=10, warning=FALSE}
+
+long_absences_count <- within(long_absences_count, Month <- factor(Month, 
+                                      levels = c("February", "January",
+                                                 "December", "November", "October"))) %>%
+  group_by(GradeLevel, StudentGroup) %>%
+  mutate(label_y = cumsum(`Total Absences`))
+
+plot_absences_count_bygrades <- long_absences_count %>%
+  ggplot(aes(x = StudentGroup, 
+             y = `Total Absences`,
+             fill = Month, 
+             order = Month)) + 
+#  geom_bar(position="dodge", stat="identity") + #to separated bars for months 
+  geom_col(stat="identity", width = 0.7) +
+  facet_wrap(~GradeLevel, ncol = 1) +
+  ggtitle("Total Absences by Month for School Year 2020-21") +
+        labs(x = "Student Groups", 
+             y = "Total Absences") +
+  scale_y_continuous(limits = c(0, 35)) +
+  geom_text(aes(y = label_y, label = `Total Absences`), hjust = 1, colour = "grey88", size = 3) +
+  scale_fill_manual(values = uw_palette(5))  +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+ #       legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+ #       legend.justification = c(0, 1),
+  #      legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=0, vjust=0.5, size=9),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
+
+plot_absences_count_bygrades
+
+#ggsave("/Users/alexliu/Desktop/plot.png")
+```
+
+```{r A.2.1.i Student Absence Count sorted by races unstacked, fig.height=14, fig.width=10, warning=FALSE}
+
+#long_absences_count <- ungroup(long_absences_count)
+
+plot_absences_count_bygrades_unstacked <- long_absences_count %>%
+  ggplot(aes(x = StudentGroup, 
+             y = `Total Absences`,
+             fill = Month, 
+             order = Month)) + 
+  geom_col(position="dodge", stat="identity", width = 0.7) + #to separated bars for months 
+#  geom_bar(stat="identity", width = 0.4) +
+  facet_wrap(~GradeLevel, ncol = 1) +
+  ggtitle("Total Absences by Month for School Year 2020-21") +
+        labs(x = "Student Groups", 
+             y = "Total Absences") +
+#  scale_y_continuous(limits = c(0, 35)) +
+  geom_text(aes(label = `Total Absences`), position=position_dodge(width=0.9), 
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
+  scale_fill_manual(values = uw_palette(5))  +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+ #       legend.justification = c(0, 1),
+        legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=0, vjust=0.5, size=9),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
+
+plot_absences_count_bygrades_unstacked
+
+#ggsave("/Users/alexliu/Desktop/plot.png")
 
 ```
 
-```{r absence count 6th grade, include=FALSE}
+```{r A.2.1.i Student Absence Count sorted by races separate, warning=FALSE}
+
+long_absences_count <- ungroup(long_absences_count)
+
+grade_levels <- unique(long_absences_count$GradeLevel)
+plot_absences_count_separate <- list()
+
+for (i in seq_along(grade_levels)) {
+  df <- long_absences_count %>% filter(GradeLevel == grade_levels[i]) 
+    p<- ggplot(df, aes(x = StudentGroup, 
+        y = `Total Absences`,
+        fill = Month, 
+        order = Month)) + 
+    geom_col(position="dodge", width = 0.7) +  
+    facet_wrap(~GradeLevel, ncol = 1) +
+    ggtitle("Total Absences by Month for School Year 2020-21") +
+    labs(x = "Student Groups", y = "Total Absences") +
+    scale_y_continuous(limits = c(0, 7.5)) +
+    geom_text(aes(label = `Total Absences`), position=position_dodge(width=0.9), 
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
+    scale_fill_manual(values = uw_palette(5))  +
+    theme_light() +
+    coord_flip() +
+    theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+          plot.subtitle = element_text(size = 14, hjust = 0.5),
+          legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+          axis.text.x  = element_text(angle=0, vjust=0.5, size=9),
+          axis.title.x  = element_text(size=14),
+          axis.title.y  = element_text(size=14),
+          strip.text.x = element_text(size = 12, colour = "black")) 
+  
+  print(p)
+  plot_absences_count_separate[[i]] <- p
+}
 
 ```
 
-```{r absence count 8th grade, include=FALSE}
+```{r A.2.1.ii Student Absence Count sorted by income data, include=FALSE}
+
+months_in_df <- c("October", "November", "December", "January", "February")
+df_absences$"GradeLevel" <- factor(df_absences$"GradeLevel", 
+                                   levels = c("Kindergarten", "3rd Grade", 
+                                              "6th Grade", "8th Grade",
+                                              "9th Grade", "10th Grade"))
+  
+absences_count_income <- df_absences %>%
+  filter(StudentGroup == "All Students" | 
+           StudentGroup == "Low-Income"|
+           StudentGroup == "Non-Low Income") %>%
+  select(!c("10/2019", "11/2019", "12/2019", "01/2019", "02/2019",
+            "10/2020", "11/2020", "12/2020", "01/2020", "02/2020")) 
+
+colnames(absences_count_income) <- c("GradeLevel", "StudentGroup", months_in_df)
+
+long_absences_count_income <- melt(absences_count_income, 
+                            id.vars = c("GradeLevel", "StudentGroup"),
+                            measure.vars = months_in_df,
+                            variable.name = "Month",
+                            value.name=c("Total Absences")) %>%
+  mutate(`Total Absences` = as.numeric(`Total Absences`)) %>%
+  arrange(GradeLevel, StudentGroup, Month)
 
 ```
 
-```{r absence count 9th grade, include=FALSE}
+```{r A.2.1.ii Student Absence Count sorted by income, warning=FALSE}
+
+long_absences_count_income <- within(long_absences_count_income, Month <- factor(Month, 
+                                      levels = c("February", "January",
+                                                 "December", "November", "October"))) %>%
+  group_by(GradeLevel, StudentGroup) %>%
+  mutate(label_y = cumsum(`Total Absences`))
+
+plot_absences_count_income <- long_absences_count_income %>%
+  ggplot(aes(x = StudentGroup, 
+             y = `Total Absences`,
+             fill = Month, 
+             order = Month)) + 
+#  geom_bar(position="dodge", stat="identity") + #to separated bars for months 
+  geom_col(stat="identity", width = 0.7) +
+  facet_wrap(~GradeLevel, ncol = 1) +
+  ggtitle("Total Absences by Month for School Year 2020-21") +
+        labs(x = "Student Groups", 
+             y = "Total Absences") +
+  scale_y_continuous(limits = c(0, 25)) +
+  geom_text(aes(y = label_y, label = `Total Absences`), hjust = 1, colour = "grey88", size = 3) +
+  scale_fill_manual(values = uw_palette(5))  +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+    #    legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+ #       legend.justification = c(0, 1),
+   #     legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=0, vjust=0.5, size=9),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
+
+plot_absences_count_income
+
+# ggsave("/Users/alexliu/Desktop/plot.png")
 
 ```
 
-```{r absence count 10th grade, include=FALSE}
+```{r A.2.1.ii Student Absence Count sorted by income unstacked, fig.height=12, fig.width=10}
+#long_absences_count_income <- ungroup(long_absences_count_income)
+
+plot_absences_count_income_unstacked <- long_absences_count_income %>%
+  ggplot(aes(x = StudentGroup, 
+             y = `Total Absences`,
+             fill = Month, 
+             order = Month)) + 
+  geom_col(position="dodge", stat="identity", width = 0.7) + #to separated bars for months 
+  facet_wrap(~GradeLevel, ncol = 1) +
+  ggtitle("Total Absences by Month for School Year 2020-21") +
+        labs(x = "Student Groups", 
+             y = "Total Absences") +
+  geom_text(aes(label = `Total Absences`), position = position_dodge(0.9),
+            hjust = 0, vjust = 0.5, colour = "black", size = 2) +
+  scale_fill_manual(values = uw_palette(5))  +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+  #      legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=0, vjust=0.5, size=9),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
+
+plot_absences_count_income_unstacked
+
+#ggsave("/Users/alexliu/Desktop/plot.png")
 
 ```
 
-## plot II: absence change; datatype: % changed; 2019 vs 2021 (ignore 2020); grades: kindergargen, 3, 6, 8, 9, 10; sorted by races and income levels
+```{r A.2.1.ii Student Absence Count sorted by income separate}
+long_absences_count_income <- ungroup(long_absences_count_income)
 
-```{r absence change kindergarden, include=FALSE}
+grade_levels <- unique(long_absences_count_income$GradeLevel)
+plot_absences_count_inc_separate <- list()
+
+for (i in seq_along(grade_levels)) {
+  df <- long_absences_count_income %>% filter(GradeLevel == grade_levels[i]) 
+    p<- ggplot(df, aes(x = StudentGroup, 
+        y = `Total Absences`,
+        fill = Month, 
+        order = Month)) + 
+    geom_col(position="dodge", width = 0.7) + #to separated bars for months 
+    facet_wrap(~GradeLevel, ncol = 1) +
+    ggtitle("Total Absences by Month for School Year 2020-21") +
+    labs(x = "Student Groups", y = "Total Absences") +
+    scale_y_continuous(limits = c(0, 6)) +
+    geom_text(aes(label = `Total Absences`), position=position_dodge(width=0.9), 
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
+    scale_fill_manual(values = uw_palette(5))  +
+    theme_light() +
+    coord_flip() +
+    theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+          plot.subtitle = element_text(size = 14, hjust = 0.5),
+          legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+          axis.text.x  = element_text(angle=0, vjust=0.5, size=9),
+          axis.title.x  = element_text(size=14),
+          axis.title.y  = element_text(size=14),
+          strip.text.x = element_text(size = 12, colour = "black")) 
+  
+  print(p)
+  plot_absences_count_inc_separate[[i]] <- p
+}
+```
+
+```{r A.2.2.i Student Absence Change sorted by races data, include=FALSE}
+
+months_in_df <- c("October", "November", "December", "January", "February")
+df_absences$"GradeLevel" <- factor(df_absences$"GradeLevel", 
+                                   levels = c("Kindergarten", "3rd Grade", 
+                                              "6th Grade", "8th Grade",
+                                              "9th Grade", "10th Grade"))
+  
+absences_change <- df_absences %>%
+  filter(StudentGroup == "All Students" | 
+           StudentGroup == "American Indian/ Alaskan Native"|
+           StudentGroup == "Asian"|
+           StudentGroup == "Black/ African American"|
+           StudentGroup == "Hispanic/ Latino of any race(s)"|
+           StudentGroup == "Native Hawaian/ Other Pacific Islander"|
+           StudentGroup == "Two or More Races"|
+           StudentGroup == "White") %>%
+  mutate(October = as.numeric(`10/2021`) - as.numeric(`10/2019`),
+         November = as.numeric(`11/2021`) - as.numeric(`11/2019`),
+         December = as.numeric(`12/2021`) - as.numeric(`12/2019`),
+         January = as.numeric(`01/2021`) - as.numeric(`01/2019`),
+         February = as.numeric(`02/2021`) - as.numeric(`02/2019`)) %>%
+  select(c("GradeLevel", "StudentGroup", "October", "November", "December", "January", "February")) 
+
+long_absences_change <- melt(absences_change, 
+                            id.vars = c("GradeLevel", "StudentGroup"),
+                            measure.vars = months_in_df,
+                            variable.name = "Month",
+                            value.name=c("% Change in Absences")) %>%
+  mutate(`% Change in Absences` = as.numeric(`% Change in Absences`)) %>%
+  mutate(`% Change in Absences` = formattable(`% Change in Absences`, digits = 1, format = "f")) %>%
+  arrange(GradeLevel, StudentGroup, Month)
+
+
 
 ```
 
-```{r absence change 3rd grade, include=FALSE}
+```{r A.2.2.i Student Absence Change sorted by races, fig.height=14, fig.width=10, warning=FALSE}
+
+plot_absences_change_bygrades <- long_absences_change %>%
+  ggplot(aes(x = StudentGroup, 
+             y = `% Change in Absences`,
+             fill = Month, 
+             order = Month)) + 
+  geom_col(position="dodge", stat="identity", width = 0.7) + #to separated bars for months 
+#  geom_bar(stat="identity", width = 0.4) +
+  facet_wrap(~GradeLevel, ncol = 1) +
+  ggtitle("Difference in Total Absences",
+          subtitle = "between School Year 2018-19 amd School Year 2020-21") +
+        labs(x = "Student Groups", 
+             y = "Difference in Absences") +
+  scale_y_continuous(limits = c(-1, 3.5)) +
+  geom_text(aes(label = `% Change in Absences`), position=position_dodge(width=0.9), 
+            hjust = 0.5, vjust = 0.25, colour = "black", size = 1.5) +
+  scale_fill_manual(values = uw_palette(5))  +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+        plot.subtitle = element_text(size = 14, hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+ #       legend.justification = c(0, 1),
+        legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=0, vjust=0.5, size=9),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
+
+plot_absences_change_bygrades
+
+#ggsave("/Users/alexliu/Desktop/plot.png")
 
 ```
 
-```{r absence change 6th grade, include=FALSE}
+```{r A.2.2.i Student Absence Change sorted by races separate}
+
+grade_levels <- unique(long_absences_change$GradeLevel)
+plot_absences_change_separate <- list()
+
+for (i in seq_along(grade_levels)) {
+  df <- long_absences_change %>% filter(GradeLevel == grade_levels[i]) 
+    p<- ggplot(df, aes(x = StudentGroup, 
+                   y = `% Change in Absences`,
+                   fill = Month, 
+                   order = Month)) + 
+      geom_col(position="dodge", width = 0.7) +
+      facet_wrap(~GradeLevel, ncol = 1) +
+      ggtitle("Difference in Total Absences",
+              subtitle = "between School Year 2018-19 and School Year 2020-21") +
+      labs(x = "Student Groups", y = "Difference in Absences") +
+      scale_y_continuous(limits = c(-1, 3.5)) +
+      geom_text(aes(label = `% Change in Absences`), position=position_dodge(width=0.9), 
+            hjust = 0.5, vjust = 0.25, colour = "black", size = 1.5) +
+      scale_fill_manual(values = uw_palette(5))  +
+      theme_light() +
+      coord_flip() +
+      theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+            plot.subtitle = element_text(size = 14, hjust = 0.5),
+            legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+            axis.text.x  = element_text(angle=0, vjust=0.5, size=9),
+            axis.title.x  = element_text(size=14),
+            axis.title.y  = element_text(size=14),
+            strip.text.x = element_text(size = 12, colour = "black")) 
+    print(p)
+    plot_absences_change_separate[[i]] <- p
+}
 
 ```
 
-```{r absence change 8th grade, include=FALSE}
+```{r A.2.2.ii Student Absence Change sorted by income data, include=FALSE}
+
+absences_change_income <- df_absences %>%
+  filter(StudentGroup == "All Students" | 
+           StudentGroup == "Low-Income"|
+           StudentGroup == "Non-Low Income") %>%
+  mutate(October = as.numeric(`10/2021`) - as.numeric(`10/2019`),
+         November = as.numeric(`11/2021`) - as.numeric(`11/2019`),
+         December = as.numeric(`12/2021`) - as.numeric(`12/2019`),
+         January = as.numeric(`01/2021`) - as.numeric(`01/2019`),
+         February = as.numeric(`02/2021`) - as.numeric(`02/2019`)) %>%
+  select(c("GradeLevel", "StudentGroup", "October", "November", "December", "January", "February")) 
+
+long_absences_change_income <- melt(absences_change_income, 
+                            id.vars = c("GradeLevel", "StudentGroup"),
+                            measure.vars = months_in_df,
+                            variable.name = "Month",
+                            value.name=c("% Change in Absences")) %>%
+  mutate(`% Change in Absences` = as.numeric(`% Change in Absences`)) %>%
+  mutate(`% Change in Absences` = formattable(`% Change in Absences`, digits = 1, format = "f")) %>%
+  arrange(GradeLevel, StudentGroup, Month)
 
 ```
 
-```{r absence change 9th grade, include=FALSE}
+```{r A.2.2.ii Student Absence Change sorted by income, fig.height=12, fig.width=10, warning=FALSE}
+
+plot_absences_change_income <- long_absences_change_income %>%
+  ggplot(aes(x = StudentGroup, 
+             y = `% Change in Absences`,
+             fill = Month, 
+             order = Month)) + 
+  geom_col(position="dodge", stat="identity", width = 0.7) + #to separated bars for months 
+  facet_wrap(~GradeLevel, ncol = 1) +
+  ggtitle("Difference in Total Absences",
+          subtitle = "between School Year 2018-19 and School Year 2020-21") +
+        labs(x = "Student Groups", 
+             y = "Difference in Absences") +
+  geom_text(aes(label = `% Change in Absences`), position = position_dodge(0.9),
+            hjust = 0.5, vjust = 0.5, colour = "black", size = 2) +
+  scale_y_continuous(limits = c(-1, 2.5)) +
+  scale_fill_manual(values = uw_palette(5))  +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+        plot.subtitle = element_text(size = 14, hjust = 0.5),
+   #     legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+ #       legend.justification = c(0, 1),
+  #      legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=0, vjust=0.5, size=9),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
+
+plot_absences_change_income
+
+ggsave("/Users/alexliu/Desktop/plot.png")
 
 ```
 
-```{r absence change 10th grade, include=FALSE}
+```{r A.2.2.ii Student Absence Change sorted by income separate}
+
+grade_levels <- unique(long_absences_change_income$GradeLevel)
+plot_absences_change_inc_separate <- list()
+
+for (i in seq_along(grade_levels)) {
+  df <- long_absences_change_income %>% filter(GradeLevel == grade_levels[i]) 
+    p<- ggplot(df, aes(x = StudentGroup, 
+                   y = `% Change in Absences`,
+                   fill = Month, 
+                   order = Month)) + 
+      geom_col(position="dodge", width = 0.7) +
+      facet_wrap(~GradeLevel, ncol = 1) +
+      ggtitle("Difference in Total Absences",
+              subtitle = "between School Year 2018-19 and School Year 2020-21") +
+      labs(x = "Student Groups", y = "Difference in Absences") +
+      scale_y_continuous(limits = c(-1, 2.5)) +
+      geom_text(aes(label = `% Change in Absences`), position=position_dodge(width=0.9), 
+            hjust = 0.5, vjust = 0.25, colour = "black", size = 1.5) +
+      scale_fill_manual(values = uw_palette(5))  +
+      theme_light() +
+      coord_flip() +
+      theme(plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+            plot.subtitle = element_text(size = 14, hjust = 0.5),
+            legend.background = element_rect(fill = "white", size = 4, colour = "white"),
+            axis.text.x  = element_text(angle=0, vjust=0.5, size=9),
+            axis.title.x  = element_text(size=14),
+            axis.title.y  = element_text(size=14),
+            strip.text.x = element_text(size = 12, colour = "black")) 
+    print(p)
+    plot_absences_change_inc_separate[[i]] <- p
+}
 
 ```
 
-# Course Taking 
-## plot I: counts; only use "non-passing grades"; sorted by income levels; 2020-21; bar; w/ and w/o reference; reference = state ave 
+***
 
-```{r course taking}
-#need to fix the reference lines
+# A.3. Course Taking 
+> A.3.1. Statewide breakdown by groups
+
+* for Percentage of All Courses Taken Resulted in Non-Passing Grade
+  + state average decreased in sy2019-20 and increased in sy2020-21
+  + state ave in sy2021 is higher than state ave in sy2018-19 (before covid-19)
+  + the same groups have higher non-passing rate than state ave before and after covid-19 
+  + in addition, gaps between those groups and the others increased from sy2018-19 to sy-2020-21
+
+```{r A.3.1. Statewide breakdown by groups, message=FALSE, warning=FALSE}
 course_by_race <- df_course_outcomes_by_outcome %>%
   filter(`Organization Name` == "Washington State" & 
            !is.na(`All Non-Passing Grades`)) %>%
@@ -672,41 +1308,137 @@ course_by_race$`Grade Level` <-
 course_by_race$`School Year` <- 
   factor(course_by_race$`School Year`, levels = c("2020-21", "2019-20", "2018-19"))
 
-#reference lines
-reference_line <- data.frame(`School Year` = levels(course_by_race$`School Year`), 
-                             state_ave = c(0.11, 0.048, 0.074))
-
-plot_non_pass_race <- course_by_race %>%
+plot_non_pass_20_21 <- course_by_race %>%
+  filter(`School Year` == "2020-21") %>%
   ggplot(aes(fill= `Grade Level`,
              x= `Student Group`, 
              y=`All Non-Passing Grades`)) + 
-  geom_bar(position="dodge", stat="identity") +
-  facet_grid(. ~`School Year`) +
-  geom_hline(data = reference_line, aes(yintercept = state_ave), linetype = "dashed") +
-  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade (All Grade Levels)")+
-        labs(x = "Student Groups", 
-             y = "All Non-Passing Grades") +
-  scale_y_continuous(labels = percent) +
-  scale_fill_brewer(palette = "Purples")  +
-  theme_grey() +
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0.11, linetype = "dashed") +
+  geom_text(aes(0, 0.11, label = "state average = 11%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "for school year 2020-21") +
+  labs(x = "Student Groups", y = "All Non-Passing Grades") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.9),
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
+  theme_light() +
   coord_flip() +
-  theme(axis.text.x  = element_text(angle=45, vjust=0.5, size=9),
-        axis.title.x  = element_text(size=12),
-        axis.title.y  = element_text(size=12),
+  theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
+
+plot_non_pass_19_20 <- course_by_race %>%
+  filter(`School Year` == "2019-20") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Non-Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0.048, linetype = "dashed") +
+  geom_text(aes(0, 0.048, label = "state average = 4.8%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "for school year 2019-20") +
+  labs(x = "Student Groups", y = "All Non-Passing Grades") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.9),
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
         strip.text.x = element_text(size = 12, colour = "black"))
 
-plot_non_pass_race 
+ plot_non_pass_18_19 <- course_by_race %>%
+  filter(`School Year` == "2018-19") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Non-Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0.074, linetype = "dashed") +
+  geom_text(aes(0, 0.074, label = "state average = 7.4%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "for school year 2018-19") +
+   labs(x = "Student Groups", y = "All Non-Passing Grades") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.9),
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black"))
 
-ggsave("section_a_analysis_files/figures/plot_non_pass_race.png", 
-       width = 40, height = 15, units = "cm")
+plot_non_pass_20_21
+plot_non_pass_19_20
+plot_non_pass_18_19
+
+```
+
+```{r A.3.1. Statewide breakdown by groups grid, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+
+get_legend<-function(myggplot){
+  tmp <- ggplot_gtable(ggplot_build(myggplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)
+}
+
+legend <- get_legend(plot_non_pass_20_21)
+lwidth <- sum(legend$width)
+
+plot_all_nonpass <- grid.arrange(arrangeGrob(plot_non_pass_20_21 + theme(legend.position="none"),
+                                 plot_non_pass_19_20 + theme(legend.position="none"),
+                                 plot_non_pass_18_19 + theme(legend.position="none")),
+                                 legend,
+                                 widths=unit.c(unit(1, "npc") - lwidth, lwidth),
+                                 nrow=1)
+
+plot_all_nonpass
+
+ggsave("section_a_analysis_files/figures/A.3.1. Statewide breakdown by groups.png", plot_all_nonpass,
+       width = 20, height = 40, units = "cm")
 
 ```
 
 
-## plot II. (for all students) 
-## i: Calculate the Difference in all non-passing grade from 2018-19 to 2020-21, separately for four groups: low-income, non-low-income, students of color (excluding Asian), and White). Then generate a map below. By this graph, we get which districts have the largest change and for which group, numerically. 
+> A.3.2.1 Geographical differences across districts in all non-passing grade from 2018-19 to 2020-21
 
-```{r 3.2 differences btwn sy in non-passing by district}
+students of color (excluding Asian)
+
+For spatial plots: missing data (grey areas) results from 
+
+1. missing and suppression at district level; 
+2. some districts have data for only one of the SYs, then the changes are going to be NAs; 
+3. some districts in the shapefile do not appear in the ospi data (shows in "match district names with shape file" section)
+
+```{r A.3.2.1.i The Difference in all non-passing grade from 2018-19 to 2020-21 (white vs nonwhite), echo=FALSE, message=FALSE, warning=FALSE}
 
 course_geo <- df_course_outcomes_by_outcome %>%
   select(c(`Organization Name`, `School Year`, 
@@ -729,7 +1461,7 @@ course_geo_wide <- merge(x = course_geo_2021, y = course_geo_1819,
                          by = c("Organization Name", "Student Group", "Grade Level"), 
                          all = TRUE) %>%
   select(!c("School Year.x", "School Year.y")) %>%
-  mutate(Change = `SY2018-19` - `SY2020-21` ) %>%
+  mutate(Change = `SY2020-21` - `SY2018-19` ) %>%
   filter(!is.na(Change)) %>%
   #filter(Change >= -1) %>%
   mutate(Race = NA) 
@@ -773,14 +1505,14 @@ course_nonwhite_sf <- left_join(wa_district_shape, all_grades_nonwhite, by = c("
 plot_spatial_year_diff_white <- ggplot() +
   geom_sf(data = course_white_sf, aes(fill = Change))+
   # scale_fill_distiller(name = "% change", palette = "YlOrRd") + 
-  scale_fill_gradient2(low = "gold", mid = "snow", high = "purple") +
+  scale_fill_gradient2(low = "#e8e3d3", high = "#4b2e83") +
   theme(panel.background = element_blank(),
         legend.title = element_text(size = 10),
         plot.title = element_text(size = 14),
         plot.subtitle = element_text(size = 10),
         plot.caption = element_text(hjust = 0, size = 7, face = "italic")) +
-  labs(title="Difference in all non-passing grade from 2018-19 to 2020-21",
-       subtitle = "For white students",
+  labs(title="Difference in all non-passing grade from SY2018-19 to SY2020-21",
+       subtitle = "for white students",
        caption = "Note: grey areas indicate districts with unavaible data")
  
 plot_spatial_year_diff_white 
@@ -791,14 +1523,14 @@ ggsave("section_a_analysis_files/figures/plot_spatial_year_diff_white.png")
 plot_spatial_year_diff_nonwhite <- ggplot() +
   geom_sf(data = course_nonwhite_sf, aes(fill = Change))+
   #scale_fill_distiller(name = "% change", palette = "YlOrRd") + 
-  scale_fill_gradient2(low = "gold", mid = "snow", high = "purple") +
+  scale_fill_gradient2(low = "#e8e3d3", high = "#4b2e83") +
   theme(panel.background = element_blank(),
         legend.title = element_text(size = 10),
         plot.title = element_text(size = 14),
         plot.subtitle = element_text(size = 10),
         plot.caption = element_text(hjust = 0, size = 7, face = "italic")) +
-  labs(title="Difference in all non-passing grade from 2018-19 to 2020-21",
-       subtitle = "For non-white students",
+  labs(title="Difference in all non-passing grade from SY2018-19 to SY2020-21",
+       subtitle = "for non-white students",
       caption = "Note: grey areas indicate districts with unavaible data")
 
 plot_spatial_year_diff_nonwhite
@@ -806,9 +1538,8 @@ plot_spatial_year_diff_nonwhite
 ggsave("section_a_analysis_files/figures/plot_spatial_year_diff_nonwhite.png")
 
 ```
-#### for spatial plots: missing data (grey areas): 1. missing and suppression at district level; 2. some districts have data for only one of the SYs, then the changes are going to be NAs; 3. some districts in the shapefile do not appear in the ospi data 
 
-```{r 3.2 match district names with shape file, include=FALSE}
+```{r 3.2 match district names with shape file, eval=FALSE, include=FALSE}
 #matching district names
 df_name <- unique(course_groupby_race$Districts)
 shape_name <- sort(unique(wa_district_shape$LEAName))
@@ -830,15 +1561,18 @@ for (j in 1:length(shape_name)) {
 #df_name[151]"Seattle School District No. 1" = shape_name[220]"Seattle Public Schools"
 #df_name[187]"Wellpinit School District #49" = shape_name[279]"Wellpinit School District"
 ## 7 schools in our dataset have no matches in shape file
+```
 
+```{r A.3.2.1.ii The Difference in all non-passing grade from 2018-19 to 2020-21 (low-income vs non-low income)}
 
 ```
 
+> A.3.2.2 The gap in all non-passing in 2020-21 between students of color and white for each district
 
-## plot II (for all students)
-### ii Calculate the gap in all non-passing in 2020-21 between low-income and non-low income (students of color (excluding Asian) and white) for each district and graph the difference using the map below.
+* gap calculated by white - nonwhite 
+  + positive values indicate nonwhite students have lower non-passing rate
 
-```{r 3.3 differences btwn student types in non-passing by district}
+```{r A.3.2.2.i The gap in all non-passing in 2020-21 between students of color and white for each district, echo=FALSE, message=FALSE, warning=FALSE}
 
 course_compare <- df_course_outcomes_by_outcome %>%
   select(c(`Organization Name`, `School Year`, 
@@ -896,14 +1630,14 @@ course_race_diff_sf <- left_join(wa_district_shape, diff_all_students, by = c("L
 plot_spatial_white_nonwhite_gap <- ggplot() +
   geom_sf(data = course_race_diff_sf, aes(fill = Change))+
   # scale_fill_distiller(name = "% change", palette = "YlOrRd") + 
-  scale_fill_gradient2(low = "gold", mid = "snow", high = "purple") +
+  scale_fill_gradient2(low = "#e8e3d3", high = "#4b2e83") +
   theme(panel.background = element_blank(),
         legend.title = element_text(size = 10),
         plot.title = element_text(size = 14),
         plot.subtitle = element_text(size = 10), 
         plot.caption = element_text(hjust = 0, size = 7, face = "italic")) +
-  labs(title="Gap in All Non-Passing in 2020-21",
-       subtitle = "Between white and non-white students",
+  labs(title="Gap of All Non-Passing in SY2020-21",
+       subtitle = "between white and non-white students",
        caption = "Note: grey areas indicate districts with unavaible data")
  
 plot_spatial_white_nonwhite_gap
@@ -913,7 +1647,12 @@ ggsave("section_a_analysis_files/figures/plot_spatial_white_nonwhite_gap.png")
 ```
 
 
-## plot III: 
+```{r A.3.2.2.ii The gap in all non-passing in 2020-21 between students of low-income and non-low income for each district}
+
+```
+
+
+## on track: 
 * 9th grade on track: did not get a grade of D or F. The % of students that received grades of A,B, C.
 * Regular attendance, meaning that has more than 90% attendance during the year
 * Dual credit (not prestigious): (AP/IB courses is more prestigious); therefore, less useful
@@ -926,7 +1665,7 @@ df_course_outcomes_by_student
 df_course_outcomes_by_outcome
 ```
 
-## plot IV; Graduation (the class of 2020). 
+## Graduation (the class of 2020). 
 https://www.k12.wa.us/data-reporting/data-displays/graduation-pathways-display
 Different pathways by income and students of color 
 ```{r graduation, include=FALSE}

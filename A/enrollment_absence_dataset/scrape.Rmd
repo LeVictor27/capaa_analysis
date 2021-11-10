@@ -117,48 +117,48 @@ enrollment_nine <- write.csv(enroll_nine, "/Users/alexliu/Documents/GitHub/evide
 ```
 
 
-```{r enroll kindergarden}
-df <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/Kindergarden_Monthly Enrollment.pdf",
+```{r enroll kindergarten}
+df <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/Kindergarten_Monthly Enrollment.pdf",
                      output = "data.frame",
                      guess = FALSE)
 
 #write.csv(df[[1]], 
-#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_enrollment_kindergargen.csv",
+#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_enrollment_kindergarten.csv",
 #          row.names=FALSE)
 
-enroll_kindergarden <- df[[1]] %>%
+enroll_kindergarten <- df[[1]] %>%
   slice(6:29)
 
 colmn1 <- c("October", "October_9th", "November", "November_9th", "December")
 colmn2 <- c("December_9th", "January", "January_9th")
 colmn3 <- c("February", "February_9th")
 
-enroll_kindergarden <- separate(data = enroll_kindergarden,
+enroll_kindergarten <- separate(data = enroll_kindergarten,
                                 col = Select.View.,
                                 sep = " ",
                                 into = colmn1,
                                 remove = TRUE) 
-enroll_kindergarden <- separate(data = enroll_kindergarden, 
+enroll_kindergarten <- separate(data = enroll_kindergarten, 
                                 col = Filter.by.Grade.Levels, 
                                 sep = " ", 
                                 into = colmn2, 
                                 remove = TRUE)
 
-enroll_kindergarden <- separate(data = enroll_kindergarden,
+enroll_kindergarten <- separate(data = enroll_kindergarten,
                                 col = X.1,
                                 sep = " ",
                                 into = colmn3,
                                 remove = TRUE)
 
-for (i in 2: ncol(enroll_kindergarden)) {
-  enroll_kindergarden[i] <- lapply(enroll_kindergarden[i],
+for (i in 2: ncol(enroll_kindergarten)) {
+  enroll_kindergarten[i] <- lapply(enroll_kindergarten[i],
                           function(x){as.numeric(as.character(gsub(",", "", x)))})
 }
 
 # the row "Gender X" need to be corrected
-#is.na(enroll_kindergarden)
-enroll_kindergarden[8,2:11] <- c(42, 61, 43, 60, 44, 60, 45, 60, 43, 60)
-write.csv(enroll_kindergarden, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/enrollment_kindergarden.csv",
+#is.na(enroll_kindergarten)
+enroll_kindergarten[8,2:11] <- c(42, 61, 43, 60, 44, 60, 45, 60, 43, 60)
+write.csv(enroll_kindergarten, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/enrollment_kindergarten.csv",
                             row.names=FALSE)
 
 ```
@@ -255,13 +255,13 @@ write.csv(change_enroll_nine, "/Users/alexliu/Documents/GitHub/evidenceforequity
 ```
 
 
-```{r change_enroll_kindergarden}
-df1 <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/Kindergarden_Monthly Enrollment Change.pdf",
+```{r change_enroll_kindergarten}
+df1 <- extract_tables("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/Kindergarten_Monthly Enrollment Change.pdf",
                      output = "data.frame",
                      guess = FALSE)
 
 #write.csv(df1[[1]], 
-#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_change_enrollment_kindergarden.csv",
+#          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_change_enrollment_kindergarten.csv",
 #          row.names=FALSE)
 
 change_enroll_kid <- df1[[1]] %>%
@@ -294,8 +294,330 @@ change_enroll_kid[2:6] <- sapply(change_enroll_kid[2:6],
 #                                 function(x) percent(x, accuracy=0.1))
 
 
-write.csv(change_enroll_kid, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/change_enrollment_kindergarden.csv",
+write.csv(change_enroll_kid, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/change_enrollment_kindergarten.csv",
                             row.names=FALSE)
 
 ```
+
+```{r absences raw data}
+
+setwd("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset")
+absences_files <- list.files(pattern = "*Absences.pdf$")
+output <- vector("list", length(absences_files))
+df_absences <- vector("list", length(absences_files))
+grade_level <- vector("list", length(absences_files))
+
+for (i in seq_along(absences_files)) {
+  output[[i]] <- extract_tables(absences_files[[i]],
+                     output = "data.frame",
+                     guess = FALSE) 
+  df_absences[[i]] <- output[[i]][[1]]
+  grade_level[[i]] <- df_absences[[i]][1,2]
+}
+
+names(df_absences) = grade_level
+
+write.csv(df_absences[["10th Grade"]], 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_10th_Absences.csv",
+          row.names=FALSE)
+
+write.csv(df_absences[["9th Grade"]], 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_9th_Absences.csv",
+          row.names=FALSE)
+
+write.csv(df_absences[["8th Grade"]], 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_8th_Absences.csv",
+          row.names=FALSE)
+
+write.csv(df_absences[["6th Grade"]], 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_6th_Absences.csv",
+          row.names=FALSE)
+
+write.csv(df_absences[["3rd Grade"]], 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_3rd_Absences.csv",
+          row.names=FALSE)
+
+write.csv(df_absences[["Kindergarten"]], 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_Kindergarten_Absences.csv",
+          row.names=FALSE)
+```
+
+```{r absences prek}
+absences_prek <- read.csv("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_Kindergarten_Absences.csv") %>%
+  slice(7:29)
+
+colmn1 <- c("10/2019", "10/2020", "10/2021", 
+            "11/2019", "11/2020", "11/2021", "12/2019")
+colmn2 <- c("12/2020", "12/2021", "01/2019", "01/2020")
+colmn3 <- c("01/2021", "02/2019", "02/2020", "02/2021")
+
+absences_prek <- separate(data = absences_prek, 
+                                col = Select.View., 
+                                sep = " ", 
+                                into = colmn1, 
+                                remove = TRUE) 
+absences_prek <- separate(data = absences_prek, 
+                                col = Filter.by.Grade.Levels, 
+                                sep = " ", 
+                                into = colmn2, 
+                                remove = TRUE) 
+absences_prek <- separate(data = absences_prek, 
+                                col = X.1, 
+                                sep = " ", 
+                                into = colmn3, 
+                                remove = TRUE) 
+
+months <-c(" ", "October", "October", "October", 
+           "November", "November", "November",
+           "December", "December", "December",
+           "January", "January", "January",
+           "February", "February", "February" ) 
+years <- c(" ", "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021")
+names(absences_prek)[1] <- "StudentGroup"
+absences_prek[1, 1] <- "All Students"
+absences_prek <- rbind(months, years, absences_prek)
+
+write.csv(absences_prek, 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/absences_prek.csv",
+          row.names=FALSE)
+
+```
+
+```{r absences 3rd}
+absences_3rd <- read.csv("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_3rd_Absences.csv") %>%
+  slice(7:29)
+
+colmn1 <- c("10/2019", "10/2020", "10/2021", 
+            "11/2019", "11/2020", "11/2021")
+colmn2 <- c("12/2019", "12/2020", "12/2021", 
+            "01/2019", "01/2020")
+colmn3 <- c("01/2021", "02/2019", "02/2020", "02/2021")
+
+absences_3rd <- separate(data = absences_3rd, 
+                                col = Select.View., 
+                                sep = " ", 
+                                into = colmn1, 
+                                remove = TRUE) 
+absences_3rd <- separate(data = absences_3rd, 
+                                col = Filter.by.Grade.Levels, 
+                                sep = " ", 
+                                into = colmn2, 
+                                remove = TRUE) 
+absences_3rd <- separate(data = absences_3rd, 
+                                col = X.1, 
+                                sep = " ", 
+                                into = colmn3, 
+                                remove = TRUE) 
+
+months <-c(" ", "October", "October", "October", 
+           "November", "November", "November",
+           "December", "December", "December",
+           "January", "January", "January",
+           "February", "February", "February" ) 
+years <- c(" ", "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021")
+names(absences_3rd)[1] <- "StudentGroup"
+absences_3rd[1, 1] <- "All Students"
+absences_3rd <- rbind(months, years, absences_3rd)
+
+write.csv(absences_3rd, 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/absences_3rd.csv",
+          row.names=FALSE)
+
+```
+
+```{r absences 6th}
+absences_6th <- read.csv("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_6th_Absences.csv") %>%
+  slice(7:29)
+
+colmn1 <- c("10/2019", "10/2020", "10/2021", 
+            "11/2019", "11/2020", "11/2021")
+colmn2 <- c("12/2019", "12/2020", "12/2021", 
+            "01/2019", "01/2020")
+colmn3 <- c("01/2021", "02/2019", "02/2020", "02/2021")
+
+absences_6th <- separate(data = absences_6th, 
+                                col = Select.View., 
+                                sep = " ", 
+                                into = colmn1, 
+                                remove = TRUE) 
+absences_6th <- separate(data = absences_6th, 
+                                col = Filter.by.Grade.Levels, 
+                                sep = " ", 
+                                into = colmn2, 
+                                remove = TRUE) 
+absences_6th <- separate(data = absences_6th, 
+                                col = X.1, 
+                                sep = " ", 
+                                into = colmn3, 
+                                remove = TRUE) 
+
+months <-c(" ", "October", "October", "October", 
+           "November", "November", "November",
+           "December", "December", "December",
+           "January", "January", "January",
+           "February", "February", "February" ) 
+years <- c(" ", "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021")
+names(absences_6th)[1] <- "StudentGroup"
+absences_6th[1, 1] <- "All Students"
+absences_6th <- rbind(months, years, absences_6th)
+
+write.csv(absences_6th, 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/absences_6th.csv",
+          row.names=FALSE)
+```
+
+
+```{r absences 8th}
+absences_8th <- read.csv("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_8th_Absences.csv") %>%
+  slice(7:29)
+
+colmn1 <- c("10/2019", "10/2020", "10/2021", 
+            "11/2019", "11/2020", "11/2021")
+colmn2 <- c("12/2019", "12/2020", "12/2021", 
+            "01/2019", "01/2020")
+colmn3 <- c("01/2021", "02/2019", "02/2020", "02/2021")
+
+absences_8th <- separate(data = absences_8th, 
+                                col = Select.View., 
+                                sep = " ", 
+                                into = colmn1, 
+                                remove = TRUE) 
+absences_8th <- separate(data = absences_8th, 
+                                col = Filter.by.Grade.Levels, 
+                                sep = " ", 
+                                into = colmn2, 
+                                remove = TRUE) 
+absences_8th <- separate(data = absences_8th, 
+                                col = X.1, 
+                                sep = " ", 
+                                into = colmn3, 
+                                remove = TRUE) 
+
+months <-c(" ", "October", "October", "October", 
+           "November", "November", "November",
+           "December", "December", "December",
+           "January", "January", "January",
+           "February", "February", "February" ) 
+years <- c(" ", "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021")
+names(absences_8th)[1] <- "StudentGroup"
+absences_8th[1, 1] <- "All Students"
+absences_8th <- rbind(months, years, absences_8th)
+
+write.csv(absences_8th, 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/absences_8th.csv",
+          row.names=FALSE)
+```
+
+```{r absences 9th}
+absences_9th <- read.csv("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_9th_Absences.csv") %>%
+  slice(7:29)
+
+colmn1 <- c("10/2019", "10/2020", "10/2021", 
+            "11/2019", "11/2020", "11/2021")
+colmn2 <- c("12/2019", "12/2020", "12/2021", 
+            "01/2019", "01/2020")
+colmn3 <- c("01/2021", "02/2019", "02/2020", "02/2021")
+
+absences_9th <- separate(data = absences_9th, 
+                                col = Select.View., 
+                                sep = " ", 
+                                into = colmn1, 
+                                remove = TRUE) 
+absences_9th <- separate(data = absences_9th, 
+                                col = Filter.by.Grade.Levels, 
+                                sep = " ", 
+                                into = colmn2, 
+                                remove = TRUE) 
+absences_9th <- separate(data = absences_9th, 
+                                col = X.1, 
+                                sep = " ", 
+                                into = colmn3, 
+                                remove = TRUE) 
+
+months <-c(" ", "October", "October", "October", 
+           "November", "November", "November",
+           "December", "December", "December",
+           "January", "January", "January",
+           "February", "February", "February" ) 
+years <- c(" ", "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021")
+names(absences_9th)[1] <- "StudentGroup"
+absences_9th[1, 1] <- "All Students"
+absences_9th <- rbind(months, years, absences_9th)
+
+write.csv(absences_9th, 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/absences_9th.csv",
+          row.names=FALSE)
+
+```
+
+
+```{r absences 10th}
+absences_10th <- read.csv("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_10th_Absences.csv") %>%
+  slice(7:29)
+
+colmn1 <- c("10/2019", "10/2020", "10/2021", 
+            "11/2019", "11/2020", "11/2021")
+colmn2 <- c("12/2019", "12/2020", "12/2021", 
+            "01/2019", "01/2020")
+colmn3 <- c("01/2021", "02/2019", "02/2020", "02/2021")
+
+absences_10th <- separate(data = absences_10th, 
+                                col = Select.View., 
+                                sep = " ", 
+                                into = colmn1, 
+                                remove = TRUE) 
+absences_10th <- separate(data = absences_10th, 
+                                col = Filter.by.Grade.Levels, 
+                                sep = " ", 
+                                into = colmn2, 
+                                remove = TRUE) 
+absences_10th <- separate(data = absences_10th, 
+                                col = X.1, 
+                                sep = " ", 
+                                into = colmn3, 
+                                remove = TRUE) 
+
+months <-c("", "October", "October", "October", 
+           "November", "November", "November",
+           "December", "December", "December",
+           "January", "January", "January",
+           "February", "February", "February" ) 
+years <- c("", "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021",
+           "2019", "2020", "2021")
+names(absences_10th)[1] <- "StudentGroup"
+absences_10th[1, 1] <- "All Students"
+absences_10th <- rbind(months, years, absences_10th)
+
+write.csv(absences_10th, 
+          "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/absences_10th.csv",
+          row.names=FALSE)
+
+```
+
+
+
+
 
