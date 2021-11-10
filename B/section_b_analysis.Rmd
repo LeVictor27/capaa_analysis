@@ -184,7 +184,6 @@ Federal, state, and local revenue source for districts serving students of color
 
 # B3: Spatial distribution of school funding
 
-## Demographic Maps
 ```{r B3_maps_data}
 
 library(leaidr)
@@ -244,7 +243,7 @@ wa_mccleary_rev_wide <- left_join(mccleary_rev_wide, wa, by = c("leaid" = "GEOID
 
 ```
 
-
+## Demographic Maps
 ```{r B3_maps_demo}
 
 #Demographic Maps
@@ -301,8 +300,8 @@ wa_df196 %>%
 
 ```
 
-## Finance Maps
-```{r B3_maps_finance}
+## Revenue Maps
+```{r B3_maps_rev}
 
 #Need to figure out what colors work best with this map to make it pop
 
@@ -371,6 +370,11 @@ wa_df196 %>%
        subtitle = "Dollar Difference Against State Mean for the School Year")+
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5))
+```
+
+
+## McCleary Maps
+```{r B3_maps_mccleary}
 
 wa_mccleary_rev_wide %>%
   sf::st_as_sf() %>% 
@@ -378,7 +382,7 @@ wa_mccleary_rev_wide %>%
   geom_sf(aes(fill = rev_fed_mean_reform_diff), size = .25) +
   scale_fill_gradient2(low="#FF0000", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
   theme_void() +
-  labs(title="Figure. Post-McCleary Reform Federal Revenue Difference",
+  labs(title="Figure. Federal Revenue Difference Post-McCleary Reform",
        subtitle = "Between Spring SY 2016-2018 (3 Year Average) and 2019-2020 (2 Year Average)")+
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5))
@@ -389,7 +393,7 @@ wa_mccleary_rev_wide %>%
   geom_sf(aes(fill = rev_st_mean_reform_diff), size = .25) +
   scale_fill_gradient2(low="#FF0000", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
   theme_void() +
-  labs(title="Figure. Post-McCleary Reform State Revenue Difference",
+  labs(title="Figure. State Revenue Difference Post-McCleary Reform",
        subtitle = "Between Spring SY 2016-2018 (3 Year Average) and 2019-2020 (2 Year Average)")+
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5))
@@ -400,14 +404,14 @@ wa_mccleary_rev_wide %>%
   geom_sf(aes(fill = rev_loc_mean_reform_diff), size = .25) +
   scale_fill_gradient2(low="#FF0000", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
   theme_void() +
-  labs(title="Figure. Post-McCleary Reform Local Revenue Difference",
+  labs(title="Figure. Local Revenue Difference Post-McCleary Reform",
        subtitle = "Between Spring SY 2016-2018 (3 Year Average) and 2019-2020 (2 Year Average)")+
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5))
 
 ```
 
-Maps of (1) state revenue per pupil; (2) federal revenue per pupil; and (3) local revenue per pupil; (4) total expenditure per-pupil
+Maps of (1) state revenue per pupil; (2) federal revenue per pupil; and (3) local revenue per pupil; (4) total revenue per-pupil
 
 % change in revenue per pupil over 3 year period (2015-16, 2016-17, 2017-18, 3 year average) to difference of the two year average (2018-19 and 19-2020), divided by average of pre-McCleary as base to get percentage change
 
