@@ -526,3 +526,36 @@ In Section B4, we present information about expenditure category by two students
 We focus on the 2019-2020 school year, the second year of the McCleary reform.
 
 
+
+```{r other, include=FALSE}
+
+x <- df_f196_merge_raw%>%
+  filter(schyear>=2019)%>%
+  select(
+    rfactor_cis_2019,
+    PctAmericanIndianOrAlaskan,
+    PctAsian,
+    PctAsianPacificIslander,
+    PctBlack,
+    PctHispanic,
+    PctMultirac,
+    PctWhite
+    )                   
+
+y <- x%>%
+  pivot_longer(!rfactor_cis_2019, names_to = "race", values_to = "pct")%>%
+  mutate(rfactor_cis_2019=as.character(rfactor_cis_2019),
+         race=as.character(race))
+
+z <- collap(y, pct ~ rfactor_cis_2019 + race, 
+                           FUN = list(fmean))
+
+ggplot(z, aes(x = rfactor_cis_2019, y=pct, fill=race, label = format(round(pct, 2), nsmall = 2) )) + 
+  geom_bar(stat = "identity")+
+  geom_text(size = 3, position = position_stack(vjust = 0.5))
+
+
+
+
+```
+
