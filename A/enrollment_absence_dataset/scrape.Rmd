@@ -618,6 +618,54 @@ write.csv(absences_10th,
 ```
 
 
+```{r nonpassing income data, message=FALSE, warning=FALSE}
+setwd("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/pdf_dataset/non_passing_byincome")
+
+district_files <- list.files(pattern = "*.pdf$")
+output <- vector("list", length(district_files))
+raw_output <- vector("list", length(district_files))
+
+colmn1 <- c("GradeLevel", "2018-19", "add1")
+colmn2 <- c("2019-20", "2020-21", "add2")
+
+for (i in seq_along(district_files)) {
+  df <- extract_tables(district_files[[i]],
+                     output = "data.frame",
+                     guess = FALSE)
+  raw_output[[i]] <- df[[1]]
+  
+  r <- grep("^Al Grades", df[[1]][ ,1])
+  `Low-Income` <- df[[1]][r[1], ]
+  `Non-Low Income` <- df[[1]][r[2], ]
+  
+  output[[i]] <- bind_rows(df[[1]][r[1], ], df[[1]][r[2], ]) %>%
+    mutate(District = df[[1]][1, 2]) %>%
+    mutate(StudentGroup = c("Low-Income", "Non-Low Income"))
+  
+  output[[i]] <- separate(data = output[[i]], 
+                          col = X, 
+                          sep = "(?<=[ ])(?=[0-9 S])", 
+                          into = colmn1, 
+                          remove = FALSE)
+  
+  output[[i]] <- separate(data = output[[i]], 
+                          col = Student.Course.Outcomes, 
+                          sep = "(?<=[ ])(?=[0-9 S])",  
+                          into = colmn2, 
+                          remove = FALSE) 
+}
+
+df_district_nonpass_byinc <- bind_rows(output)
+
+write.csv(df_district_nonpass_byinc, 
+          "raw/raw_nonpass_district_byinc.csv",
+          row.names=FALSE)
+```
+
+```{r}
+
+
+```
 
 
 
