@@ -1562,8 +1562,9 @@ For spatial plots: missing data (grey areas) results from
 2. some districts have data for only one of the SYs, then the changes are going to be NAs; e.g. Rainier Valley Leadership Academy; e.g. Everett School District
 3. some districts in the shape file do not appear in the ospi data (shows in "match district names with shape file" section), vice versa; e.g. Rainier Valley Leadership Academy
 
-* data for comparison among ethnicity groups was downloaded directly from OSPI website
-* data for comparison among income groups was downloaded and scraped for each district and manually compiled
+*data for comparison among ethnicity groups was downloaded directly from OSPI website.*
+
+*data for comparison between income groups was downloaded and scraped for each district and manually compiled*
 
 * Difference calculated by %nonpass (or %numerical failing) in SY2020-21 minus %nonpass (or %numerical failing) in SY 2018-19
   + darker purple color indicates more increase in %nonpass (or %numerical failing) in SY2020-21
@@ -1911,9 +1912,7 @@ for (j in 1:length(shape_name)) {
 }
 ```
 
-
 > A.3.2.2 The gap in all non-passing in 2020-21 between students of color and white for each district
-
 
 * Gap calculated by %nonpass among low-income minus %nonpass among non-low income in SY2020-21
   + darker purple color indicates more nonpass/num failing grades among students of color
