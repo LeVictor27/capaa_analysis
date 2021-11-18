@@ -1,465 +1,461 @@
-"X","GradeLevel","2018-19","add1","Student.Course.Outcomes","2019-20","2020-21","add2","District","StudentGroup","X.1"
-"Al Grades 11.6%","Al Grades ","11.6%",NA,"7.7% 17.6%","7.7% ","17.6%",NA,"Washington State","Low-Income",NA
-"Al Grades 4.1%","Al Grades ","4.1%",NA,"2.6% 5.8%","2.6% ","5.8%",NA,"Washington State","Non-Low Income",NA
-"Al Grades 9.9%","Al Grades ","9.9%",NA,"6.7% 15.8%","6.7% ","15.8%",NA,"Battle Ground School District","Low-Income",NA
-"Al Grades 4.5%","Al Grades ","4.5%",NA,"2.5% 6.7%","2.5% ","6.7%",NA,"Battle Ground School District","Non-Low Income",NA
-"Al Grades 3.7%","Al Grades ","3.7%",NA,"Suppressed: <7.% 10.0%","Suppressed: <7.% ","10.0%",NA,"Liberty School District","Low-Income",NA
-"Al Grades 0.7%","Al Grades ","0.7%",NA,"Suppressed: <2.% 3.3%","Suppressed: <2.% ","3.3%",NA,"Liberty School District","Non-Low Income",NA
-"Al Grades 7.0%","Al Grades ","7.0%",NA,"5.8% 13.9%","5.8% ","13.9%",NA,"Lind School District","Low-Income",NA
-"Al Grades 3.7%","Al Grades ","3.7%",NA,"Suppressed: <10% Suppressed: <10%","Suppressed: <10% ","Suppressed: <10%",NA,"Lind School District","Non-Low Income",NA
-"Al Grades 9.0%","Al Grades ","9.0%",NA,"4.4% 22.2%","4.4% ","22.2%",NA,"Longview School District","Low-Income",NA
-"Al Grades 3.1%","Al Grades ","3.1%",NA,"2.0% 10.1%","2.0% ","10.1%",NA,"Longview School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"14.3% 6.8% 30.7%","14.3% ","6.8% ","30.7%","Lummi Tribal Agency","Low-Income",NA
-"Al Grades 2.0%","Al Grades ","2.0%",NA,"3.2% 22.1%","3.2% ","22.1%",NA,"Lummi Tribal Agency","Non-Low Income",NA
-"Al Grades 4.3%","Al Grades ","4.3%",NA,"10.9% 19.1%","10.9% ","19.1%",NA,"Lyle School District","Low-Income",NA
-"Al Grades 7.1%","Al Grades ","7.1%",NA,"7.8% 16.9%","7.8% ","16.9%",NA,"Lyle School District","Non-Low Income",NA
-"Al Grades 10.3%","Al Grades ","10.3%",NA,"5.8% 1.2%","5.8% ","1.2%",NA,"Lynden School District","Low-Income",NA
-"Al Grades 5.2%","Al Grades ","5.2%",NA,"1.8% 0.4%","1.8% ","0.4%",NA,"Lynden School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.3% 8.5% 41.8%","12.3% ","8.5% ","41.8%","Mabton School District","Low-Income",NA
-"Al Grades 10.3%","Al Grades ","10.3%",NA,"2.6% 20.5%","2.6% ","20.5%",NA,"Mabton School District","Non-Low Income",NA
-"Al Grades 2.5%","Al Grades ","2.5%",NA,"4.7% 7.0%","4.7% ","7.0%",NA,"Manson School District","Low-Income",NA
-"Al Grades 1.9%","Al Grades ","1.9%",NA,"1.3% 2.8%","1.3% ","2.8%",NA,"Manson School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"19.6% 15.6% 13.8%","19.6% ","15.6% ","13.8%","Mary M Knight School District","Low-Income",NA
-"Al Grades","Al Grades",NA,NA,"21.1% 14.0% 19.7%","21.1% ","14.0% ","19.7%","Mary M Knight School District","Non-Low Income",NA
-"Al Grades 4.5%","Al Grades ","4.5%",NA,"1.4% 16.4%","1.4% ","16.4%",NA,"Mary Walker School District","Low-Income",NA
-"Al Grades 2.1%","Al Grades ","2.1%",NA,"0.9% 10.3%","0.9% ","10.3%",NA,"Mary Walker School District","Non-Low Income",NA
-"Al Grades 10.6%","Al Grades ","10.6%",NA,"6.6% 14.1%","6.6% ","14.1%",NA,"Belevue School District","Low-Income",NA
-"Al Grades 2.1%","Al Grades ","2.1%",NA,"1.1% 3.1%","1.1% ","3.1%",NA,"Belevue School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"15.5% 7.7% 9.8%","15.5% ","7.7% ","9.8%","Marysvile School District","Low-Income",NA
-"Al Grades 8.3%","Al Grades ","8.3%",NA,"3.8% 5.1%","3.8% ","5.1%",NA,"Marysvile School District","Non-Low Income",NA
-"Al Grades 6.0%","Al Grades ","6.0%",NA,"4.3% 13.2%","4.3% ","13.2%",NA,"Mead School District","Low-Income",NA
-"Al Grades 1.7%","Al Grades ","1.7%",NA,"1.1% 4.0%","1.1% ","4.0%",NA,"Mead School District","Non-Low Income",NA
-"Al Grades 5.2%","Al Grades ","5.2%",NA,"3.4% 1.3%","3.4% ","1.3%",NA,"Medical Lake School District","Low-Income",NA
-"Al Grades 2.0%","Al Grades ","2.0%",NA,"1.2% 0.6%","1.2% ","0.6%",NA,"Medical Lake School District","Non-Low Income",NA
-"Al Grades 3.8%","Al Grades ","3.8%",NA,"4.1% 4.7%","4.1% ","4.7%",NA,"Mercer Island School District","Low-Income",NA
-"Al Grades 0.6%","Al Grades ","0.6%",NA,"0.3% 0.5%","0.3% ","0.5%",NA,"Mercer Island School District","Non-Low Income",NA
-"Al Grades 4.5%","Al Grades ","4.5%",NA,"4.3% 1.8%","4.3% ","1.8%",NA,"Methow Valey School District","Low-Income",NA
-"Al Grades 0.8%","Al Grades ","0.8%",NA,"1.3% 1.4%","1.3% ","1.4%",NA,"Methow Valey School District","Non-Low Income",NA
-"Al Grades 10.7%","Al Grades ","10.7%",NA,"5.0% 15.6%","5.0% ","15.6%",NA,"Monroe School District","Low-Income",NA
-"Al Grades 4.1%","Al Grades ","4.1%",NA,"1.7% 6.8%","1.7% ","6.8%",NA,"Monroe School District","Non-Low Income",NA
-"Al Grades 8.0%","Al Grades ","8.0%",NA,"4.0% 17.9%","4.0% ","17.9%",NA,"Montesano School District","Low-Income",NA
-"Al Grades 1.5%","Al Grades ","1.5%",NA,"1.2% 4.2%","1.2% ","4.2%",NA,"Montesano School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"18.1% 12.1% 31.0%","18.1% ","12.1% ","31.0%","Moses Lake School District","Low-Income",NA
-"Al Grades 8.0%","Al Grades ","8.0%",NA,"3.7% 12.2%","3.7% ","12.2%",NA,"Moses Lake School District","Non-Low Income",NA
-"Al Grades 4.6%","Al Grades ","4.6%",NA,"2.3% 8.9%","2.3% ","8.9%",NA,"Mossyrock School District","Low-Income",NA
-"Al Grades Suppressed: <6.%","Al Grades ","Suppressed: <6.%",NA,"Suppressed: <6.% 4.4%","Suppressed: <6.% ","4.4%",NA,"Mossyrock School District","Non-Low Income",NA
-"Al Grades 11.6%","Al Grades ","11.6%",NA,"7.7% 3.1%","7.7% ","3.1%",NA,"Mount Baker School District","Low-Income",NA
-"Al Grades 4.9%","Al Grades ","4.9%",NA,"2.7% 0.7%","2.7% ","0.7%",NA,"Mount Baker School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"13.0% 6.6% 13.6%","13.0% ","6.6% ","13.6%","Belingham School District","Low-Income",NA
-"Al Grades 3.8%","Al Grades ","3.8%",NA,"2.1% 3.9%","2.1% ","3.9%",NA,"Belingham School District","Non-Low Income",NA
-"Al Grades 8.8%","Al Grades ","8.8%",NA,"5.0% 15.8%","5.0% ","15.8%",NA,"Mount Vernon School District","Low-Income",NA
-"Al Grades 3.1%","Al Grades ","3.1%",NA,"1.3% 5.1%","1.3% ","5.1%",NA,"Mount Vernon School District","Non-Low Income",NA
-"Al Grades 11.1%","Al Grades ","11.1%",NA,"5.1% Suppressed: <1.%","5.1% ","Suppressed: <1.%",NA,"Mukilteo School District","Low-Income",""
-"Al Grades 4.5%","Al Grades ","4.5%",NA,"2.1% Suppressed: <1.%","2.1% ","Suppressed: <1.%",NA,"Mukilteo School District","Non-Low Income",""
-"Al Grades 4.0%","Al Grades ","4.0%",NA,"1.9% 7.7%","1.9% ","7.7%",NA,"Naches Valey School District","Low-Income",NA
-"Al Grades 1.7%","Al Grades ","1.7%",NA,"0.8% 3.4%","0.8% ","3.4%",NA,"Naches Valey School District","Non-Low Income",NA
-"Al Grades 6.7%","Al Grades ","6.7%",NA,"2.3% 10.5%","2.3% ","10.5%",NA,"Napavine School District","Low-Income",NA
-"Al Grades 3.1%","Al Grades ","3.1%",NA,"1.3% 5.5%","1.3% ","5.5%",NA,"Napavine School District","Non-Low Income",NA
-"Al Grades 1.6%","Al Grades ","1.6%",NA,"1.2% 1.5%","1.2% ","1.5%",NA,"Nasele-Grays River Valey School District","Low-Income",NA
-"Al Grades 1.5%","Al Grades ","1.5%",NA,"0.6% 0.3%","0.6% ","0.3%",NA,"Nasele-Grays River Valey School District","Non-Low Income",NA
-"Al Grades 7.1%","Al Grades ","7.1%",NA,"4.9% 1.5%","4.9% ","1.5%",NA,"Newport School District","Low-Income",NA
-"Al Grades 2.9%","Al Grades ","2.9%",NA,"1.1% 0.7%","1.1% ","0.7%",NA,"Newport School District","Non-Low Income",NA
-"Al Grades 4.3%","Al Grades ","4.3%",NA,"3.7% 9.3%","3.7% ","9.3%",NA,"Nine Mile Fals School District","Low-Income",NA
-"Al Grades 1.3%","Al Grades ","1.3%",NA,"0.5% 1.3%","0.5% ","1.3%",NA,"Nine Mile Fals School District","Non-Low Income",NA
-"Al Grades 6.3%","Al Grades ","6.3%",NA,"4.8% 13.8%","4.8% ","13.8%",NA,"Nooksack Valey School District","Low-Income",NA
-"Al Grades 1.9%","Al Grades ","1.9%",NA,"1.5% 4.7%","1.5% ","4.7%",NA,"Nooksack Valey School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.7% 6.0% 13.8%","12.7% ","6.0% ","13.8%","North Beach School District No. 64","Low-Income",NA
-"Al Grades 5.8%","Al Grades ","5.8%",NA,"3.0% 7.2%","3.0% ","7.2%",NA,"North Beach School District No. 64","Non-Low Income",NA
-"Al Grades 1.5%","Al Grades ","1.5%",NA,"0.8% 1.8%","0.8% ","1.8%",NA,"North Franklin School District","Low-Income",NA
-"Al Grades Suppressed: <2.%","Al Grades ","Suppressed: <2.%",NA,"Suppressed: <2.% 1.9%","Suppressed: <2.% ","1.9%",NA,"North Franklin School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"16.3% 13.0% 36.5%","16.3% ","13.0% ","36.5%","Bethel School District","Low-Income",NA
-"Al Grades 8.0%","Al Grades ","8.0%",NA,"5.6% 20.5%","5.6% ","20.5%",NA,"Bethel School District","Non-Low Income",NA
-"Al Grades 10.5%","Al Grades ","10.5%",NA,"2.9% 19.1%","2.9% ","19.1%",NA,"North Kitsap School District","Low-Income",NA
-"Al Grades 4.2%","Al Grades ","4.2%",NA,"1.2% 7.0%","1.2% ","7.0%",NA,"North Kitsap School District","Non-Low Income",NA
-"Al Grades 11.2%","Al Grades ","11.2%",NA,"10.4% 30.8%","10.4% ","30.8%",NA,"North Mason School District","Low-Income",NA
-"Al Grades 6.4%","Al Grades ","6.4%",NA,"4.6% 13.9%","4.6% ","13.9%",NA,"North Mason School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.1% 7.1% 4.1%","12.1% ","7.1% ","4.1%","North Thurston Public Schools","Low-Income",NA
-"Al Grades 5.5%","Al Grades ","5.5%",NA,"2.7% 1.2%","2.7% ","1.2%",NA,"North Thurston Public Schools","Non-Low Income",NA
-"Al Grades 5.6%","Al Grades ","5.6%",NA,"4.3% 7.2%","4.3% ","7.2%",NA,"Northshore School District","Low-Income",NA
-"Al Grades 1.4%","Al Grades ","1.4%",NA,"1.2% 1.6%","1.2% ","1.6%",NA,"Northshore School District","Non-Low Income",NA
-"Al Grades 10.6%","Al Grades ","10.6%",NA,"6.7% 14.9%","6.7% ","14.9%",NA,"Oak Harbor School District","Low-Income",NA
-"Al Grades 3.7%","Al Grades ","3.7%",NA,"2.5% 4.6%","2.5% ","4.6%",NA,"Oak Harbor School District","Non-Low Income",NA
-"Al Grades 4.9%","Al Grades ","4.9%",NA,"2.1% 8.0%","2.1% ","8.0%",NA,"Oakvile School District","Low-Income",NA
-"Al Grades 1.8%","Al Grades ","1.8%",NA,"4.8% 11.3%","4.8% ","11.3%",NA,"Oakvile School District","Non-Low Income",NA
-"Al Grades 7.0%","Al Grades ","7.0%",NA,"3.2% 15.9%","3.2% ","15.9%",NA,"Ocean Beach School District","Low-Income",NA
-"Al Grades 2.4%","Al Grades ","2.4%",NA,"Suppressed: <3.% 8.2%","Suppressed: <3.% ","8.2%",NA,"Ocean Beach School District","Non-Low Income",NA
-"Al Grades 6.3%","Al Grades ","6.3%",NA,"5.1% 25.0%","5.1% ","25.0%",NA,"Ocosta School District","Low-Income",NA
-"Al Grades 1.7%","Al Grades ","1.7%",NA,"2.9% 7.3%","2.9% ","7.3%",NA,"Ocosta School District","Non-Low Income",NA
-"Al Grades 1.6%","Al Grades ","1.6%",NA,"1.5% 2.3%","1.5% ","2.3%",NA,"Odessa School District","Low-Income",NA
-"Al Grades 0.9%","Al Grades ","0.9%",NA,"Suppressed: <6.% 1.6%","Suppressed: <6.% ","1.6%",NA,"Odessa School District","Non-Low Income",NA
-"Al Grades 5.1%","Al Grades ","5.1%",NA,"4.9% 15.9%","4.9% ","15.9%",NA,"Okanogan School District","Low-Income",NA
-"Al Grades 1.9%","Al Grades ","1.9%",NA,"1.9% 8.0%","1.9% ","8.0%",NA,"Okanogan School District","Non-Low Income",NA
-"Al Grades Suppressed: N<10","Al Grades ","Suppressed: N<10",NA,"4.0% Suppressed: N<10","4.0% ","Suppressed: N<10",NA,"Bickleton School District","Low-Income",NA
-"Al Grades","Al Grades",NA,NA,"Suppressed: <10% Suppressed: <10% Suppressed: <10%","Suppressed: <10% ","Suppressed: <10% ","Suppressed: <10%","Bickleton School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"14.8% 11.1% 17.2%","14.8% ","11.1% ","17.2%","Omak School District","Low-Income",NA
-"Al Grades 9.0%","Al Grades ","9.0%",NA,"5.3% 7.6%","5.3% ","7.6%",NA,"Omak School District","Non-Low Income",NA
-"Al Grades 3.9%","Al Grades ","3.9%",NA,"3.4% 9.4%","3.4% ","9.4%",NA,"Onalaska School District","Low-Income",NA
-"Al Grades 3.2%","Al Grades ","3.2%",NA,"3.3% 5.5%","3.3% ","5.5%",NA,"Onalaska School District","Non-Low Income",NA
-"Al Grades 4.7%","Al Grades ","4.7%",NA,"4.4% 5.0%","4.4% ","5.0%",NA,"Orcas Island School District","Low-Income",NA
-"Al Grades 5.0%","Al Grades ","5.0%",NA,"2.9% 1.4%","2.9% ","1.4%",NA,"Orcas Island School District","Non-Low Income",NA
-"Al Grades 10.3%","Al Grades ","10.3%",NA,"12.6% 17.3%","12.6% ","17.3%",NA,"Orovile School District","Low-Income",NA
-"Al Grades 0.9%","Al Grades ","0.9%",NA,"5.8% 10.8%","5.8% ","10.8%",NA,"Orovile School District","Non-Low Income",NA
-"Al Grades 6.3%","Al Grades ","6.3%",NA,"3.1% 16.1%","3.1% ","16.1%",NA,"Orting School District","Low-Income",NA
-"Al Grades 2.3%","Al Grades ","2.3%",NA,"2.3% 7.1%","2.3% ","7.1%",NA,"Orting School District","Non-Low Income",NA
-"Al Grades 9.5%","Al Grades ","9.5%",NA,"6.3% 9.9%","6.3% ","9.9%",NA,"Othelo School District","Low-Income",NA
-"Al Grades 5.2%","Al Grades ","5.2%",NA,"4.1% 4.3%","4.1% ","4.3%",NA,"Othelo School District","Non-Low Income",NA
-"Al Grades Suppressed: <10%","Al Grades ","Suppressed: <10%",NA,"3.9% 21.3%","3.9% ","21.3%",NA,"Palouse School District","Low-Income",NA
-"Al Grades 0.6%","Al Grades ","0.6%",NA,"Suppressed: <7.% 1.6%","Suppressed: <7.% ","1.6%",NA,"Palouse School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"18.1% 18.1% 38.0%","18.1% ","18.1% ","38.0%","Pasco School District","Low-Income",NA
-"Al Grades 8.2%","Al Grades ","8.2%",NA,"8.7% 19.4%","8.7% ","19.4%",NA,"Pasco School District","Non-Low Income",NA
-"Al Grades 3.8%","Al Grades ","3.8%",NA,"6.9% 8.1%","6.9% ","8.1%",NA,"Pateros School District","Low-Income",NA
-"Al Grades Suppressed: <10%","Al Grades ","Suppressed: <10%",NA,"6.7% 1.7%","6.7% ","1.7%",NA,"Pateros School District","Non-Low Income",NA
-"Al Grades 5.8%","Al Grades ","5.8%",NA,"2.2% 13.6%","2.2% ","13.6%",NA,"Pe El School District","Low-Income",NA
-"Al Grades 2.3%","Al Grades ","2.3%",NA,"Suppressed: <9.% 10.9%","Suppressed: <9.% ","10.9%",NA,"Pe El School District","Non-Low Income",NA
-"Al Grades 7.2%","Al Grades ","7.2%",NA,"3.0% 10.1%","3.0% ","10.1%",NA,"Blaine School District","Low-Income",NA
-"Al Grades 2.5%","Al Grades ","2.5%",NA,"1.0% 2.8%","1.0% ","2.8%",NA,"Blaine School District","Non-Low Income",NA
-"Al Grades 11.2%","Al Grades ","11.2%",NA,"9.8% 20.9%","9.8% ","20.9%",NA,"Peninsula School District","Low-Income",NA
-"Al Grades 3.4%","Al Grades ","3.4%",NA,"2.6% 6.5%","2.6% ","6.5%",NA,"Peninsula School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"13.0% 7.9% 26.9%","13.0% ","7.9% ","26.9%","Port Angeles School District","Low-Income",NA
-"Al Grades 5.1%","Al Grades ","5.1%",NA,"2.6% 9.9%","2.6% ","9.9%",NA,"Port Angeles School District","Non-Low Income",NA
-"Al Grades 7.5%","Al Grades ","7.5%",NA,"3.3% 1.5%","3.3% ","1.5%",NA,"Port Townsend School District","Low-Income",NA
-"Al Grades 3.4%","Al Grades ","3.4%",NA,"1.4% 0.8%","1.4% ","0.8%",NA,"Port Townsend School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"14.2% 10.2% 31.9%","14.2% ","10.2% ","31.9%","Prosser School District","Low-Income",NA
-"Al Grades 4.2%","Al Grades ","4.2%",NA,"3.6% 11.8%","3.6% ","11.8%",NA,"Prosser School District","Non-Low Income",NA
-"Al Grades 6.5%","Al Grades ","6.5%",NA,"3.2% 8.0%","3.2% ","8.0%",NA,"Pulman School District","Low-Income",NA
-"Al Grades 1.0%","Al Grades ","1.0%",NA,"0.4% 1.2%","0.4% ","1.2%",NA,"Pulman School District","Non-Low Income",NA
-"Al Grades 8.9%","Al Grades ","8.9%",NA,"9.3% 18.2%","9.3% ","18.2%",NA,"Puyalup School District","Low-Income",NA
-"Al Grades 4.1%","Al Grades ","4.1%",NA,"4.1% 8.3%","4.1% ","8.3%",NA,"Puyalup School District","Non-Low Income",NA
-"Al Grades 2.1%","Al Grades ","2.1%",NA,"5.0% 2.7%","5.0% ","2.7%",NA,"Quilcene School District","Low-Income",NA
-"Al Grades 0.9%","Al Grades ","0.9%",NA,"1.2% 2.0%","1.2% ","2.0%",NA,"Quilcene School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"23.8% 21.1% 27.1%","23.8% ","21.1% ","27.1%","Quilayute Valey School District","Low-Income",NA
-"Al Grades","Al Grades",NA,NA,"17.8% 14.7% 18.2%","17.8% ","14.7% ","18.2%","Quilayute Valey School District","Non-Low Income",NA
-"Al Grades 10.8%","Al Grades ","10.8%",NA,"5.4% 20.9%","5.4% ","20.9%",NA,"Quincy School District","Low-Income",NA
-"Al Grades 4.0%","Al Grades ","4.0%",NA,"2.7% 10.1%","2.7% ","10.1%",NA,"Quincy School District","Non-Low Income",NA
-"Al Grades 5.9%","Al Grades ","5.9%",NA,"4.4% 19.8%","4.4% ","19.8%",NA,"Rainier School District","Low-Income",NA
-"Al Grades 2.3%","Al Grades ","2.3%",NA,"1.0% 3.9%","1.0% ","3.9%",NA,"Rainier School District","Non-Low Income",NA
-"Al Grades 7.2%","Al Grades ","7.2%",NA,"3.0% 10.1%","3.0% ","10.1%",NA,"Blaine School District","Low-Income",NA
-"Al Grades 2.5%","Al Grades ","2.5%",NA,"1.0% 2.8%","1.0% ","2.8%",NA,"Blaine School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"2.7% 0.8%","2.7% ","0.8%",NA,"Rainier Valey Leadership Academy","Low-Income",NA
-"Al Grades","Al Grades",NA,NA,"* 10.8% 2.4%","* ","10.8% ","2.4%","Rainier Valey Leadership Academy","Non-Low Income",NA
-"Al Grades 4.8%","Al Grades ","4.8%",NA,"5.0% 19.6%","5.0% ","19.6%",NA,"Raymond School District","Low-Income",NA
-"Al Grades 4.9%","Al Grades ","4.9%",NA,"1.5% 12.2%","1.5% ","12.2%",NA,"Raymond School District","Non-Low Income",NA
-"Al Grades 2.7%","Al Grades ","2.7%",NA,"1.5% 6.3%","1.5% ","6.3%",NA,"Reardan-Edwal School District","Low-Income",NA
-"Al Grades 1.3%","Al Grades ","1.3%",NA,"0.4% 5.1%","0.4% ","5.1%",NA,"Reardan-Edwal School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"13.9% 10.0% 19.7%","13.9% ","10.0% ","19.7%","Renton School District","Low-Income",NA
-"Al Grades 5.9%","Al Grades ","5.9%",NA,"2.9% 6.8%","2.9% ","6.8%",NA,"Renton School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"13.2% 15.9% 34.2%","13.2% ","15.9% ","34.2%","Richland School District","Low-Income",NA
-"Al Grades 4.0%","Al Grades ","4.0%",NA,"5.2% 9.7%","5.2% ","9.7%",NA,"Richland School District","Non-Low Income",NA
-"Al Grades 9.7%","Al Grades ","9.7%",NA,"4.4% 21.9%","4.4% ","21.9%",NA,"Ridgefield School District","Low-Income",NA
-"Al Grades 3.2%","Al Grades ","3.2%",NA,"1.3% 5.8%","1.3% ","5.8%",NA,"Ridgefield School District","Non-Low Income",NA
-"Al Grades 10.9%","Al Grades ","10.9%",NA,"5.8% 13.8%","5.8% ","13.8%",NA,"Ritzvile School District","Low-Income",NA
-"Al Grades 2.7%","Al Grades ","2.7%",NA,"1.6% 2.6%","1.6% ","2.6%",NA,"Ritzvile School District","Non-Low Income",NA
-"Al Grades 2.9%","Al Grades ","2.9%",NA,"3.4% 13.7%","3.4% ","13.7%",NA,"Riverside School District","Low-Income",NA
-"Al Grades 1.3%","Al Grades ","1.3%",NA,"1.3% 4.8%","1.3% ","4.8%",NA,"Riverside School District","Non-Low Income",NA
-"Al Grades 8.4%","Al Grades ","8.4%",NA,"5.3% 3.4%","5.3% ","3.4%",NA,"Riverview School District","Low-Income",NA
-"Al Grades 2.0%","Al Grades ","2.0%",NA,"1.6% 1.5%","1.6% ","1.5%",NA,"Riverview School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.9% 5.2% 12.5%","12.9% ","5.2% ","12.5%","Rochester School District","Low-Income",NA
-"Al Grades 6.3%","Al Grades ","6.3%",NA,"3.4% 7.0%","3.4% ","7.0%",NA,"Rochester School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.1% 9.0% Suppressed: <1.%","12.1% ","9.0% ","Suppressed: <1.%","Bremerton School District","Low-Income",""
-"Al Grades 8.4%","Al Grades ","8.4%",NA,"5.3% Suppressed: <1.%","5.3% ","Suppressed: <1.%",NA,"Bremerton School District","Non-Low Income",""
-"Al Grades 2.5%","Al Grades ","2.5%",NA,"13.4% 9.7%","13.4% ","9.7%",NA,"Rosalia School District","Low-Income",NA
-"Al Grades Suppressed: <10%","Al Grades ","Suppressed: <10%",NA,"1.6% 3.5%","1.6% ","3.5%",NA,"Rosalia School District","Non-Low Income",NA
-"Al Grades 7.3%","Al Grades ","7.3%",NA,"4.5% 13.4%","4.5% ","13.4%",NA,"Royal School District","Low-Income",NA
-"Al Grades 3.8%","Al Grades ","3.8%",NA,"2.2% 8.7%","2.2% ","8.7%",NA,"Royal School District","Non-Low Income",NA
-"Al Grades 8.0%","Al Grades ","8.0%",NA,"13.0% 18.2%","13.0% ","18.2%",NA,"San Juan Island School District","Low-Income",NA
-"Al Grades 1.8%","Al Grades ","1.8%",NA,"4.0% 7.3%","4.0% ","7.3%",NA,"San Juan Island School District","Non-Low Income",NA
-"Al Grades 9.8%","Al Grades ","9.8%",NA,"4.6% 3.1%","4.6% ","3.1%",NA,"Seattle School District No. 1","Low-Income",NA
-"Al Grades 2.5%","Al Grades ","2.5%",NA,"1.2% 1.1%","1.2% ","1.1%",NA,"Seattle School District No. 1","Non-Low Income",NA
-"Al Grades 5.5%","Al Grades ","5.5%",NA,"3.5% 5.1%","3.5% ","5.1%",NA,"Sedro-Wooley School District","Low-Income",NA
-"Al Grades 3.0%","Al Grades ","3.0%",NA,"1.8% 1.8%","1.8% ","1.8%",NA,"Sedro-Wooley School District","Non-Low Income",NA
-"Al Grades 6.7%","Al Grades ","6.7%",NA,"3.7% 1.3%","3.7% ","1.3%",NA,"Selah School District","Low-Income",NA
-"Al Grades 3.5%","Al Grades ","3.5%",NA,"2.4% 1.9%","2.4% ","1.9%",NA,"Selah School District","Non-Low Income",NA
-"Al Grades 10.6%","Al Grades ","10.6%",NA,"7.4% 1.6%","7.4% ","1.6%",NA,"Sequim School District","Low-Income",NA
-"Al Grades 5.1%","Al Grades ","5.1%",NA,"2.7% 0.7%","2.7% ","0.7%",NA,"Sequim School District","Non-Low Income",NA
-"Al Grades 11.4%","Al Grades ","11.4%",NA,"6.0% 15.5%","6.0% ","15.5%",NA,"Snohomish School District","Low-Income",NA
-"Al Grades 3.8%","Al Grades ","3.8%",NA,"1.8% 4.3%","1.8% ","4.3%",NA,"Snohomish School District","Non-Low Income",NA
-"Al Grades 8.9%","Al Grades ","8.9%",NA,"4.3% 0.3%","4.3% ","0.3%",NA,"Snoqualmie Valey School District","Low-Income",NA
-"Al Grades 3.0%","Al Grades ","3.0%",NA,"0.8% 0.4%","0.8% ","0.4%",NA,"Snoqualmie Valey School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"17.0% 12.3% 19.9%","17.0% ","12.3% ","19.9%","Soap Lake School District","Low-Income",NA
-"Al Grades 10.1%","Al Grades ","10.1%",NA,"7.2% 26.8%","7.2% ","26.8%",NA,"Soap Lake School District","Non-Low Income",NA
-"Al Grades 8.3%","Al Grades ","8.3%",NA,"4.3% 14.4%","4.3% ","14.4%",NA,"Brewster School District","Low-Income",NA
-"Al Grades 7.6%","Al Grades ","7.6%",NA,"2.8% 3.7%","2.8% ","3.7%",NA,"Brewster School District","Non-Low Income",NA
-"Al Grades 4.0%","Al Grades ","4.0%",NA,"2.5% 18.0%","2.5% ","18.0%",NA,"South Bend School District","Low-Income",NA
-"Al Grades 4.7%","Al Grades ","4.7%",NA,"1.5% 4.5%","1.5% ","4.5%",NA,"South Bend School District","Non-Low Income",NA
-"Al Grades 11.8%","Al Grades ","11.8%",NA,"6.7% 25.8%","6.7% ","25.8%",NA,"South Kitsap School District","Low-Income",NA
-"Al Grades 5.1%","Al Grades ","5.1%",NA,"6.7% 12.5%","6.7% ","12.5%",NA,"South Kitsap School District","Non-Low Income",NA
-"Al Grades 8.3%","Al Grades ","8.3%",NA,"6.1% 14.9%","6.1% ","14.9%",NA,"South Whidbey School District","Low-Income",NA
-"Al Grades 1.9%","Al Grades ","1.9%",NA,"1.1% 3.8%","1.1% ","3.8%",NA,"South Whidbey School District","Non-Low Income",NA
-"Al Grades 11.8%","Al Grades ","11.8%",NA,"8.2% 11.9%","8.2% ","11.9%",NA,"Spokane School District","Low-Income",NA
-"Al Grades 3.4%","Al Grades ","3.4%",NA,"2.4% 4.0%","2.4% ","4.0%",NA,"Spokane School District","Non-Low Income",NA
-"Al Grades 0.9%","Al Grades ","0.9%",NA,"1.7% 13.6%","1.7% ","13.6%",NA,"Sprague School District","Low-Income",NA
-"Al Grades 4.7%","Al Grades ","4.7%",NA,"1.3% 3.7%","1.3% ","3.7%",NA,"Sprague School District","Non-Low Income",NA
-"Al Grades 7.4%","Al Grades ","7.4%",NA,"2.3% 19.2%","2.3% ","19.2%",NA,"Stanwood-Camano School District","Low-Income",NA
-"Al Grades 2.7%","Al Grades ","2.7%",NA,"1.0% 5.9%","1.0% ","5.9%",NA,"Stanwood-Camano School District","Non-Low Income",NA
-"Al Grades 8.2%","Al Grades ","8.2%",NA,"4.5% 4.5%","4.5% ","4.5%",NA,"Steilacoom Hist. School District","Low-Income",NA
-"Al Grades 1.8%","Al Grades ","1.8%",NA,"1.5% 1.2%","1.5% ","1.2%",NA,"Steilacoom Hist. School District","Non-Low Income",NA
-"Al Grades 6.2%","Al Grades ","6.2%",NA,"3.0% 21.5%","3.0% ","21.5%",NA,"Stevenson-Carson School District","Low-Income",NA
-"Al Grades 2.9%","Al Grades ","2.9%",NA,"1.9% 10.0%","1.9% ","10.0%",NA,"Stevenson-Carson School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"14.5% 16.0% 37.7%","14.5% ","16.0% ","37.7%","Sultan School District","Low-Income",NA
-"Al Grades 8.6%","Al Grades ","8.6%",NA,"11.8% 27.1%","11.8% ","27.1%",NA,"Sultan School District","Non-Low Income",NA
-"Al Grades 10.0%","Al Grades ","10.0%",NA,"4.4% 15.7%","4.4% ","15.7%",NA,"Sumner School District","Low-Income",NA
-"Al Grades 2.7%","Al Grades ","2.7%",NA,"1.1% 4.5%","1.1% ","4.5%",NA,"Sumner School District","Non-Low Income",NA
-"Al Grades 3.5%","Al Grades ","3.5%",NA,"12.1% 14.0%","12.1% ","14.0%",NA,"Bridgeport School District","Low-Income",NA
-"Al Grades 2.4%","Al Grades ","2.4%",NA,"10.0% 9.1%","10.0% ","9.1%",NA,"Bridgeport School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.9% 20.6% 22.4%","12.9% ","20.6% ","22.4%","Sunnyside School District","Low-Income",NA
-"Al Grades 7.6%","Al Grades ","7.6%",NA,"7.6% 12.9%","7.6% ","12.9%",NA,"Sunnyside School District","Non-Low Income",NA
-"Al Grades 2.5%","Al Grades ","2.5%",NA,"1.4% 14.6%","1.4% ","14.6%",NA,"Suquamish Tribal Education Department","Low-Income",NA
-"Al Grades Suppressed: <10%","Al Grades ","Suppressed: <10%",NA,"Suppressed: <10% 20.6%","Suppressed: <10% ","20.6%",NA,"Suquamish Tribal Education Department","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"13.2% 7.4% 24.3%","13.2% ","7.4% ","24.3%","Tacoma School District","Low-Income",NA
-"Al Grades 4.8%","Al Grades ","4.8%",NA,"2.6% 8.7%","2.6% ","8.7%",NA,"Tacoma School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.0% 3.3% 13.5%","12.0% ","3.3% ","13.5%","Taholah School District","Low-Income",NA
-"Al Grades 7.9%","Al Grades ","7.9%",NA,"3.0% 9.6%","3.0% ","9.6%",NA,"Taholah School District","Non-Low Income",NA
-"Al Grades 11.8%","Al Grades ","11.8%",NA,"6.9% 27.0%","6.9% ","27.0%",NA,"Tahoma School District","Low-Income",NA
-"Al Grades 3.6%","Al Grades ","3.6%",NA,"1.7% 8.1%","1.7% ","8.1%",NA,"Tahoma School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"13.0% 7.3% 10.4%","13.0% ","7.3% ","10.4%","Tenino School District","Low-Income",NA
-"Al Grades 6.3%","Al Grades ","6.3%",NA,"2.2% 5.8%","2.2% ","5.8%",NA,"Tenino School District","Non-Low Income",NA
-"Al Grades 5.5%","Al Grades ","5.5%",NA,"5.1% 12.7%","5.1% ","12.7%",NA,"Toledo School District","Low-Income",NA
-"Al Grades 1.8%","Al Grades ","1.8%",NA,"1.8% 5.5%","1.8% ","5.5%",NA,"Toledo School District","Non-Low Income",NA
-"Al Grades 11.8%","Al Grades ","11.8%",NA,"4.7% 10.5%","4.7% ","10.5%",NA,"Tonasket School District","Low-Income",NA
-"Al Grades 2.0%","Al Grades ","2.0%",NA,"0.9% 5.0%","0.9% ","5.0%",NA,"Tonasket School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"15.5% 7.7% 7.8%","15.5% ","7.7% ","7.8%","Toppenish School District","Low-Income",NA
-"Al Grades 2.3%","Al Grades ","2.3%",NA,"2.3% 3.8%","2.3% ","3.8%",NA,"Toppenish School District","Non-Low Income",NA
-"Al Grades 2.8%","Al Grades ","2.8%",NA,"1.0% 4.3%","1.0% ","4.3%",NA,"Touchet School District","Low-Income",NA
-"Al Grades 4.7%","Al Grades ","4.7%",NA,"Suppressed: <10% 2.2%","Suppressed: <10% ","2.2%",NA,"Touchet School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"16.1% 11.9% 30.8%","16.1% ","11.9% ","30.8%","Aberdeen School District","Low-Income",NA
-"Al Grades 9.5%","Al Grades ","9.5%",NA,"6.6% 16.7%","6.6% ","16.7%",NA,"Aberdeen School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.4% 9.7% 30.6%","12.4% ","9.7% ","30.6%","Burlington-Edison School District","Low-Income",NA
-"Al Grades 3.5%","Al Grades ","3.5%",NA,"2.3% 9.7%","2.3% ","9.7%",NA,"Burlington-Edison School District","Non-Low Income",NA
-"Al Grades 9.1%","Al Grades ","9.1%",NA,"5.0% 27.5%","5.0% ","27.5%",NA,"Toutle Lake School District","Low-Income",NA
-"Al Grades 4.2%","Al Grades ","4.2%",NA,"3.3% 7.6%","3.3% ","7.6%",NA,"Toutle Lake School District","Non-Low Income",NA
-"Al Grades 11.6%","Al Grades ","11.6%",NA,"5.7% 9.0%","5.7% ","9.0%",NA,"Tukwila School District","Low-Income",NA
-"Al Grades 6.6%","Al Grades ","6.6%",NA,"4.4% 5.1%","4.4% ","5.1%",NA,"Tukwila School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"15.8% 7.2% 18.1%","15.8% ","7.2% ","18.1%","Tumwater School District","Low-Income",NA
-"Al Grades 5.5%","Al Grades ","5.5%",NA,"2.3% 6.0%","2.3% ","6.0%",NA,"Tumwater School District","Non-Low Income",NA
-"Al Grades 10.7%","Al Grades ","10.7%",NA,"4.8% 18.9%","4.8% ","18.9%",NA,"University Place School District","Low-Income",NA
-"Al Grades 3.3%","Al Grades ","3.3%",NA,"1.6% 7.4%","1.6% ","7.4%",NA,"University Place School District","Non-Low Income",NA
-"Al Grades Suppressed: <10%","Al Grades ","Suppressed: <10%",NA,"1.3% 4.2%","1.3% ","4.2%",NA,"Valey School District","Low-Income",NA
-"Al Grades 1.4%","Al Grades ","1.4%",NA,"Suppressed: <10% 3.0%","Suppressed: <10% ","3.0%",NA,"Valey School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.7% 6.3% 22.3%","12.7% ","6.3% ","22.3%","Vancouver School District","Low-Income",NA
-"Al Grades 4.3%","Al Grades ","4.3%",NA,"2.0% 8.2%","2.0% ","8.2%",NA,"Vancouver School District","Non-Low Income",NA
-"Al Grades 6.6%","Al Grades ","6.6%",NA,"1.5% 13.7%","1.5% ","13.7%",NA,"Vashon Island School District","Low-Income",NA
-"Al Grades 1.1%","Al Grades ","1.1%",NA,"0.6% 2.9%","0.6% ","2.9%",NA,"Vashon Island School District","Non-Low Income",NA
-"Al Grades 4.7%","Al Grades ","4.7%",NA,"1.9% 7.1%","1.9% ","7.1%",NA,"Wahkiakum School District","Low-Income",NA
-"Al Grades 1.3%","Al Grades ","1.3%",NA,"Suppressed: <4.% 2.2%","Suppressed: <4.% ","2.2%",NA,"Wahkiakum School District","Non-Low Income",NA
-"Al Grades 9.4%","Al Grades ","9.4%",NA,"2.1% 8.7%","2.1% ","8.7%",NA,"Wahluke School District","Low-Income",NA
-"Al Grades","Al Grades",NA,NA,"12.4% 4.1% 13.9%","12.4% ","4.1% ","13.9%","Wahluke School District","Non-Low Income",NA
-"Al Grades 1.2%","Al Grades ","1.2%",NA,"4.6% 9.8%","4.6% ","9.8%",NA,"Waitsburg School District","Low-Income",NA
-"Al Grades 3.4%","Al Grades ","3.4%",NA,"2.8% Suppressed: <8.%","2.8% ","Suppressed: <8.%",NA,"Waitsburg School District","Non-Low Income",NA
-"Al Grades 6.0%","Al Grades ","6.0%",NA,"7.7% 17.3%","7.7% ","17.3%",NA,"Camas School District","Low-Income",NA
-"Al Grades 1.4%","Al Grades ","1.4%",NA,"1.4% 6.4%","1.4% ","6.4%",NA,"Camas School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.5% 13.1% 15.8%","12.5% ","13.1% ","15.8%","Wala Wala Public Schools","Low-Income",NA
-"Al Grades 3.3%","Al Grades ","3.3%",NA,"5.1% 6.5%","5.1% ","6.5%",NA,"Wala Wala Public Schools","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"15.5% 8.9% 18.9%","15.5% ","8.9% ","18.9%","Wapato School District","Low-Income",NA
-"Al Grades","Al Grades",NA,NA,"12.7% 4.6% 11.1%","12.7% ","4.6% ","11.1%","Wapato School District","Non-Low Income",NA
-"Al Grades 6.4%","Al Grades ","6.4%",NA,"3.2% 17.1%","3.2% ","17.1%",NA,"Warden School District","Low-Income",NA
-"Al Grades 6.1%","Al Grades ","6.1%",NA,"3.5% 23.6%","3.5% ","23.6%",NA,"Warden School District","Non-Low Income",NA
-"Al Grades 9.6%","Al Grades ","9.6%",NA,"8.8% 25.4%","8.8% ","25.4%",NA,"Washougal School District","Low-Income",NA
-"Al Grades 2.8%","Al Grades ","2.8%",NA,"2.6% 7.7%","2.6% ","7.7%",NA,"Washougal School District","Non-Low Income",NA
-"Al Grades 8.50%","Al Grades ","8.50%",NA,"4.80% 5.3%","4.80% ","5.3%",NA,"Washtucna School District","Low-Income",NA
-"Al Grades Suppressed: N<10","Al Grades ","Suppressed: N<10",NA,"Suppressed: N<10 Suppressed: <10%","Suppressed: N<10 ","Suppressed: <10%",NA,"Washtucna School District","Non-Low Income",NA
-"Al Grades 8.7%","Al Grades ","8.7%",NA,"5.9% 10.8%","5.9% ","10.8%",NA,"Watervile School District","Low-Income",NA
-"Al Grades 1.1%","Al Grades ","1.1%",NA,"2.4% 7.3%","2.4% ","7.3%",NA,"Watervile School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"16.3% 4.4% 15.9%","16.3% ","4.4% ","15.9%","Welpinit School District #49","Low-Income",NA
-"Al Grades 3.7%","Al Grades ","3.7%",NA,"Suppressed: <5.% Suppressed: <10%","Suppressed: <5.% ","Suppressed: <10%",NA,"Welpinit School District #49","Non-Low Income",NA
-"Al Grades 6.3%","Al Grades ","6.3%",NA,"4.8% 15.8%","4.8% ","15.8%",NA,"Wenatchee School District","Low-Income",NA
-"Al Grades 1.7%","Al Grades ","1.7%",NA,"1.9% 5.3%","1.9% ","5.3%",NA,"Wenatchee School District","Non-Low Income",NA
-"Al Grades 3.1%","Al Grades ","3.1%",NA,"2.5% 5.5%","2.5% ","5.5%",NA,"West Valey School District (Spokane)","Low-Income",NA
-"Al Grades 2.1%","Al Grades ","2.1%",NA,"1.5% 4.5%","1.5% ","4.5%",NA,"West Valey School District (Spokane)","Non-Low Income",NA
-"Al Grades 11.9%","Al Grades ","11.9%",NA,"7.0% 26.1%","7.0% ","26.1%",NA,"West Valey School District (Yakima)","Low-Income",NA
-"Al Grades 4.7%","Al Grades ","4.7%",NA,"2.3% 7.8%","2.3% ","7.8%",NA,"West Valey School District (Yakima)","Non-Low Income",NA
-"Al Grades 2.9%","Al Grades ","2.9%",NA,"2.0% 9.3%","2.0% ","9.3%",NA,"Cape Flattery School District","Low-Income",NA
-"Al Grades 0.8%","Al Grades ","0.8%",NA,"Suppressed: <10% 9.4%","Suppressed: <10% ","9.4%",NA,"Cape Flattery School District","Non-Low Income",NA
-"Al Grades 10.0%","Al Grades ","10.0%",NA,"4.0% 21.5%","4.0% ","21.5%",NA,"White Pass School District","Low-Income",NA
-"Al Grades 4.0%","Al Grades ","4.0%",NA,"2.2% 12.0%","2.2% ","12.0%",NA,"White Pass School District","Non-Low Income",NA
-"Al Grades 8.3%","Al Grades ","8.3%",NA,"4.5% 8.4%","4.5% ","8.4%",NA,"White River School District","Low-Income",NA
-"Al Grades 2.1%","Al Grades ","2.1%",NA,"1.4% 1.9%","1.4% ","1.9%",NA,"White River School District","Non-Low Income",NA
-"Al Grades 4.4%","Al Grades ","4.4%",NA,"3.9% 18.4%","3.9% ","18.4%",NA,"White Salmon Valey School District","Low-Income",NA
-"Al Grades 1.8%","Al Grades ","1.8%",NA,"1.4% 5.2%","1.4% ","5.2%",NA,"White Salmon Valey School District","Non-Low Income",NA
-"Al Grades 2.4%","Al Grades ","2.4%",NA,"2.8% 9.0%","2.8% ","9.0%",NA,"Wilbur School District","Low-Income",NA
-"Al Grades 2.0%","Al Grades ","2.0%",NA,"Suppressed: <6.% 4.5%","Suppressed: <6.% ","4.5%",NA,"Wilbur School District","Non-Low Income",NA
-"Al Grades 0.7%","Al Grades ","0.7%",NA,"Suppressed: <7.% 1.7%","Suppressed: <7.% ","1.7%",NA,"Wilapa Valey School District","Low-Income",NA
-"Al Grades Suppressed: <4.%","Al Grades ","Suppressed: <4.%",NA,"Suppressed: <4.% 1.2%","Suppressed: <4.% ","1.2%",NA,"Wilapa Valey School District","Non-Low Income",NA
-"Al Grades 10.7%","Al Grades ","10.7%",NA,"Suppressed: <10% 14.6%","Suppressed: <10% ","14.6%",NA,"Wilson Creek School District","Low-Income",NA
-"Al Grades 1.7%","Al Grades ","1.7%",NA,"1.6% 5.3%","1.6% ","5.3%",NA,"Wilson Creek School District","Non-Low Income",NA
-"Al Grades 9.8%","Al Grades ","9.8%",NA,"5.2% 6.4%","5.2% ","6.4%",NA,"Winlock School District","Low-Income",NA
-"Al Grades","Al Grades",NA,NA,"14.5% 8.6% 6.9%","14.5% ","8.6% ","6.9%","Winlock School District","Non-Low Income",NA
-"Al Grades 7.1%","Al Grades ","7.1%",NA,"4.0% 18.2%","4.0% ","18.2%",NA,"Wishkah Valey School District","Low-Income",NA
-"Al Grades 2.8%","Al Grades ","2.8%",NA,"1.9% 14.0%","1.9% ","14.0%",NA,"Wishkah Valey School District","Non-Low Income",NA
-"Al Grades Suppressed: <10%","Al Grades ","Suppressed: <10%",NA,"18.4% 8.80%","18.4% ","8.80%",NA,"Wishram School District","Low-Income",NA
-"Al Grades Suppressed: N<10","Al Grades ","Suppressed: N<10",NA,"Suppressed: N<10 Suppressed: N<10","Suppressed: N<10 ","Suppressed: N<10",NA,"Wishram School District","Non-Low Income",NA
-"Al Grades 7.7%","Al Grades ","7.7%",NA,"7.1% 15.3%","7.1% ","15.3%",NA,"Woodland School District","Low-Income",NA
-"Al Grades 5.4%","Al Grades ","5.4%",NA,"3.3% 6.8%","3.3% ","6.8%",NA,"Woodland School District","Non-Low Income",NA
-"Al Grades 7.3%","Al Grades ","7.3%",NA,"4.7% 15.9%","4.7% ","15.9%",NA,"Cascade School District","Low-Income",NA
-"Al Grades 2.9%","Al Grades ","2.9%",NA,"1.8% 6.7%","1.8% ","6.7%",NA,"Cascade School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"19.0% 8.9% 35.3%","19.0% ","8.9% ","35.3%","Yakima School District","Low-Income",NA
-"Al Grades 9.3%","Al Grades ","9.3%",NA,"4.4% 22.6%","4.4% ","22.6%",NA,"Yakima School District","Non-Low Income",NA
-"Al Grades 9.4%","Al Grades ","9.4%",NA,"6.2% 22.4%","6.2% ","22.4%",NA,"Yelm School District","Low-Income",NA
-"Al Grades 3.9%","Al Grades ","3.9%",NA,"2.9% 11.3%","2.9% ","11.3%",NA,"Yelm School District","Non-Low Income",NA
-"Al Grades 8.1%","Al Grades ","8.1%",NA,"6.4% 11.2%","6.4% ","11.2%",NA,"Zilah School District","Low-Income",NA
-"Al Grades 1.6%","Al Grades ","1.6%",NA,"0.9% 6.0%","0.9% ","6.0%",NA,"Zilah School District","Non-Low Income",NA
-"Al Grades 7.4%","Al Grades ","7.4%",NA,"3.9% 11.4%","3.9% ","11.4%",NA,"CASHMERE SCHOOL DISTRICT","Low-Income",NA
-"Al Grades 2.6%","Al Grades ","2.6%",NA,"0.7% 3.6%","0.7% ","3.6%",NA,"CASHMERE SCHOOL DISTRICT","Non-Low Income",NA
-"Al Grades 5.1%","Al Grades ","5.1%",NA,"2.9% 22.7%","2.9% ","22.7%",NA,"Castle Rock School District","Low-Income",NA
-"Al Grades 2.3%","Al Grades ","2.3%",NA,"1.5% 9.2%","1.5% ","9.2%",NA,"Castle Rock School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"13.3% 7.7% 21.6%","13.3% ","7.7% ","21.6%","Central Kitsap School District","Low-Income",NA
-"Al Grades 5.7%","Al Grades ","5.7%",NA,"4.6% 10.4%","4.6% ","10.4%",NA,"Central Kitsap School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.9% 6.9% 16.7%","12.9% ","6.9% ","16.7%","Central Valey School District","Low-Income",NA
-"Al Grades 3.8%","Al Grades ","3.8%",NA,"2.3% 7.3%","2.3% ","7.3%",NA,"Central Valey School District","Non-Low Income",NA
-"Al Grades 9.4%","Al Grades ","9.4%",NA,"5.4% 23.3%","5.4% ","23.3%",NA,"Centralia School District","Low-Income",NA
-"Al Grades 5.1%","Al Grades ","5.1%",NA,"2.1% 13.4%","2.1% ","13.4%",NA,"Centralia School District","Non-Low Income",NA
-"Al Grades 9.3%","Al Grades ","9.3%",NA,"5.4% 14.9%","5.4% ","14.9%",NA,"Chehalis School District","Low-Income",NA
-"Al Grades 4.4%","Al Grades ","4.4%",NA,"1.9% 6.5%","1.9% ","6.5%",NA,"Chehalis School District","Non-Low Income",NA
-"Al Grades 1.8%","Al Grades ","1.8%",NA,"1.9% 5.8%","1.9% ","5.8%",NA,"Adna School District","Low-Income",NA
-"Al Grades 1.1%","Al Grades ","1.1%",NA,"0.6% 1.8%","0.6% ","1.8%",NA,"Adna School District","Non-Low Income",NA
-"Al Grades 9.4%","Al Grades ","9.4%",NA,"5.4% 23.3%","5.4% ","23.3%",NA,"Centralia School District","Low-Income",NA
-"Al Grades 5.1%","Al Grades ","5.1%",NA,"2.1% 13.4%","2.1% ","13.4%",NA,"Centralia School District","Non-Low Income",NA
-"Al Grades 6.6%","Al Grades ","6.6%",NA,"2.0% 7.7%","2.0% ","7.7%",NA,"Cheney School District","Low-Income",NA
-"Al Grades 2.3%","Al Grades ","2.3%",NA,"0.8% 2.3%","0.8% ","2.3%",NA,"Cheney School District","Non-Low Income",NA
-"Al Grades 10.2%","Al Grades ","10.2%",NA,"5.9% 13.1%","5.9% ","13.1%",NA,"Chewelah School District","Low-Income",NA
-"Al Grades 3.1%","Al Grades ","3.1%",NA,"1.1% 5.5%","1.1% ","5.5%",NA,"Chewelah School District","Non-Low Income",NA
-"Al Grades Suppressed: N<10","Al Grades ","Suppressed: N<10",NA,"3.1% 11.5%","3.1% ","11.5%",NA,"Chief Leschi Schools","Low-Income",NA
-"Al Grades","Al Grades",NA,NA,"13.3% 4.2% 26.9%","13.3% ","4.2% ","26.9%","Chief Leschi Schools","Non-Low Income",NA
-"Al Grades 8.0%","Al Grades ","8.0%",NA,"5.2% 29.1%","5.2% ","29.1%",NA,"Chimacum School District","Low-Income",NA
-"Al Grades 5.3%","Al Grades ","5.3%",NA,"1.6% 15.6%","1.6% ","15.6%",NA,"Chimacum School District","Non-Low Income",NA
-"Al Grades 9.5%","Al Grades ","9.5%",NA,"4.7% 15.2%","4.7% ","15.2%",NA,"Clarkston School District","Low-Income",NA
-"Al Grades 3.7%","Al Grades ","3.7%",NA,"2.1% 5.2%","2.1% ","5.2%",NA,"Clarkston School District","Non-Low Income",NA
-"Al Grades 8.3%","Al Grades ","8.3%",NA,"6.1% 16.3%","6.1% ","16.3%",NA,"Cle Elum-Roslyn School District","Low-Income",NA
-"Al Grades 2.9%","Al Grades ","2.9%",NA,"2.4% 6.1%","2.4% ","6.1%",NA,"Cle Elum-Roslyn School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"15.6% 10.0% 22.1%","15.6% ","10.0% ","22.1%","Clover Park School District","Low-Income",NA
-"Al Grades 7.6%","Al Grades ","7.6%",NA,"4.1% 12.7%","4.1% ","12.7%",NA,"Clover Park School District","Non-Low Income",NA
-"Al Grades 7.8%","Al Grades ","7.8%",NA,"8.6% 8.4%","8.6% ","8.4%",NA,"Colfax School District","Low-Income",NA
-"Al Grades 1.9%","Al Grades ","1.9%",NA,"3.0% 3.2%","3.0% ","3.2%",NA,"Colfax School District","Non-Low Income",NA
-"Al Grades 5.9%","Al Grades ","5.9%",NA,"13.1% 14.2%","13.1% ","14.2%",NA,"Colege Place School District","Low-Income",NA
-"Al Grades 2.0%","Al Grades ","2.0%",NA,"4.5% 6.4%","4.5% ","6.4%",NA,"Colege Place School District","Non-Low Income",NA
-"Al Grades 7.3%","Al Grades ","7.3%",NA,"3.3% 3.2%","3.3% ","3.2%",NA,"Anacortes School District","Low-Income",NA
-"Al Grades 2.4%","Al Grades ","2.4%",NA,"1.1% 1.5%","1.1% ","1.5%",NA,"Anacortes School District","Non-Low Income",NA
-"Al Grades Suppressed: N<10","Al Grades ","Suppressed: N<10",NA,"Suppressed: N<10 24.1%","Suppressed: N<10 ","24.1%",NA,"Colton School District","Low-Income",NA
-"Al Grades 1.60%","Al Grades ","1.60%",NA,"0.60% Suppressed: <10%","0.60% ","Suppressed: <10%",NA,"Colton School District","Non-Low Income",NA
-"Al Grades 6.00%","Al Grades ","6.00%",NA,"7.00% 17.5%","7.00% ","17.5%",NA,"Columbia (Stevens) School District","Low-Income",NA
-"Al Grades Suppressed: N<10","Al Grades ","Suppressed: N<10",NA,"Suppressed: N<10 14.8%","Suppressed: N<10 ","14.8%",NA,"Columbia (Stevens) School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"17.3% 8.8% 32.6%","17.3% ","8.8% ","32.6%","Columbia (Wala Wala) School District","Low-Income",NA
-"Al Grades 6.5%","Al Grades ","6.5%",NA,"1.4% 10.0%","1.4% ","10.0%",NA,"Columbia (Wala Wala) School District","Non-Low Income",NA
-"Al Grades 6.8%","Al Grades ","6.8%",NA,"2.8% 15.8%","2.8% ","15.8%",NA,"Colvile School District","Low-Income",NA
-"Al Grades 2.6%","Al Grades ","2.6%",NA,"0.8% 5.0%","0.8% ","5.0%",NA,"Colvile School District","Non-Low Income",NA
-"Al Grades 5.9%","Al Grades ","5.9%",NA,"4.9% 27.8%","4.9% ","27.8%",NA,"Concrete School District","Low-Income",NA
-"Al Grades 2.8%","Al Grades ","2.8%",NA,"5.4% 25.1%","5.4% ","25.1%",NA,"Concrete School District","Non-Low Income",NA
-"Al Grades 1.7%","Al Grades ","1.7%",NA,"Suppressed: <8.% 8.4%","Suppressed: <8.% ","8.4%",NA,"Coulee-Hartline School District","Low-Income",NA
-"Al Grades Suppressed: <5.%","Al Grades ","Suppressed: <5.%",NA,"Suppressed: <8.% 1.3%","Suppressed: <8.% ","1.3%",NA,"Coulee-Hartline School District","Non-Low Income",NA
-"Al Grades 8.2%","Al Grades ","8.2%",NA,"3.9% 9.9%","3.9% ","9.9%",NA,"Coupevile School District","Low-Income",NA
-"Al Grades 3.0%","Al Grades ","3.0%",NA,"1.4% 4.4%","1.4% ","4.4%",NA,"Coupevile School District","Non-Low Income",NA
-"Al Grades 3.8%","Al Grades ","3.8%",NA,"5.1% 9.9%","5.1% ","9.9%",NA,"Crescent School District","Low-Income",NA
-"Al Grades Suppressed: <10%","Al Grades ","Suppressed: <10%",NA,"Suppressed: <10% 8.4%","Suppressed: <10% ","8.4%",NA,"Crescent School District","Non-Low Income",NA
-"Al Grades Suppressed: N<10","Al Grades ","Suppressed: N<10",NA,"Suppressed: N<10 Suppressed: N<10","Suppressed: N<10 ","Suppressed: N<10",NA,"Creston School District","Low-Income",""
-"Al Grades Suppressed: <10%","Al Grades ","Suppressed: <10%",NA,"2.80% Suppressed: <10%","2.80% ","Suppressed: <10%",NA,"Creston School District","Non-Low Income",""
-"Al Grades 3.10%","Al Grades ","3.10%",NA,"1.8% 3.9%","1.8% ","3.9%",NA,"Curlew School District","Low-Income",NA
-"Al Grades Suppressed: N<10","Al Grades ","Suppressed: N<10",NA,"Suppressed: <10% Suppressed: <10%","Suppressed: <10% ","Suppressed: <10%",NA,"Curlew School District","Non-Low Income",NA
-"Al Grades 10.1%","Al Grades ","10.1%",NA,"5.9% 21.0%","5.9% ","21.0%",NA,"Arlington School District","Low-Income",NA
-"Al Grades 4.0%","Al Grades ","4.0%",NA,"2.3% 9.2%","2.3% ","9.2%",NA,"Arlington School District","Non-Low Income",NA
-"Al Grades 9.8%","Al Grades ","9.8%",NA,"3.4% 4.1%","3.4% ","4.1%",NA,"Cusick School District","Low-Income",NA
-"Al Grades 5.1%","Al Grades ","5.1%",NA,"Suppressed: <10% 4.5%","Suppressed: <10% ","4.5%",NA,"Cusick School District","Non-Low Income",NA
-"Al Grades 9.7%","Al Grades ","9.7%",NA,"26.3% 34.3%","26.3% ","34.3%",NA,"Darrington School District","Low-Income",NA
-"Al Grades 5.9%","Al Grades ","5.9%",NA,"9.5% 13.1%","9.5% ","13.1%",NA,"Darrington School District","Non-Low Income",NA
-"Al Grades 1.0%","Al Grades ","1.0%",NA,"0.6% 3.9%","0.6% ","3.9%",NA,"Davenport School District","Low-Income",NA
-"Al Grades Suppressed: <3.%","Al Grades ","Suppressed: <3.%",NA,"Suppressed: <3.% 1.2%","Suppressed: <3.% ","1.2%",NA,"Davenport School District","Non-Low Income",NA
-"Al Grades 6.3%","Al Grades ","6.3%",NA,"3.5% 12.2%","3.5% ","12.2%",NA,"Dayton School District","Low-Income",NA
-"Al Grades Suppressed: <6.%","Al Grades ","Suppressed: <6.%",NA,"Suppressed: <7.% 1.5%","Suppressed: <7.% ","1.5%",NA,"Dayton School District","Non-Low Income",NA
-"Al Grades 2.2%","Al Grades ","2.2%",NA,"0.9% 2.0%","0.9% ","2.0%",NA,"Deer Park School District","Low-Income",NA
-"Al Grades 1.0%","Al Grades ","1.0%",NA,"0.4% 0.9%","0.4% ","0.9%",NA,"Deer Park School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"13.4% 6.5% 15.3%","13.4% ","6.5% ","15.3%","East Valey School District (Spokane)","Low-Income",NA
-"Al Grades 6.2%","Al Grades ","6.2%",NA,"2.7% 6.0%","2.7% ","6.0%",NA,"East Valey School District (Spokane)","Non-Low Income",NA
-"Al Grades 4.1%","Al Grades ","4.1%",NA,"2.4% 13.4%","2.4% ","13.4%",NA,"East Valey School District (Yakima)","Low-Income",NA
-"Al Grades 1.1%","Al Grades ","1.1%",NA,"0.7% 3.2%","0.7% ","3.2%",NA,"East Valey School District (Yakima)","Non-Low Income",NA
-"Al Grades 8.6%","Al Grades ","8.6%",NA,"5.8% 18.7%","5.8% ","18.7%",NA,"Eastmont School District","Low-Income",NA
-"Al Grades 3.3%","Al Grades ","3.3%",NA,"2.1% 5.8%","2.1% ","5.8%",NA,"Eastmont School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"13.6% 3.70% 7.30%","13.6% ","3.70% ","7.30%","Easton School District","Low-Income",NA
-"Al Grades","Al Grades",NA,NA,"19.7% Suppressed: N<10 Suppressed: N<10","19.7% ","Suppressed: N<10 ","Suppressed: N<10","Easton School District","Non-Low Income",NA
-"Al Grades 7.4%","Al Grades ","7.4%",NA,"3.1% 11.9%","3.1% ","11.9%",NA,"Eatonvile School District","Low-Income",NA
-"Al Grades 3.6%","Al Grades ","3.6%",NA,"0.9% 5.2%","0.9% ","5.2%",NA,"Eatonvile School District","Non-Low Income",NA
-"Al Grades 7.7%","Al Grades ","7.7%",NA,"2.4% 5.2%","2.4% ","5.2%",NA,"Asotin-Anatone School District","Low-Income",NA
-"Al Grades 0.5%","Al Grades ","0.5%",NA,"0.3% 1.0%","0.3% ","1.0%",NA,"Asotin-Anatone School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"13.6% 6.4% Suppressed: <1.%","13.6% ","6.4% ","Suppressed: <1.%","Edmonds School District","Low-Income",""
-"Al Grades 5.4%","Al Grades ","5.4%",NA,"2.4% Suppressed: <1.%","2.4% ","Suppressed: <1.%",NA,"Edmonds School District","Non-Low Income",""
-"Al Grades 9.8%","Al Grades ","9.8%",NA,"6.1% 25.2%","6.1% ","25.2%",NA,"Elensburg School District","Low-Income",NA
-"Al Grades 3.6%","Al Grades ","3.6%",NA,"2.2% 8.1%","2.2% ","8.1%",NA,"Elensburg School District","Non-Low Income",NA
-"Al Grades 6.8%","Al Grades ","6.8%",NA,"4.0% 16.6%","4.0% ","16.6%",NA,"Elma School District","Low-Income",NA
-"Al Grades 3.5%","Al Grades ","3.5%",NA,"2.8% 10.5%","2.8% ","10.5%",NA,"Elma School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"14.1% 9.2% 16.9%","14.1% ","9.2% ","16.9%","Entiat School District","Low-Income",NA
-"Al Grades 7.2%","Al Grades ","7.2%",NA,"2.5% 10.0%","2.5% ","10.0%",NA,"Entiat School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.7% 7.3% 29.3%","12.7% ","7.3% ","29.3%","Enumclaw School District","Low-Income",NA
-"Al Grades 3.7%","Al Grades ","3.7%",NA,"2.2% 10.2%","2.2% ","10.2%",NA,"Enumclaw School District","Non-Low Income",NA
-"Al Grades 7.8%","Al Grades ","7.8%",NA,"3.0% 13.6%","3.0% ","13.6%",NA,"Ephrata School District","Low-Income",NA
-"Al Grades 2.1%","Al Grades ","2.1%",NA,"0.8% 3.1%","0.8% ","3.1%",NA,"Ephrata School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"14.9% 7.4% 16.8%","14.9% ","7.4% ","16.8%","Everett School District","Low-Income",NA
-"Al Grades *","Al Grades ","*",NA,"* 6.2%","* ","6.2%",NA,"Everett School District","Non-Low Income",NA
-"Al Grades 11.8%","Al Grades ","11.8%",NA,"6.2% 15.6%","6.2% ","15.6%",NA,"Evergreen School District (Clark)","Low-Income",NA
-"Al Grades 5.2%","Al Grades ","5.2%",NA,"2.7% 5.8%","2.7% ","5.8%",NA,"Evergreen School District (Clark)","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"15.6% 14.3% 26.7%","15.6% ","14.3% ","26.7%","Federal Way School District","Low-Income",NA
-"Al Grades 7.3%","Al Grades ","7.3%",NA,"5.4% 12.1%","5.4% ","12.1%",NA,"Federal Way School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"13.3% 6.6% 27.3%","13.3% ","6.6% ","27.3%","Ferndale School District","Low-Income",NA
-"Al Grades 5.7%","Al Grades ","5.7%",NA,"2.8% 12.1%","2.8% ","12.1%",NA,"Ferndale School District","Non-Low Income",NA
-"Al Grades 10.9%","Al Grades ","10.9%",NA,"5.3% 18.8%","5.3% ","18.8%",NA,"Auburn School District","Low-Income",NA
-"Al Grades 4.9%","Al Grades ","4.9%",NA,"2.2% 7.6%","2.2% ","7.6%",NA,"Auburn School District","Non-Low Income",NA
-"Al Grades 5.8%","Al Grades ","5.8%",NA,"3.4% 13.9%","3.4% ","13.9%",NA,"Fife School District","Low-Income",NA
-"Al Grades 2.6%","Al Grades ","2.6%",NA,"1.4% 5.2%","1.4% ","5.2%",NA,"Fife School District","Non-Low Income",NA
-"Al Grades 7.6%","Al Grades ","7.6%",NA,"3.2% 8.6%","3.2% ","8.6%",NA,"Finley School District","Low-Income",NA
-"Al Grades 4.9%","Al Grades ","4.9%",NA,"2.2% 6.0%","2.2% ","6.0%",NA,"Finley School District","Non-Low Income",NA
-"Al Grades 9.4%","Al Grades ","9.4%",NA,"5.3% 13.6%","5.3% ","13.6%",NA,"Franklin Pierce School District","Low-Income",NA
-"Al Grades 6.4%","Al Grades ","6.4%",NA,"4.3% 10.1%","4.3% ","10.1%",NA,"Franklin Pierce School District","Non-Low Income",NA
-"Al Grades 7.3%","Al Grades ","7.3%",NA,"3.1% 6.8%","3.1% ","6.8%",NA,"Freeman School District","Low-Income",NA
-"Al Grades 0.5%","Al Grades ","0.5%",NA,"0.3% 1.3%","0.3% ","1.3%",NA,"Freeman School District","Non-Low Income",NA
-"Al Grades 4.7%","Al Grades ","4.7%",NA,"3.4% 10.0%","3.4% ","10.0%",NA,"Garfield School District","Low-Income",NA
-"Al Grades Suppressed: <10%","Al Grades ","Suppressed: <10%",NA,"Suppressed: <10% 5.4%","Suppressed: <10% ","5.4%",NA,"Garfield School District","Non-Low Income",NA
-"Al Grades 2.9%","Al Grades ","2.9%",NA,"Suppressed: N<10 Suppressed: N<10","Suppressed: N<10 ","Suppressed: N<10",NA,"Glenwood School District","Low-Income",NA
-"Al Grades Suppressed: <10%","Al Grades ","Suppressed: <10%",NA,"3.30% 16.7%","3.30% ","16.7%",NA,"Glenwood School District","Non-Low Income",NA
-"Al Grades 8.5%","Al Grades ","8.5%",NA,"4.3% 14.9%","4.3% ","14.9%",NA,"Goldendale School District","Low-Income",NA
-"Al Grades 2.5%","Al Grades ","2.5%",NA,"1.7% 6.1%","1.7% ","6.1%",NA,"Goldendale School District","Non-Low Income",NA
-"Al Grades 7.2%","Al Grades ","7.2%",NA,"4.7% 21.7%","4.7% ","21.7%",NA,"Grand Coulee Dam School District","Low-Income",NA
-"Al Grades 5.7%","Al Grades ","5.7%",NA,"0.6% 12.4%","0.6% ","12.4%",NA,"Grand Coulee Dam School District","Non-Low Income",NA
-"Al Grades 6.9%","Al Grades ","6.9%",NA,"5.8% 20.0%","5.8% ","20.0%",NA,"Grandview School District","Low-Income",NA
-"Al Grades 5.1%","Al Grades ","5.1%",NA,"3.5% 11.4%","3.5% ","11.4%",NA,"Grandview School District","Non-Low Income",NA
-"Al Grades 7.6%","Al Grades ","7.6%",NA,"5.2% 23.2%","5.2% ","23.2%",NA,"Granger School District","Low-Income",NA
-"Al Grades 3.2%","Al Grades ","3.2%",NA,"2.8% 9.8%","2.8% ","9.8%",NA,"Granger School District","Non-Low Income",NA
-"Al Grades 3.7%","Al Grades ","3.7%",NA,"4.7% 3.4%","4.7% ","3.4%",NA,"Bainbridge Island School District","Low-Income",NA
-"Al Grades 0.8%","Al Grades ","0.8%",NA,"0.4% 1.1%","0.4% ","1.1%",NA,"Bainbridge Island School District","Non-Low Income",NA
-"Al Grades 11.4%","Al Grades ","11.4%",NA,"6.4% 22.5%","6.4% ","22.5%",NA,"Granite Fals School District","Low-Income",NA
-"Al Grades 8.3%","Al Grades ","8.3%",NA,"4.4% 17.2%","4.4% ","17.2%",NA,"Granite Fals School District","Non-Low Income",NA
-"Al Grades 4.5%","Al Grades ","4.5%",NA,"4.2% 11.1%","4.2% ","11.1%",NA,"Harrington School District","Low-Income",NA
-"Al Grades 3.8%","Al Grades ","3.8%",NA,"1.2% 1.3%","1.2% ","1.3%",NA,"Harrington School District","Non-Low Income",NA
-"Al Grades 8.8%","Al Grades ","8.8%",NA,"4.2% 17.7%","4.2% ","17.7%",NA,"Highland School District","Low-Income",NA
-"Al Grades 4.8%","Al Grades ","4.8%",NA,"1.1% 10.5%","1.1% ","10.5%",NA,"Highland School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"13.3% 10.6% 6.0%","13.3% ","10.6% ","6.0%","Highline School District","Low-Income",NA
-"Al Grades 7.6%","Al Grades ","7.6%",NA,"3.6% 3.0%","3.6% ","3.0%",NA,"Highline School District","Non-Low Income",NA
-"Al Grades 3.9%","Al Grades ","3.9%",NA,"5.4% 20.7%","5.4% ","20.7%",NA,"Hockinson School District","Low-Income",NA
-"Al Grades 2.3%","Al Grades ","2.3%",NA,"1.9% 3.9%","1.9% ","3.9%",NA,"Hockinson School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"16.9% 6.3% 34.2%","16.9% ","6.3% ","34.2%","Hoquiam School District","Low-Income",NA
-"Al Grades 8.5%","Al Grades ","8.5%",NA,"3.8% 13.1%","3.8% ","13.1%",NA,"Hoquiam School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"14.3% 9.9% 22.9%","14.3% ","9.9% ","22.9%","Inchelium School District","Low-Income",NA
-"Al Grades 9.4%","Al Grades ","9.4%",NA,"6.1% 6.7%","6.1% ","6.7%",NA,"Inchelium School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.0% 7.5% 27.3%","12.0% ","7.5% ","27.3%","Issaquah School District","Low-Income",NA
-"Al Grades 2.2%","Al Grades ","2.2%",NA,"0.8% 4.8%","0.8% ","4.8%",NA,"Issaquah School District","Non-Low Income",NA
-"Al Grades 5.5%","Al Grades ","5.5%",NA,"3.5% 17.2%","3.5% ","17.2%",NA,"Kalama School District","Low-Income",NA
-"Al Grades 3.3%","Al Grades ","3.3%",NA,"1.2% 5.9%","1.2% ","5.9%",NA,"Kalama School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.2% 13.0% 32.6%","12.2% ","13.0% ","32.6%","Kennewick School District","Low-Income",NA
-"Al Grades 5.2%","Al Grades ","5.2%",NA,"5.3% 13.2%","5.3% ","13.2%",NA,"Kennewick School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"68.2% 61.6%","68.2% ","61.6%",NA,"Bates Technical Colege","Low-Income","67.5%"
-"Al Grades","Al Grades",NA,NA,"35.0% 49.7% 15.3% 2.0%","35.0% ","49.7% ","15.3% ","Bates Technical Colege","Non-Low Income",""
-"Al Grades 11.9%","Al Grades ","11.9%",NA,"6.6% 0.4%","6.6% ","0.4%",NA,"Kent School District","Low-Income",NA
-"Al Grades 4.8%","Al Grades ","4.8%",NA,"2.8% 0.5%","2.8% ","0.5%",NA,"Kent School District","Non-Low Income",NA
-"Al Grades 3.7%","Al Grades ","3.7%",NA,"1.7% 9.6%","1.7% ","9.6%",NA,"Kettle Fals School District","Low-Income",NA
-"Al Grades 0.8%","Al Grades ","0.8%",NA,"0.6% 3.3%","0.6% ","3.3%",NA,"Kettle Fals School District","Non-Low Income",NA
-"Al Grades 11.2%","Al Grades ","11.2%",NA,"43.4%","43.4%",NA,NA,"Kiona-Benton City School District","Low-Income",NA
-"Al Grades 6.5%","Al Grades ","6.5%",NA,"5.0% 24.7%","5.0% ","24.7%",NA,"Kiona-Benton City School District","Non-Low Income",NA
-"Al Grades 9.3%","Al Grades ","9.3%",NA,"5.6% 10.3%","5.6% ","10.3%",NA,"Kittitas School District","Low-Income",NA
-"Al Grades 2.5%","Al Grades ","2.5%",NA,"2.8% 4.6%","2.8% ","4.6%",NA,"Kittitas School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"12.4% 8.2% 26.4%","12.4% ","8.2% ","26.4%","La Center School District","Low-Income",NA
-"Al Grades 3.5%","Al Grades ","3.5%",NA,"2.5% 7.6%","2.5% ","7.6%",NA,"La Center School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"15.0% 11.1% 27.1%","15.0% ","11.1% ","27.1%","La Conner School District","Low-Income",NA
-"Al Grades 2.2%","Al Grades ","2.2%",NA,"2.0% 6.1%","2.0% ","6.1%",NA,"La Conner School District","Non-Low Income",NA
-"Al Grades 7.5%","Al Grades ","7.5%",NA,"4.0% 10.5%","4.0% ","10.5%",NA,"Lake Chelan School District","Low-Income",NA
-"Al Grades 2.9%","Al Grades ","2.9%",NA,"1.0% 3.8%","1.0% ","3.8%",NA,"Lake Chelan School District","Non-Low Income",NA
-"Al Grades 7.3%","Al Grades ","7.3%",NA,"5.7% 2.3%","5.7% ","2.3%",NA,"Lake Stevens School District","Low-Income",NA
-"Al Grades 3.2%","Al Grades ","3.2%",NA,"2.0% 0.6%","2.0% ","0.6%",NA,"Lake Stevens School District","Non-Low Income",NA
-"Al Grades 11.6%","Al Grades ","11.6%",NA,"10.6% 0.5%","10.6% ","0.5%",NA,"Lake Washington School District","Low-Income",NA
-"Al Grades 1.8%","Al Grades ","1.8%",NA,"1.5% Suppressed: <1.%","1.5% ","Suppressed: <1.%",NA,"Lake Washington School District","Non-Low Income",NA
-"Al Grades","Al Grades",NA,NA,"14.6% 8.2% 17.1%","14.6% ","8.2% ","17.1%","Lakewood School District","Low-Income",NA
-"Al Grades 4.8%","Al Grades ","4.8%",NA,"2.9% 6.3%","2.9% ","6.3%",NA,"Lakewood School District","Non-Low Income",NA
+X,GradeLevel,2018-19,add1,Student.Course.Outcomes,2019-20,2020-21,add2,District,StudentGroup,X.1
+Al Grades,Al Grades,NA,NA,16.1% 11.9% 30.8%,16.1%,11.9%,30.8%,Aberdeen School District,Low-Income,NA
+Al Grades 9.5%,Al Grades ,9.5%,NA,6.6% 16.7%,6.6%,16.7%,NA,Aberdeen School District,Non-Low Income,NA
+Al Grades 1.8%,Al Grades ,1.8%,NA,1.9% 5.8%,1.9%,5.8%,NA,Adna School District,Low-Income,NA
+Al Grades 1.1%,Al Grades ,1.1%,NA,0.6% 1.8%,0.6%,1.8%,NA,Adna School District,Non-Low Income,NA
+Al Grades 7.3%,Al Grades ,7.3%,NA,3.3% 3.2%,3.3%,3.2%,NA,Anacortes School District,Low-Income,NA
+Al Grades 2.4%,Al Grades ,2.4%,NA,1.1% 1.5%,1.1%,1.5%,NA,Anacortes School District,Non-Low Income,NA
+Al Grades 10.1%,Al Grades ,10.1%,NA,5.9% 21.0%,5.9%,21.0%,NA,Arlington School District,Low-Income,NA
+Al Grades 4.0%,Al Grades ,4.0%,NA,2.3% 9.2%,2.3%,9.2%,NA,Arlington School District,Non-Low Income,NA
+Al Grades 7.7%,Al Grades ,7.7%,NA,2.4% 5.2%,2.4%,5.2%,NA,Asotin-Anatone School District,Low-Income,NA
+Al Grades 0.5%,Al Grades ,0.5%,NA,0.3% 1.0%,0.3%,1.0%,NA,Asotin-Anatone School District,Non-Low Income,NA
+Al Grades 10.9%,Al Grades ,10.9%,NA,5.3% 18.8%,5.3%,18.8%,NA,Auburn School District,Low-Income,NA
+Al Grades 4.9%,Al Grades ,4.9%,NA,2.2% 7.6%,2.2%,7.6%,NA,Auburn School District,Non-Low Income,NA
+Al Grades 3.7%,Al Grades ,3.7%,NA,4.7% 3.4%,4.7%,3.4%,NA,Bainbridge Island School District,Low-Income,NA
+Al Grades 0.8%,Al Grades ,0.8%,NA,0.4% 1.1%,0.4%,1.1%,NA,Bainbridge Island School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,68.2% 61.6%,68.2%,61.6%,NA,Bates Technical College,Low-Income,67.5%
+Al Grades,Al Grades,NA,NA,35.0% 49.7% 15.3% 2.0%,35.0%,49.7%,15.3%,Bates Technical College,Non-Low Income,
+Al Grades 9.9%,Al Grades ,9.9%,NA,6.7% 15.8%,6.7%,15.8%,NA,Battle Ground School District,Low-Income,NA
+Al Grades 4.5%,Al Grades ,4.5%,NA,2.5% 6.7%,2.5%,6.7%,NA,Battle Ground School District,Non-Low Income,NA
+Al Grades 10.6%,Al Grades ,10.6%,NA,6.6% 14.1%,6.6%,14.1%,NA,Bellevue School District,Low-Income,NA
+Al Grades 2.1%,Al Grades ,2.1%,NA,1.1% 3.1%,1.1%,3.1%,NA,Bellevue School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,13.0% 6.6% 13.6%,13.0%,6.6%,13.6%,Bellingham School District,Low-Income,NA
+Al Grades 3.8%,Al Grades ,3.8%,NA,2.1% 3.9%,2.1%,3.9%,NA,Bellingham School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,16.3% 13.0% 36.5%,16.3%,13.0%,36.5%,Bethel School District,Low-Income,NA
+Al Grades 8.0%,Al Grades ,8.0%,NA,5.6% 20.5%,5.6%,20.5%,NA,Bethel School District,Non-Low Income,NA
+Al Grades Suppressed: N<10,Al Grades ,Suppressed: N<10,NA,4.0% Suppressed: N<10,4.0%,Suppressed: N<10,NA,Bickleton School District,Low-Income,NA
+Al Grades,Al Grades,NA,NA,Suppressed: <10% Suppressed: <10% Suppressed: <10%,Suppressed: <10%,Suppressed: <10%,Suppressed: <10%,Bickleton School District,Non-Low Income,NA
+Al Grades 7.2%,Al Grades ,7.2%,NA,3.0% 10.1%,3.0%,10.1%,NA,Blaine School District,Low-Income,NA
+Al Grades 2.5%,Al Grades ,2.5%,NA,1.0% 2.8%,1.0%,2.8%,NA,Blaine School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.1% 9.0% Suppressed: <1.%,12.1%,9.0%,Suppressed: <1.%,Bremerton School District,Low-Income,
+Al Grades 8.4%,Al Grades ,8.4%,NA,5.3% Suppressed: <1.%,5.3%,Suppressed: <1.%,NA,Bremerton School District,Non-Low Income,
+Al Grades 8.3%,Al Grades ,8.3%,NA,4.3% 14.4%,4.3%,14.4%,NA,Brewster School District,Low-Income,NA
+Al Grades 7.6%,Al Grades ,7.6%,NA,2.8% 3.7%,2.8%,3.7%,NA,Brewster School District,Non-Low Income,NA
+Al Grades 3.5%,Al Grades ,3.5%,NA,12.1% 14.0%,12.1%,14.0%,NA,Bridgeport School District,Low-Income,NA
+Al Grades 2.4%,Al Grades ,2.4%,NA,10.0% 9.1%,10.0%,9.1%,NA,Bridgeport School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.4% 9.7% 30.6%,12.4%,9.7%,30.6%,Burlington-Edison School District,Low-Income,NA
+Al Grades 3.5%,Al Grades ,3.5%,NA,2.3% 9.7%,2.3%,9.7%,NA,Burlington-Edison School District,Non-Low Income,NA
+Al Grades 6.0%,Al Grades ,6.0%,NA,7.7% 17.3%,7.7%,17.3%,NA,Camas School District,Low-Income,NA
+Al Grades 1.4%,Al Grades ,1.4%,NA,1.4% 6.4%,1.4%,6.4%,NA,Camas School District,Non-Low Income,NA
+Al Grades 2.9%,Al Grades ,2.9%,NA,2.0% 9.3%,2.0%,9.3%,NA,Cape Flattery School District,Low-Income,NA
+Al Grades 0.8%,Al Grades ,0.8%,NA,Suppressed: <10% 9.4%,Suppressed: <10%,9.4%,NA,Cape Flattery School District,Non-Low Income,NA
+Al Grades 7.3%,Al Grades ,7.3%,NA,4.7% 15.9%,4.7%,15.9%,NA,Cascade School District,Low-Income,NA
+Al Grades 2.9%,Al Grades ,2.9%,NA,1.8% 6.7%,1.8%,6.7%,NA,Cascade School District,Non-Low Income,NA
+Al Grades 7.4%,Al Grades ,7.4%,NA,3.9% 11.4%,3.9%,11.4%,NA,Cashmere School District,Low-Income,NA
+Al Grades 2.6%,Al Grades ,2.6%,NA,0.7% 3.6%,0.7%,3.6%,NA,Cashmere School District,Non-Low Income,NA
+Al Grades 5.1%,Al Grades ,5.1%,NA,2.9% 22.7%,2.9%,22.7%,NA,Castle Rock School District,Low-Income,NA
+Al Grades 2.3%,Al Grades ,2.3%,NA,1.5% 9.2%,1.5%,9.2%,NA,Castle Rock School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,13.3% 7.7% 21.6%,13.3%,7.7%,21.6%,Central Kitsap School District,Low-Income,NA
+Al Grades 5.7%,Al Grades ,5.7%,NA,4.6% 10.4%,4.6%,10.4%,NA,Central Kitsap School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.9% 6.9% 16.7%,12.9%,6.9%,16.7%,Central Valley School District,Low-Income,NA
+Al Grades 3.8%,Al Grades ,3.8%,NA,2.3% 7.3%,2.3%,7.3%,NA,Central Valley School District,Non-Low Income,NA
+Al Grades 9.4%,Al Grades ,9.4%,NA,5.4% 23.3%,5.4%,23.3%,NA,Centralia School District,Low-Income,NA
+Al Grades 5.1%,Al Grades ,5.1%,NA,2.1% 13.4%,2.1%,13.4%,NA,Centralia School District,Non-Low Income,NA
+Al Grades 9.3%,Al Grades ,9.3%,NA,5.4% 14.9%,5.4%,14.9%,NA,Chehalis School District,Low-Income,NA
+Al Grades 4.4%,Al Grades ,4.4%,NA,1.9% 6.5%,1.9%,6.5%,NA,Chehalis School District,Non-Low Income,NA
+Al Grades 6.6%,Al Grades ,6.6%,NA,2.0% 7.7%,2.0%,7.7%,NA,Cheney School District,Low-Income,NA
+Al Grades 2.3%,Al Grades ,2.3%,NA,0.8% 2.3%,0.8%,2.3%,NA,Cheney School District,Non-Low Income,NA
+Al Grades 10.2%,Al Grades ,10.2%,NA,5.9% 13.1%,5.9%,13.1%,NA,Chewelah School District,Low-Income,NA
+Al Grades 3.1%,Al Grades ,3.1%,NA,1.1% 5.5%,1.1%,5.5%,NA,Chewelah School District,Non-Low Income,NA
+Al Grades Suppressed: N<10,Al Grades ,Suppressed: N<10,NA,3.1% 11.5%,3.1%,11.5%,NA,Chief Leschi Schools,Low-Income,NA
+Al Grades,Al Grades,NA,NA,13.3% 4.2% 26.9%,13.3%,4.2%,26.9%,Chief Leschi Schools,Non-Low Income,NA
+Al Grades 8.0%,Al Grades ,8.0%,NA,5.2% 29.1%,5.2%,29.1%,NA,Chimacum School District,Low-Income,NA
+Al Grades 5.3%,Al Grades ,5.3%,NA,1.6% 15.6%,1.6%,15.6%,NA,Chimacum School District,Non-Low Income,NA
+Al Grades 9.5%,Al Grades ,9.5%,NA,4.7% 15.2%,4.7%,15.2%,NA,Clarkston School District,Low-Income,NA
+Al Grades 3.7%,Al Grades ,3.7%,NA,2.1% 5.2%,2.1%,5.2%,NA,Clarkston School District,Non-Low Income,NA
+Al Grades 8.3%,Al Grades ,8.3%,NA,6.1% 16.3%,6.1%,16.3%,NA,Cle Elum-Roslyn School District,Low-Income,NA
+Al Grades 2.9%,Al Grades ,2.9%,NA,2.4% 6.1%,2.4%,6.1%,NA,Cle Elum-Roslyn School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,15.6% 10.0% 22.1%,15.6%,10.0%,22.1%,Clover Park School District,Low-Income,NA
+Al Grades 7.6%,Al Grades ,7.6%,NA,4.1% 12.7%,4.1%,12.7%,NA,Clover Park School District,Non-Low Income,NA
+Al Grades 5.9%,Al Grades ,5.9%,NA,13.1% 14.2%,13.1%,14.2%,NA,College Place School District,Low-Income,NA
+Al Grades 2.0%,Al Grades ,2.0%,NA,4.5% 6.4%,4.5%,6.4%,NA,College Place School District,Non-Low Income,NA
+Al Grades 7.8%,Al Grades ,7.8%,NA,8.6% 8.4%,8.6%,8.4%,NA,Colfax School District,Low-Income,NA
+Al Grades 1.9%,Al Grades ,1.9%,NA,3.0% 3.2%,3.0%,3.2%,NA,Colfax School District,Non-Low Income,NA
+Al Grades Suppressed: N<10,Al Grades ,Suppressed: N<10,NA,Suppressed: N<10 24.1%,Suppressed: N<10,24.1%,NA,Colton School District,Low-Income,NA
+Al Grades 1.60%,Al Grades ,1.60%,NA,0.60% Suppressed: <10%,0.60%,Suppressed: <10%,NA,Colton School District,Non-Low Income,NA
+Al Grades 6.00%,Al Grades ,6.00%,NA,7.00% 17.5%,7.00%,17.5%,NA,Columbia School District,Low-Income,NA
+Al Grades Suppressed: N<10,Al Grades ,Suppressed: N<10,NA,Suppressed: N<10 14.8%,Suppressed: N<10,14.8%,NA,Columbia School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,17.3% 8.8% 32.6%,17.3%,8.8%,32.6%,Columbia School District (Walla Walla),Low-Income,NA
+Al Grades 6.5%,Al Grades ,6.5%,NA,1.4% 10.0%,1.4%,10.0%,NA,Columbia School District (Walla Walla),Non-Low Income,NA
+Al Grades 6.8%,Al Grades ,6.8%,NA,2.8% 15.8%,2.8%,15.8%,NA,Colville School District,Low-Income,NA
+Al Grades 2.6%,Al Grades ,2.6%,NA,0.8% 5.0%,0.8%,5.0%,NA,Colville School District,Non-Low Income,NA
+Al Grades 5.9%,Al Grades ,5.9%,NA,4.9% 27.8%,4.9%,27.8%,NA,Concrete School District,Low-Income,NA
+Al Grades 2.8%,Al Grades ,2.8%,NA,5.4% 25.1%,5.4%,25.1%,NA,Concrete School District,Non-Low Income,NA
+Al Grades 1.7%,Al Grades ,1.7%,NA,Suppressed: <8.% 8.4%,Suppressed: <8.%,8.4%,NA,Coulee-Hartline School District,Low-Income,NA
+Al Grades Suppressed: <5.%,Al Grades ,Suppressed: <5.%,NA,Suppressed: <8.% 1.3%,Suppressed: <8.%,1.3%,NA,Coulee-Hartline School District,Non-Low Income,NA
+Al Grades 8.2%,Al Grades ,8.2%,NA,3.9% 9.9%,3.9%,9.9%,NA,Coupeville School District,Low-Income,NA
+Al Grades 3.0%,Al Grades ,3.0%,NA,1.4% 4.4%,1.4%,4.4%,NA,Coupeville School District,Non-Low Income,NA
+Al Grades 3.8%,Al Grades ,3.8%,NA,5.1% 9.9%,5.1%,9.9%,NA,Crescent School District,Low-Income,NA
+Al Grades Suppressed: <10%,Al Grades ,Suppressed: <10%,NA,Suppressed: <10% 8.4%,Suppressed: <10%,8.4%,NA,Crescent School District,Non-Low Income,NA
+Al Grades Suppressed: N<10,Al Grades ,Suppressed: N<10,NA,Suppressed: N<10 Suppressed: N<10,Suppressed: N<10,Suppressed: N<10,NA,Creston School District,Low-Income,
+Al Grades Suppressed: <10%,Al Grades ,Suppressed: <10%,NA,2.80% Suppressed: <10%,2.80%,Suppressed: <10%,NA,Creston School District,Non-Low Income,
+Al Grades 3.10%,Al Grades ,3.10%,NA,1.8% 3.9%,1.8%,3.9%,NA,Curlew School District,Low-Income,NA
+Al Grades Suppressed: N<10,Al Grades ,Suppressed: N<10,NA,Suppressed: <10% Suppressed: <10%,Suppressed: <10%,Suppressed: <10%,NA,Curlew School District,Non-Low Income,NA
+Al Grades 9.8%,Al Grades ,9.8%,NA,3.4% 4.1%,3.4%,4.1%,NA,Cusick School District,Low-Income,NA
+Al Grades 5.1%,Al Grades ,5.1%,NA,Suppressed: <10% 4.5%,Suppressed: <10%,4.5%,NA,Cusick School District,Non-Low Income,NA
+Al Grades 9.7%,Al Grades ,9.7%,NA,26.3% 34.3%,26.3%,34.3%,NA,Darrington School District,Low-Income,NA
+Al Grades 5.9%,Al Grades ,5.9%,NA,9.5% 13.1%,9.5%,13.1%,NA,Darrington School District,Non-Low Income,NA
+Al Grades 1.0%,Al Grades ,1.0%,NA,0.6% 3.9%,0.6%,3.9%,NA,Davenport School District,Low-Income,NA
+Al Grades Suppressed: <3.%,Al Grades ,Suppressed: <3.%,NA,Suppressed: <3.% 1.2%,Suppressed: <3.%,1.2%,NA,Davenport School District,Non-Low Income,NA
+Al Grades 6.3%,Al Grades ,6.3%,NA,3.5% 12.2%,3.5%,12.2%,NA,Dayton School District,Low-Income,NA
+Al Grades Suppressed: <6.%,Al Grades ,Suppressed: <6.%,NA,Suppressed: <7.% 1.5%,Suppressed: <7.%,1.5%,NA,Dayton School District,Non-Low Income,NA
+Al Grades 2.2%,Al Grades ,2.2%,NA,0.9% 2.0%,0.9%,2.0%,NA,Deer Park School District,Low-Income,NA
+Al Grades 1.0%,Al Grades ,1.0%,NA,0.4% 0.9%,0.4%,0.9%,NA,Deer Park School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,13.4% 6.5% 15.3%,13.4%,6.5%,15.3%,East Valley School District (Spokane),Low-Income,NA
+Al Grades 6.2%,Al Grades ,6.2%,NA,2.7% 6.0%,2.7%,6.0%,NA,East Valley School District (Spokane),Non-Low Income,NA
+Al Grades 4.1%,Al Grades ,4.1%,NA,2.4% 13.4%,2.4%,13.4%,NA,East Valley School District (Yakima),Low-Income,NA
+Al Grades 1.1%,Al Grades ,1.1%,NA,0.7% 3.2%,0.7%,3.2%,NA,East Valley School District (Yakima),Non-Low Income,NA
+Al Grades 8.6%,Al Grades ,8.6%,NA,5.8% 18.7%,5.8%,18.7%,NA,Eastmont School District,Low-Income,NA
+Al Grades 3.3%,Al Grades ,3.3%,NA,2.1% 5.8%,2.1%,5.8%,NA,Eastmont School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,13.6% 3.70% 7.30%,13.6%,3.70%,7.30%,Easton School District,Low-Income,NA
+Al Grades,Al Grades,NA,NA,19.7% Suppressed: N<10 Suppressed: N<10,19.7%,Suppressed: N<10,Suppressed: N<10,Easton School District,Non-Low Income,NA
+Al Grades 7.4%,Al Grades ,7.4%,NA,3.1% 11.9%,3.1%,11.9%,NA,Eatonville School District,Low-Income,NA
+Al Grades 3.6%,Al Grades ,3.6%,NA,0.9% 5.2%,0.9%,5.2%,NA,Eatonville School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,13.6% 6.4% Suppressed: <1.%,13.6%,6.4%,Suppressed: <1.%,Edmonds School District,Low-Income,
+Al Grades 5.4%,Al Grades ,5.4%,NA,2.4% Suppressed: <1.%,2.4%,Suppressed: <1.%,NA,Edmonds School District,Non-Low Income,
+Al Grades 9.8%,Al Grades ,9.8%,NA,6.1% 25.2%,6.1%,25.2%,NA,Ellensburg School District,Low-Income,NA
+Al Grades 3.6%,Al Grades ,3.6%,NA,2.2% 8.1%,2.2%,8.1%,NA,Ellensburg School District,Non-Low Income,NA
+Al Grades 6.8%,Al Grades ,6.8%,NA,4.0% 16.6%,4.0%,16.6%,NA,Elma School District,Low-Income,NA
+Al Grades 3.5%,Al Grades ,3.5%,NA,2.8% 10.5%,2.8%,10.5%,NA,Elma School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,14.1% 9.2% 16.9%,14.1%,9.2%,16.9%,Entiat School District,Low-Income,NA
+Al Grades 7.2%,Al Grades ,7.2%,NA,2.5% 10.0%,2.5%,10.0%,NA,Entiat School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.7% 7.3% 29.3%,12.7%,7.3%,29.3%,Enumclaw School District,Low-Income,NA
+Al Grades 3.7%,Al Grades ,3.7%,NA,2.2% 10.2%,2.2%,10.2%,NA,Enumclaw School District,Non-Low Income,NA
+Al Grades 7.8%,Al Grades ,7.8%,NA,3.0% 13.6%,3.0%,13.6%,NA,Ephrata School District,Low-Income,NA
+Al Grades 2.1%,Al Grades ,2.1%,NA,0.8% 3.1%,0.8%,3.1%,NA,Ephrata School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,14.9% 7.4% 16.8%,14.9%,7.4%,16.8%,Everett School District,Low-Income,NA
+Al Grades *,Al Grades ,*,NA,* 6.2%,* ,6.2%,NA,Everett School District,Non-Low Income,NA
+Al Grades 11.8%,Al Grades ,11.8%,NA,6.2% 15.6%,6.2%,15.6%,NA,Evergreen School District (Clark),Low-Income,NA
+Al Grades 5.2%,Al Grades ,5.2%,NA,2.7% 5.8%,2.7%,5.8%,NA,Evergreen School District (Clark),Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,15.6% 14.3% 26.7%,15.6%,14.3%,26.7%,Federal Way School District,Low-Income,NA
+Al Grades 7.3%,Al Grades ,7.3%,NA,5.4% 12.1%,5.4%,12.1%,NA,Federal Way School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,13.3% 6.6% 27.3%,13.3%,6.6%,27.3%,Ferndale School District,Low-Income,NA
+Al Grades 5.7%,Al Grades ,5.7%,NA,2.8% 12.1%,2.8%,12.1%,NA,Ferndale School District,Non-Low Income,NA
+Al Grades 5.8%,Al Grades ,5.8%,NA,3.4% 13.9%,3.4%,13.9%,NA,Fife Public Schools,Low-Income,NA
+Al Grades 2.6%,Al Grades ,2.6%,NA,1.4% 5.2%,1.4%,5.2%,NA,Fife Public Schools,Non-Low Income,NA
+Al Grades 7.6%,Al Grades ,7.6%,NA,3.2% 8.6%,3.2%,8.6%,NA,Finley School District,Low-Income,NA
+Al Grades 4.9%,Al Grades ,4.9%,NA,2.2% 6.0%,2.2%,6.0%,NA,Finley School District,Non-Low Income,NA
+Al Grades 9.4%,Al Grades ,9.4%,NA,5.3% 13.6%,5.3%,13.6%,NA,Franklin Pierce School District,Low-Income,NA
+Al Grades 6.4%,Al Grades ,6.4%,NA,4.3% 10.1%,4.3%,10.1%,NA,Franklin Pierce School District,Non-Low Income,NA
+Al Grades 7.3%,Al Grades ,7.3%,NA,3.1% 6.8%,3.1%,6.8%,NA,Freeman School District,Low-Income,NA
+Al Grades 0.5%,Al Grades ,0.5%,NA,0.3% 1.3%,0.3%,1.3%,NA,Freeman School District,Non-Low Income,NA
+Al Grades 4.7%,Al Grades ,4.7%,NA,3.4% 10.0%,3.4%,10.0%,NA,Garfield School District,Low-Income,NA
+Al Grades Suppressed: <10%,Al Grades ,Suppressed: <10%,NA,Suppressed: <10% 5.4%,Suppressed: <10%,5.4%,NA,Garfield School District,Non-Low Income,NA
+Al Grades 2.9%,Al Grades ,2.9%,NA,Suppressed: N<10 Suppressed: N<10,Suppressed: N<10,Suppressed: N<10,NA,Glenwood School District,Low-Income,NA
+Al Grades Suppressed: <10%,Al Grades ,Suppressed: <10%,NA,3.30% 16.7%,3.30%,16.7%,NA,Glenwood School District,Non-Low Income,NA
+Al Grades 8.5%,Al Grades ,8.5%,NA,4.3% 14.9%,4.3%,14.9%,NA,Goldendale School District,Low-Income,NA
+Al Grades 2.5%,Al Grades ,2.5%,NA,1.7% 6.1%,1.7%,6.1%,NA,Goldendale School District,Non-Low Income,NA
+Al Grades 7.2%,Al Grades ,7.2%,NA,4.7% 21.7%,4.7%,21.7%,NA,Grand Coulee Dam School District,Low-Income,NA
+Al Grades 5.7%,Al Grades ,5.7%,NA,0.6% 12.4%,0.6%,12.4%,NA,Grand Coulee Dam School District,Non-Low Income,NA
+Al Grades 6.9%,Al Grades ,6.9%,NA,5.8% 20.0%,5.8%,20.0%,NA,Grandview School District,Low-Income,NA
+Al Grades 5.1%,Al Grades ,5.1%,NA,3.5% 11.4%,3.5%,11.4%,NA,Grandview School District,Non-Low Income,NA
+Al Grades 7.6%,Al Grades ,7.6%,NA,5.2% 23.2%,5.2%,23.2%,NA,Granger School District,Low-Income,NA
+Al Grades 3.2%,Al Grades ,3.2%,NA,2.8% 9.8%,2.8%,9.8%,NA,Granger School District,Non-Low Income,NA
+Al Grades 11.4%,Al Grades ,11.4%,NA,6.4% 22.5%,6.4%,22.5%,NA,Granite Falls School District,Low-Income,NA
+Al Grades 8.3%,Al Grades ,8.3%,NA,4.4% 17.2%,4.4%,17.2%,NA,Granite Falls School District,Non-Low Income,NA
+Al Grades 4.5%,Al Grades ,4.5%,NA,4.2% 11.1%,4.2%,11.1%,NA,Harrington School District,Low-Income,NA
+Al Grades 3.8%,Al Grades ,3.8%,NA,1.2% 1.3%,1.2%,1.3%,NA,Harrington School District,Non-Low Income,NA
+Al Grades 8.8%,Al Grades ,8.8%,NA,4.2% 17.7%,4.2%,17.7%,NA,Highland School District,Low-Income,NA
+Al Grades 4.8%,Al Grades ,4.8%,NA,1.1% 10.5%,1.1%,10.5%,NA,Highland School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,13.3% 10.6% 6.0%,13.3%,10.6%,6.0%,Highline School District,Low-Income,NA
+Al Grades 7.6%,Al Grades ,7.6%,NA,3.6% 3.0%,3.6%,3.0%,NA,Highline School District,Non-Low Income,NA
+Al Grades 3.9%,Al Grades ,3.9%,NA,5.4% 20.7%,5.4%,20.7%,NA,Hockinson School District,Low-Income,NA
+Al Grades 2.3%,Al Grades ,2.3%,NA,1.9% 3.9%,1.9%,3.9%,NA,Hockinson School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,16.9% 6.3% 34.2%,16.9%,6.3%,34.2%,Hoquiam School District,Low-Income,NA
+Al Grades 8.5%,Al Grades ,8.5%,NA,3.8% 13.1%,3.8%,13.1%,NA,Hoquiam School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,14.3% 9.9% 22.9%,14.3%,9.9%,22.9%,Inchelium School District,Low-Income,NA
+Al Grades 9.4%,Al Grades ,9.4%,NA,6.1% 6.7%,6.1%,6.7%,NA,Inchelium School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.0% 7.5% 27.3%,12.0%,7.5%,27.3%,Issaquah School District,Low-Income,NA
+Al Grades 2.2%,Al Grades ,2.2%,NA,0.8% 4.8%,0.8%,4.8%,NA,Issaquah School District,Non-Low Income,NA
+Al Grades 5.5%,Al Grades ,5.5%,NA,3.5% 17.2%,3.5%,17.2%,NA,Kalama School District,Low-Income,NA
+Al Grades 3.3%,Al Grades ,3.3%,NA,1.2% 5.9%,1.2%,5.9%,NA,Kalama School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.2% 13.0% 32.6%,12.2%,13.0%,32.6%,Kennewick School District,Low-Income,NA
+Al Grades 5.2%,Al Grades ,5.2%,NA,5.3% 13.2%,5.3%,13.2%,NA,Kennewick School District,Non-Low Income,NA
+Al Grades 11.9%,Al Grades ,11.9%,NA,6.6% 0.4%,6.6%,0.4%,NA,Kent School District,Low-Income,NA
+Al Grades 4.8%,Al Grades ,4.8%,NA,2.8% 0.5%,2.8%,0.5%,NA,Kent School District,Non-Low Income,NA
+Al Grades 3.7%,Al Grades ,3.7%,NA,1.7% 9.6%,1.7%,9.6%,NA,Kettle Falls School District,Low-Income,NA
+Al Grades 0.8%,Al Grades ,0.8%,NA,0.6% 3.3%,0.6%,3.3%,NA,Kettle Falls School District,Non-Low Income,NA
+Al Grades 11.2%,Al Grades ,11.2%,NA,43.4%,43.4%,NA,NA,Kiona-Benton School District,Low-Income,NA
+Al Grades 6.5%,Al Grades ,6.5%,NA,5.0% 24.7%,5.0%,24.7%,NA,Kiona-Benton School District,Non-Low Income,NA
+Al Grades 9.3%,Al Grades ,9.3%,NA,5.6% 10.3%,5.6%,10.3%,NA,Kittitas School District,Low-Income,NA
+Al Grades 2.5%,Al Grades ,2.5%,NA,2.8% 4.6%,2.8%,4.6%,NA,Kittitas School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.4% 8.2% 26.4%,12.4%,8.2%,26.4%,La Center School District,Low-Income,NA
+Al Grades 3.5%,Al Grades ,3.5%,NA,2.5% 7.6%,2.5%,7.6%,NA,La Center School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,15.0% 11.1% 27.1%,15.0%,11.1%,27.1%,La Conner School District,Low-Income,NA
+Al Grades 2.2%,Al Grades ,2.2%,NA,2.0% 6.1%,2.0%,6.1%,NA,La Conner School District,Non-Low Income,NA
+Al Grades 7.5%,Al Grades ,7.5%,NA,4.0% 10.5%,4.0%,10.5%,NA,Lake Chelan School District,Low-Income,NA
+Al Grades 2.9%,Al Grades ,2.9%,NA,1.0% 3.8%,1.0%,3.8%,NA,Lake Chelan School District,Non-Low Income,NA
+Al Grades 7.3%,Al Grades ,7.3%,NA,5.7% 2.3%,5.7%,2.3%,NA,Lake Stevens School District,Low-Income,NA
+Al Grades 3.2%,Al Grades ,3.2%,NA,2.0% 0.6%,2.0%,0.6%,NA,Lake Stevens School District,Non-Low Income,NA
+Al Grades 11.6%,Al Grades ,11.6%,NA,10.6% 0.5%,10.6%,0.5%,NA,Lake Washington School District,Low-Income,NA
+Al Grades 1.8%,Al Grades ,1.8%,NA,1.5% Suppressed: <1.%,1.5%,Suppressed: <1.%,NA,Lake Washington School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,14.6% 8.2% 17.1%,14.6%,8.2%,17.1%,Lakewood School District,Low-Income,NA
+Al Grades 4.8%,Al Grades ,4.8%,NA,2.9% 6.3%,2.9%,6.3%,NA,Lakewood School District,Non-Low Income,NA
+Al Grades 3.7%,Al Grades ,3.7%,NA,Suppressed: <7.% 10.0%,Suppressed: <7.%,10.0%,NA,Liberty School District,Low-Income,NA
+Al Grades 0.7%,Al Grades ,0.7%,NA,Suppressed: <2.% 3.3%,Suppressed: <2.%,3.3%,NA,Liberty School District,Non-Low Income,NA
+Al Grades 7.0%,Al Grades ,7.0%,NA,5.8% 13.9%,5.8%,13.9%,NA,Lind School District,Low-Income,NA
+Al Grades 3.7%,Al Grades ,3.7%,NA,Suppressed: <10% Suppressed: <10%,Suppressed: <10%,Suppressed: <10%,NA,Lind School District,Non-Low Income,NA
+Al Grades 9.0%,Al Grades ,9.0%,NA,4.4% 22.2%,4.4%,22.2%,NA,Longview Public Schools,Low-Income,NA
+Al Grades 3.1%,Al Grades ,3.1%,NA,2.0% 10.1%,2.0%,10.1%,NA,Longview Public Schools,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,14.3% 6.8% 30.7%,14.3%,6.8%,30.7%,Lummi Tribal Agency,Low-Income,NA
+Al Grades 2.0%,Al Grades ,2.0%,NA,3.2% 22.1%,3.2%,22.1%,NA,Lummi Tribal Agency,Non-Low Income,NA
+Al Grades 4.3%,Al Grades ,4.3%,NA,10.9% 19.1%,10.9%,19.1%,NA,Lyle School District,Low-Income,NA
+Al Grades 7.1%,Al Grades ,7.1%,NA,7.8% 16.9%,7.8%,16.9%,NA,Lyle School District,Non-Low Income,NA
+Al Grades 10.3%,Al Grades ,10.3%,NA,5.8% 1.2%,5.8%,1.2%,NA,Lynden School District,Low-Income,NA
+Al Grades 5.2%,Al Grades ,5.2%,NA,1.8% 0.4%,1.8%,0.4%,NA,Lynden School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.3% 8.5% 41.8%,12.3%,8.5%,41.8%,Mabton School District,Low-Income,NA
+Al Grades 10.3%,Al Grades ,10.3%,NA,2.6% 20.5%,2.6%,20.5%,NA,Mabton School District,Non-Low Income,NA
+Al Grades 2.5%,Al Grades ,2.5%,NA,4.7% 7.0%,4.7%,7.0%,NA,Manson School District,Low-Income,NA
+Al Grades 1.9%,Al Grades ,1.9%,NA,1.3% 2.8%,1.3%,2.8%,NA,Manson School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,19.6% 15.6% 13.8%,19.6%,15.6%,13.8%,Mary M. Knight School District,Low-Income,NA
+Al Grades,Al Grades,NA,NA,21.1% 14.0% 19.7%,21.1%,14.0%,19.7%,Mary M. Knight School District,Non-Low Income,NA
+Al Grades 4.5%,Al Grades ,4.5%,NA,1.4% 16.4%,1.4%,16.4%,NA,Mary Walker School District,Low-Income,NA
+Al Grades 2.1%,Al Grades ,2.1%,NA,0.9% 10.3%,0.9%,10.3%,NA,Mary Walker School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,15.5% 7.7% 9.8%,15.5%,7.7%,9.8%,Marysville School District,Low-Income,NA
+Al Grades 8.3%,Al Grades ,8.3%,NA,3.8% 5.1%,3.8%,5.1%,NA,Marysville School District,Non-Low Income,NA
+Al Grades 6.0%,Al Grades ,6.0%,NA,4.3% 13.2%,4.3%,13.2%,NA,Mead School District,Low-Income,NA
+Al Grades 1.7%,Al Grades ,1.7%,NA,1.1% 4.0%,1.1%,4.0%,NA,Mead School District,Non-Low Income,NA
+Al Grades 5.2%,Al Grades ,5.2%,NA,3.4% 1.3%,3.4%,1.3%,NA,Medical Lake School District,Low-Income,NA
+Al Grades 2.0%,Al Grades ,2.0%,NA,1.2% 0.6%,1.2%,0.6%,NA,Medical Lake School District,Non-Low Income,NA
+Al Grades 3.8%,Al Grades ,3.8%,NA,4.1% 4.7%,4.1%,4.7%,NA,Mercer Island School District,Low-Income,NA
+Al Grades 0.6%,Al Grades ,0.6%,NA,0.3% 0.5%,0.3%,0.5%,NA,Mercer Island School District,Non-Low Income,NA
+Al Grades 4.5%,Al Grades ,4.5%,NA,4.3% 1.8%,4.3%,1.8%,NA,Methow Valley School District,Low-Income,NA
+Al Grades 0.8%,Al Grades ,0.8%,NA,1.3% 1.4%,1.3%,1.4%,NA,Methow Valley School District,Non-Low Income,NA
+Al Grades 10.7%,Al Grades ,10.7%,NA,5.0% 15.6%,5.0%,15.6%,NA,Monroe School District,Low-Income,NA
+Al Grades 4.1%,Al Grades ,4.1%,NA,1.7% 6.8%,1.7%,6.8%,NA,Monroe School District,Non-Low Income,NA
+Al Grades 8.0%,Al Grades ,8.0%,NA,4.0% 17.9%,4.0%,17.9%,NA,Montesano School District,Low-Income,NA
+Al Grades 1.5%,Al Grades ,1.5%,NA,1.2% 4.2%,1.2%,4.2%,NA,Montesano School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,18.1% 12.1% 31.0%,18.1%,12.1%,31.0%,Moses Lake School District,Low-Income,NA
+Al Grades 8.0%,Al Grades ,8.0%,NA,3.7% 12.2%,3.7%,12.2%,NA,Moses Lake School District,Non-Low Income,NA
+Al Grades 4.6%,Al Grades ,4.6%,NA,2.3% 8.9%,2.3%,8.9%,NA,Mossyrock School District,Low-Income,NA
+Al Grades Suppressed: <6.%,Al Grades ,Suppressed: <6.%,NA,Suppressed: <6.% 4.4%,Suppressed: <6.%,4.4%,NA,Mossyrock School District,Non-Low Income,NA
+Al Grades 11.6%,Al Grades ,11.6%,NA,7.7% 3.1%,7.7%,3.1%,NA,Mount Baker School District,Low-Income,NA
+Al Grades 4.9%,Al Grades ,4.9%,NA,2.7% 0.7%,2.7%,0.7%,NA,Mount Baker School District,Non-Low Income,NA
+Al Grades 8.8%,Al Grades ,8.8%,NA,5.0% 15.8%,5.0%,15.8%,NA,Mount Vernon School District,Low-Income,NA
+Al Grades 3.1%,Al Grades ,3.1%,NA,1.3% 5.1%,1.3%,5.1%,NA,Mount Vernon School District,Non-Low Income,NA
+Al Grades 11.1%,Al Grades ,11.1%,NA,5.1% Suppressed: <1.%,5.1%,Suppressed: <1.%,NA,Mukilteo School District,Low-Income,
+Al Grades 4.5%,Al Grades ,4.5%,NA,2.1% Suppressed: <1.%,2.1%,Suppressed: <1.%,NA,Mukilteo School District,Non-Low Income,
+Al Grades 4.0%,Al Grades ,4.0%,NA,1.9% 7.7%,1.9%,7.7%,NA,Naches Valley School District,Low-Income,NA
+Al Grades 1.7%,Al Grades ,1.7%,NA,0.8% 3.4%,0.8%,3.4%,NA,Naches Valley School District,Non-Low Income,NA
+Al Grades 6.7%,Al Grades ,6.7%,NA,2.3% 10.5%,2.3%,10.5%,NA,Napavine School District,Low-Income,NA
+Al Grades 3.1%,Al Grades ,3.1%,NA,1.3% 5.5%,1.3%,5.5%,NA,Napavine School District,Non-Low Income,NA
+Al Grades 1.6%,Al Grades ,1.6%,NA,1.2% 1.5%,1.2%,1.5%,NA,Naselle-Grays River Valley School District,Low-Income,NA
+Al Grades 1.5%,Al Grades ,1.5%,NA,0.6% 0.3%,0.6%,0.3%,NA,Naselle-Grays River Valley School District,Non-Low Income,NA
+Al Grades 7.1%,Al Grades ,7.1%,NA,4.9% 1.5%,4.9%,1.5%,NA,Newport School District,Low-Income,NA
+Al Grades 2.9%,Al Grades ,2.9%,NA,1.1% 0.7%,1.1%,0.7%,NA,Newport School District,Non-Low Income,NA
+Al Grades 4.3%,Al Grades ,4.3%,NA,3.7% 9.3%,3.7%,9.3%,NA,Nine Mile Falls School District,Low-Income,NA
+Al Grades 1.3%,Al Grades ,1.3%,NA,0.5% 1.3%,0.5%,1.3%,NA,Nine Mile Falls School District,Non-Low Income,NA
+Al Grades 6.3%,Al Grades ,6.3%,NA,4.8% 13.8%,4.8%,13.8%,NA,Nooksack Valley School District,Low-Income,NA
+Al Grades 1.9%,Al Grades ,1.9%,NA,1.5% 4.7%,1.5%,4.7%,NA,Nooksack Valley School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.7% 6.0% 13.8%,12.7%,6.0%,13.8%,North Beach School District,Low-Income,NA
+Al Grades 5.8%,Al Grades ,5.8%,NA,3.0% 7.2%,3.0%,7.2%,NA,North Beach School District,Non-Low Income,NA
+Al Grades 1.5%,Al Grades ,1.5%,NA,0.8% 1.8%,0.8%,1.8%,NA,North Franklin School District,Low-Income,NA
+Al Grades Suppressed: <2.%,Al Grades ,Suppressed: <2.%,NA,Suppressed: <2.% 1.9%,Suppressed: <2.%,1.9%,NA,North Franklin School District,Non-Low Income,NA
+Al Grades 10.5%,Al Grades ,10.5%,NA,2.9% 19.1%,2.9%,19.1%,NA,North Kitsap School District,Low-Income,NA
+Al Grades 4.2%,Al Grades ,4.2%,NA,1.2% 7.0%,1.2%,7.0%,NA,North Kitsap School District,Non-Low Income,NA
+Al Grades 11.2%,Al Grades ,11.2%,NA,10.4% 30.8%,10.4%,30.8%,NA,North Mason School District,Low-Income,NA
+Al Grades 6.4%,Al Grades ,6.4%,NA,4.6% 13.9%,4.6%,13.9%,NA,North Mason School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.1% 7.1% 4.1%,12.1%,7.1%,4.1%,North Thurston Public Schools,Low-Income,NA
+Al Grades 5.5%,Al Grades ,5.5%,NA,2.7% 1.2%,2.7%,1.2%,NA,North Thurston Public Schools,Non-Low Income,NA
+Al Grades 5.6%,Al Grades ,5.6%,NA,4.3% 7.2%,4.3%,7.2%,NA,Northshore School District,Low-Income,NA
+Al Grades 1.4%,Al Grades ,1.4%,NA,1.2% 1.6%,1.2%,1.6%,NA,Northshore School District,Non-Low Income,NA
+Al Grades 10.6%,Al Grades ,10.6%,NA,6.7% 14.9%,6.7%,14.9%,NA,Oak Harbor School District,Low-Income,NA
+Al Grades 3.7%,Al Grades ,3.7%,NA,2.5% 4.6%,2.5%,4.6%,NA,Oak Harbor School District,Non-Low Income,NA
+Al Grades 4.9%,Al Grades ,4.9%,NA,2.1% 8.0%,2.1%,8.0%,NA,Oakville School District,Low-Income,NA
+Al Grades 1.8%,Al Grades ,1.8%,NA,4.8% 11.3%,4.8%,11.3%,NA,Oakville School District,Non-Low Income,NA
+Al Grades 7.0%,Al Grades ,7.0%,NA,3.2% 15.9%,3.2%,15.9%,NA,Ocean Beach School District,Low-Income,NA
+Al Grades 2.4%,Al Grades ,2.4%,NA,Suppressed: <3.% 8.2%,Suppressed: <3.%,8.2%,NA,Ocean Beach School District,Non-Low Income,NA
+Al Grades 6.3%,Al Grades ,6.3%,NA,5.1% 25.0%,5.1%,25.0%,NA,Ocosta School District,Low-Income,NA
+Al Grades 1.7%,Al Grades ,1.7%,NA,2.9% 7.3%,2.9%,7.3%,NA,Ocosta School District,Non-Low Income,NA
+Al Grades 1.6%,Al Grades ,1.6%,NA,1.5% 2.3%,1.5%,2.3%,NA,Odessa School District,Low-Income,NA
+Al Grades 0.9%,Al Grades ,0.9%,NA,Suppressed: <6.% 1.6%,Suppressed: <6.%,1.6%,NA,Odessa School District,Non-Low Income,NA
+Al Grades 5.1%,Al Grades ,5.1%,NA,4.9% 15.9%,4.9%,15.9%,NA,Okanogan School District,Low-Income,NA
+Al Grades 1.9%,Al Grades ,1.9%,NA,1.9% 8.0%,1.9%,8.0%,NA,Okanogan School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,14.8% 11.1% 17.2%,14.8%,11.1%,17.2%,Omak School District,Low-Income,NA
+Al Grades 9.0%,Al Grades ,9.0%,NA,5.3% 7.6%,5.3%,7.6%,NA,Omak School District,Non-Low Income,NA
+Al Grades 3.9%,Al Grades ,3.9%,NA,3.4% 9.4%,3.4%,9.4%,NA,Onalaska School District,Low-Income,NA
+Al Grades 3.2%,Al Grades ,3.2%,NA,3.3% 5.5%,3.3%,5.5%,NA,Onalaska School District,Non-Low Income,NA
+Al Grades 4.7%,Al Grades ,4.7%,NA,4.4% 5.0%,4.4%,5.0%,NA,Orcas Island School District,Low-Income,NA
+Al Grades 5.0%,Al Grades ,5.0%,NA,2.9% 1.4%,2.9%,1.4%,NA,Orcas Island School District,Non-Low Income,NA
+Al Grades 10.3%,Al Grades ,10.3%,NA,12.6% 17.3%,12.6%,17.3%,NA,Oroville School District,Low-Income,NA
+Al Grades 0.9%,Al Grades ,0.9%,NA,5.8% 10.8%,5.8%,10.8%,NA,Oroville School District,Non-Low Income,NA
+Al Grades 6.3%,Al Grades ,6.3%,NA,3.1% 16.1%,3.1%,16.1%,NA,Orting School District,Low-Income,NA
+Al Grades 2.3%,Al Grades ,2.3%,NA,2.3% 7.1%,2.3%,7.1%,NA,Orting School District,Non-Low Income,NA
+Al Grades 9.5%,Al Grades ,9.5%,NA,6.3% 9.9%,6.3%,9.9%,NA,Othello School District,Low-Income,NA
+Al Grades 5.2%,Al Grades ,5.2%,NA,4.1% 4.3%,4.1%,4.3%,NA,Othello School District,Non-Low Income,NA
+Al Grades Suppressed: <10%,Al Grades ,Suppressed: <10%,NA,3.9% 21.3%,3.9%,21.3%,NA,Palouse School District,Low-Income,NA
+Al Grades 0.6%,Al Grades ,0.6%,NA,Suppressed: <7.% 1.6%,Suppressed: <7.%,1.6%,NA,Palouse School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,18.1% 18.1% 38.0%,18.1%,18.1%,38.0%,Pasco School District,Low-Income,NA
+Al Grades 8.2%,Al Grades ,8.2%,NA,8.7% 19.4%,8.7%,19.4%,NA,Pasco School District,Non-Low Income,NA
+Al Grades 3.8%,Al Grades ,3.8%,NA,6.9% 8.1%,6.9%,8.1%,NA,Pateros School District,Low-Income,NA
+Al Grades Suppressed: <10%,Al Grades ,Suppressed: <10%,NA,6.7% 1.7%,6.7%,1.7%,NA,Pateros School District,Non-Low Income,NA
+Al Grades 5.8%,Al Grades ,5.8%,NA,2.2% 13.6%,2.2%,13.6%,NA,Pe Ell School District,Low-Income,NA
+Al Grades 2.3%,Al Grades ,2.3%,NA,Suppressed: <9.% 10.9%,Suppressed: <9.%,10.9%,NA,Pe Ell School District,Non-Low Income,NA
+Al Grades 11.2%,Al Grades ,11.2%,NA,9.8% 20.9%,9.8%,20.9%,NA,Peninsula School District,Low-Income,NA
+Al Grades 3.4%,Al Grades ,3.4%,NA,2.6% 6.5%,2.6%,6.5%,NA,Peninsula School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,13.0% 7.9% 26.9%,13.0%,7.9%,26.9%,Port Angeles School District,Low-Income,NA
+Al Grades 5.1%,Al Grades ,5.1%,NA,2.6% 9.9%,2.6%,9.9%,NA,Port Angeles School District,Non-Low Income,NA
+Al Grades 7.5%,Al Grades ,7.5%,NA,3.3% 1.5%,3.3%,1.5%,NA,Port Townsend School District,Low-Income,NA
+Al Grades 3.4%,Al Grades ,3.4%,NA,1.4% 0.8%,1.4%,0.8%,NA,Port Townsend School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,14.2% 10.2% 31.9%,14.2%,10.2%,31.9%,Prosser School District,Low-Income,NA
+Al Grades 4.2%,Al Grades ,4.2%,NA,3.6% 11.8%,3.6%,11.8%,NA,Prosser School District,Non-Low Income,NA
+Al Grades 6.5%,Al Grades ,6.5%,NA,3.2% 8.0%,3.2%,8.0%,NA,Pullman School District,Low-Income,NA
+Al Grades 1.0%,Al Grades ,1.0%,NA,0.4% 1.2%,0.4%,1.2%,NA,Pullman School District,Non-Low Income,NA
+Al Grades 8.9%,Al Grades ,8.9%,NA,9.3% 18.2%,9.3%,18.2%,NA,Puyallup School District,Low-Income,NA
+Al Grades 4.1%,Al Grades ,4.1%,NA,4.1% 8.3%,4.1%,8.3%,NA,Puyallup School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,23.8% 21.1% 27.1%,23.8%,21.1%,27.1%,Quillayute Valley School District,Low-Income,NA
+Al Grades,Al Grades,NA,NA,17.8% 14.7% 18.2%,17.8%,14.7%,18.2%,Quillayute Valley School District,Non-Low Income,NA
+Al Grades 2.1%,Al Grades ,2.1%,NA,5.0% 2.7%,5.0%,2.7%,NA,Quilcene School District,Low-Income,NA
+Al Grades 0.9%,Al Grades ,0.9%,NA,1.2% 2.0%,1.2%,2.0%,NA,Quilcene School District,Non-Low Income,NA
+Al Grades 10.8%,Al Grades ,10.8%,NA,5.4% 20.9%,5.4%,20.9%,NA,Quincy School District,Low-Income,NA
+Al Grades 4.0%,Al Grades ,4.0%,NA,2.7% 10.1%,2.7%,10.1%,NA,Quincy School District,Non-Low Income,NA
+Al Grades 5.9%,Al Grades ,5.9%,NA,4.4% 19.8%,4.4%,19.8%,NA,Rainier School District,Low-Income,NA
+Al Grades 2.3%,Al Grades ,2.3%,NA,1.0% 3.9%,1.0%,3.9%,NA,Rainier School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,2.7% 0.8%,2.7%,0.8%,NA,Rainier Valley Leadership Academy,Low-Income,NA
+Al Grades,Al Grades,NA,NA,* 10.8% 2.4%,* ,10.8%,2.4%,Rainier Valley Leadership Academy,Non-Low Income,NA
+Al Grades 4.8%,Al Grades ,4.8%,NA,5.0% 19.6%,5.0%,19.6%,NA,Raymond School District,Low-Income,NA
+Al Grades 4.9%,Al Grades ,4.9%,NA,1.5% 12.2%,1.5%,12.2%,NA,Raymond School District,Non-Low Income,NA
+Al Grades 2.7%,Al Grades ,2.7%,NA,1.5% 6.3%,1.5%,6.3%,NA,Reardan-Edwall School District,Low-Income,NA
+Al Grades 1.3%,Al Grades ,1.3%,NA,0.4% 5.1%,0.4%,5.1%,NA,Reardan-Edwall School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,13.9% 10.0% 19.7%,13.9%,10.0%,19.7%,Renton School District,Low-Income,NA
+Al Grades 5.9%,Al Grades ,5.9%,NA,2.9% 6.8%,2.9%,6.8%,NA,Renton School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,13.2% 15.9% 34.2%,13.2%,15.9%,34.2%,Richland School District,Low-Income,NA
+Al Grades 4.0%,Al Grades ,4.0%,NA,5.2% 9.7%,5.2%,9.7%,NA,Richland School District,Non-Low Income,NA
+Al Grades 9.7%,Al Grades ,9.7%,NA,4.4% 21.9%,4.4%,21.9%,NA,Ridgefield School District,Low-Income,NA
+Al Grades 3.2%,Al Grades ,3.2%,NA,1.3% 5.8%,1.3%,5.8%,NA,Ridgefield School District,Non-Low Income,NA
+Al Grades 10.9%,Al Grades ,10.9%,NA,5.8% 13.8%,5.8%,13.8%,NA,Ritzville School District,Low-Income,NA
+Al Grades 2.7%,Al Grades ,2.7%,NA,1.6% 2.6%,1.6%,2.6%,NA,Ritzville School District,Non-Low Income,NA
+Al Grades 2.9%,Al Grades ,2.9%,NA,3.4% 13.7%,3.4%,13.7%,NA,Riverside School District,Low-Income,NA
+Al Grades 1.3%,Al Grades ,1.3%,NA,1.3% 4.8%,1.3%,4.8%,NA,Riverside School District,Non-Low Income,NA
+Al Grades 8.4%,Al Grades ,8.4%,NA,5.3% 3.4%,5.3%,3.4%,NA,Riverview School District,Low-Income,NA
+Al Grades 2.0%,Al Grades ,2.0%,NA,1.6% 1.5%,1.6%,1.5%,NA,Riverview School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.9% 5.2% 12.5%,12.9%,5.2%,12.5%,Rochester School District,Low-Income,NA
+Al Grades 6.3%,Al Grades ,6.3%,NA,3.4% 7.0%,3.4%,7.0%,NA,Rochester School District,Non-Low Income,NA
+Al Grades 2.5%,Al Grades ,2.5%,NA,13.4% 9.7%,13.4%,9.7%,NA,Rosalia School District,Low-Income,NA
+Al Grades Suppressed: <10%,Al Grades ,Suppressed: <10%,NA,1.6% 3.5%,1.6%,3.5%,NA,Rosalia School District,Non-Low Income,NA
+Al Grades 7.3%,Al Grades ,7.3%,NA,4.5% 13.4%,4.5%,13.4%,NA,Royal School District,Low-Income,NA
+Al Grades 3.8%,Al Grades ,3.8%,NA,2.2% 8.7%,2.2%,8.7%,NA,Royal School District,Non-Low Income,NA
+Al Grades 8.0%,Al Grades ,8.0%,NA,13.0% 18.2%,13.0%,18.2%,NA,San Juan Island School District,Low-Income,NA
+Al Grades 1.8%,Al Grades ,1.8%,NA,4.0% 7.3%,4.0%,7.3%,NA,San Juan Island School District,Non-Low Income,NA
+Al Grades 9.8%,Al Grades ,9.8%,NA,4.6% 3.1%,4.6%,3.1%,NA,Seattle Public Schools,Low-Income,NA
+Al Grades 2.5%,Al Grades ,2.5%,NA,1.2% 1.1%,1.2%,1.1%,NA,Seattle Public Schools,Non-Low Income,NA
+Al Grades 5.5%,Al Grades ,5.5%,NA,3.5% 5.1%,3.5%,5.1%,NA,Sedro-Woolley School District,Low-Income,NA
+Al Grades 3.0%,Al Grades ,3.0%,NA,1.8% 1.8%,1.8%,1.8%,NA,Sedro-Woolley School District,Non-Low Income,NA
+Al Grades 6.7%,Al Grades ,6.7%,NA,3.7% 1.3%,3.7%,1.3%,NA,Selah School District,Low-Income,NA
+Al Grades 3.5%,Al Grades ,3.5%,NA,2.4% 1.9%,2.4%,1.9%,NA,Selah School District,Non-Low Income,NA
+Al Grades 10.6%,Al Grades ,10.6%,NA,7.4% 1.6%,7.4%,1.6%,NA,Sequim School District,Low-Income,NA
+Al Grades 5.1%,Al Grades ,5.1%,NA,2.7% 0.7%,2.7%,0.7%,NA,Sequim School District,Non-Low Income,NA
+Al Grades 11.4%,Al Grades ,11.4%,NA,6.0% 15.5%,6.0%,15.5%,NA,Snohomish School District,Low-Income,NA
+Al Grades 3.8%,Al Grades ,3.8%,NA,1.8% 4.3%,1.8%,4.3%,NA,Snohomish School District,Non-Low Income,NA
+Al Grades 8.9%,Al Grades ,8.9%,NA,4.3% 0.3%,4.3%,0.3%,NA,Snoqualmie Valley School District,Low-Income,NA
+Al Grades 3.0%,Al Grades ,3.0%,NA,0.8% 0.4%,0.8%,0.4%,NA,Snoqualmie Valley School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,17.0% 12.3% 19.9%,17.0%,12.3%,19.9%,Soap Lake School District,Low-Income,NA
+Al Grades 10.1%,Al Grades ,10.1%,NA,7.2% 26.8%,7.2%,26.8%,NA,Soap Lake School District,Non-Low Income,NA
+Al Grades 4.0%,Al Grades ,4.0%,NA,2.5% 18.0%,2.5%,18.0%,NA,South Bend School District,Low-Income,NA
+Al Grades 4.7%,Al Grades ,4.7%,NA,1.5% 4.5%,1.5%,4.5%,NA,South Bend School District,Non-Low Income,NA
+Al Grades 11.8%,Al Grades ,11.8%,NA,6.7% 25.8%,6.7%,25.8%,NA,South Kitsap School District,Low-Income,NA
+Al Grades 5.1%,Al Grades ,5.1%,NA,6.7% 12.5%,6.7%,12.5%,NA,South Kitsap School District,Non-Low Income,NA
+Al Grades 8.3%,Al Grades ,8.3%,NA,6.1% 14.9%,6.1%,14.9%,NA,South Whidbey School District,Low-Income,NA
+Al Grades 1.9%,Al Grades ,1.9%,NA,1.1% 3.8%,1.1%,3.8%,NA,South Whidbey School District,Non-Low Income,NA
+Al Grades 11.8%,Al Grades ,11.8%,NA,8.2% 11.9%,8.2%,11.9%,NA,Spokane Public Schools,Low-Income,NA
+Al Grades 3.4%,Al Grades ,3.4%,NA,2.4% 4.0%,2.4%,4.0%,NA,Spokane Public Schools,Non-Low Income,NA
+Al Grades 0.9%,Al Grades ,0.9%,NA,1.7% 13.6%,1.7%,13.6%,NA,Sprague School District,Low-Income,NA
+Al Grades 4.7%,Al Grades ,4.7%,NA,1.3% 3.7%,1.3%,3.7%,NA,Sprague School District,Non-Low Income,NA
+Al Grades 7.4%,Al Grades ,7.4%,NA,2.3% 19.2%,2.3%,19.2%,NA,Stanwood-Camano School District,Low-Income,NA
+Al Grades 2.7%,Al Grades ,2.7%,NA,1.0% 5.9%,1.0%,5.9%,NA,Stanwood-Camano School District,Non-Low Income,NA
+Al Grades 8.2%,Al Grades ,8.2%,NA,4.5% 4.5%,4.5%,4.5%,NA,Steilacoom Historical School District,Low-Income,NA
+Al Grades 1.8%,Al Grades ,1.8%,NA,1.5% 1.2%,1.5%,1.2%,NA,Steilacoom Historical School District,Non-Low Income,NA
+Al Grades 6.2%,Al Grades ,6.2%,NA,3.0% 21.5%,3.0%,21.5%,NA,Stevenson-Carson School District,Low-Income,NA
+Al Grades 2.9%,Al Grades ,2.9%,NA,1.9% 10.0%,1.9%,10.0%,NA,Stevenson-Carson School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,14.5% 16.0% 37.7%,14.5%,16.0%,37.7%,Sultan School District,Low-Income,NA
+Al Grades 8.6%,Al Grades ,8.6%,NA,11.8% 27.1%,11.8%,27.1%,NA,Sultan School District,Non-Low Income,NA
+Al Grades 10.0%,Al Grades ,10.0%,NA,4.4% 15.7%,4.4%,15.7%,NA,Sumner School District,Low-Income,NA
+Al Grades 2.7%,Al Grades ,2.7%,NA,1.1% 4.5%,1.1%,4.5%,NA,Sumner School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.9% 20.6% 22.4%,12.9%,20.6%,22.4%,Sunnyside School District,Low-Income,NA
+Al Grades 7.6%,Al Grades ,7.6%,NA,7.6% 12.9%,7.6%,12.9%,NA,Sunnyside School District,Non-Low Income,NA
+Al Grades 2.5%,Al Grades ,2.5%,NA,1.4% 14.6%,1.4%,14.6%,NA,Suquamish Tribal Education Department,Low-Income,NA
+Al Grades Suppressed: <10%,Al Grades ,Suppressed: <10%,NA,Suppressed: <10% 20.6%,Suppressed: <10%,20.6%,NA,Suquamish Tribal Education Department,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,13.2% 7.4% 24.3%,13.2%,7.4%,24.3%,Tacoma Public Schools,Low-Income,NA
+Al Grades 4.8%,Al Grades ,4.8%,NA,2.6% 8.7%,2.6%,8.7%,NA,Tacoma Public Schools,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.0% 3.3% 13.5%,12.0%,3.3%,13.5%,Taholah School District,Low-Income,NA
+Al Grades 7.9%,Al Grades ,7.9%,NA,3.0% 9.6%,3.0%,9.6%,NA,Taholah School District,Non-Low Income,NA
+Al Grades 11.8%,Al Grades ,11.8%,NA,6.9% 27.0%,6.9%,27.0%,NA,Tahoma School District,Low-Income,NA
+Al Grades 3.6%,Al Grades ,3.6%,NA,1.7% 8.1%,1.7%,8.1%,NA,Tahoma School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,13.0% 7.3% 10.4%,13.0%,7.3%,10.4%,Tenino School District,Low-Income,NA
+Al Grades 6.3%,Al Grades ,6.3%,NA,2.2% 5.8%,2.2%,5.8%,NA,Tenino School District,Non-Low Income,NA
+Al Grades 5.5%,Al Grades ,5.5%,NA,5.1% 12.7%,5.1%,12.7%,NA,Toledo School District,Low-Income,NA
+Al Grades 1.8%,Al Grades ,1.8%,NA,1.8% 5.5%,1.8%,5.5%,NA,Toledo School District,Non-Low Income,NA
+Al Grades 11.8%,Al Grades ,11.8%,NA,4.7% 10.5%,4.7%,10.5%,NA,Tonasket School District,Low-Income,NA
+Al Grades 2.0%,Al Grades ,2.0%,NA,0.9% 5.0%,0.9%,5.0%,NA,Tonasket School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,15.5% 7.7% 7.8%,15.5%,7.7%,7.8%,Toppenish School District,Low-Income,NA
+Al Grades 2.3%,Al Grades ,2.3%,NA,2.3% 3.8%,2.3%,3.8%,NA,Toppenish School District,Non-Low Income,NA
+Al Grades 2.8%,Al Grades ,2.8%,NA,1.0% 4.3%,1.0%,4.3%,NA,Touchet School District,Low-Income,NA
+Al Grades 4.7%,Al Grades ,4.7%,NA,Suppressed: <10% 2.2%,Suppressed: <10%,2.2%,NA,Touchet School District,Non-Low Income,NA
+Al Grades 9.1%,Al Grades ,9.1%,NA,5.0% 27.5%,5.0%,27.5%,NA,Toutle Lake School District,Low-Income,NA
+Al Grades 4.2%,Al Grades ,4.2%,NA,3.3% 7.6%,3.3%,7.6%,NA,Toutle Lake School District,Non-Low Income,NA
+Al Grades 11.6%,Al Grades ,11.6%,NA,5.7% 9.0%,5.7%,9.0%,NA,Tukwila School District,Low-Income,NA
+Al Grades 6.6%,Al Grades ,6.6%,NA,4.4% 5.1%,4.4%,5.1%,NA,Tukwila School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,15.8% 7.2% 18.1%,15.8%,7.2%,18.1%,Tumwater School District,Low-Income,NA
+Al Grades 5.5%,Al Grades ,5.5%,NA,2.3% 6.0%,2.3%,6.0%,NA,Tumwater School District,Non-Low Income,NA
+Al Grades 10.7%,Al Grades ,10.7%,NA,4.8% 18.9%,4.8%,18.9%,NA,University Place School District,Low-Income,NA
+Al Grades 3.3%,Al Grades ,3.3%,NA,1.6% 7.4%,1.6%,7.4%,NA,University Place School District,Non-Low Income,NA
+Al Grades Suppressed: <10%,Al Grades ,Suppressed: <10%,NA,1.3% 4.2%,1.3%,4.2%,NA,Valley School District,Low-Income,NA
+Al Grades 1.4%,Al Grades ,1.4%,NA,Suppressed: <10% 3.0%,Suppressed: <10%,3.0%,NA,Valley School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.7% 6.3% 22.3%,12.7%,6.3%,22.3%,Vancouver Public Schools,Low-Income,NA
+Al Grades 4.3%,Al Grades ,4.3%,NA,2.0% 8.2%,2.0%,8.2%,NA,Vancouver Public Schools,Non-Low Income,NA
+Al Grades 6.6%,Al Grades ,6.6%,NA,1.5% 13.7%,1.5%,13.7%,NA,Vashon Island School District,Low-Income,NA
+Al Grades 1.1%,Al Grades ,1.1%,NA,0.6% 2.9%,0.6%,2.9%,NA,Vashon Island School District,Non-Low Income,NA
+Al Grades 4.7%,Al Grades ,4.7%,NA,1.9% 7.1%,1.9%,7.1%,NA,Wahkiakum School District,Low-Income,NA
+Al Grades 1.3%,Al Grades ,1.3%,NA,Suppressed: <4.% 2.2%,Suppressed: <4.%,2.2%,NA,Wahkiakum School District,Non-Low Income,NA
+Al Grades 9.4%,Al Grades ,9.4%,NA,2.1% 8.7%,2.1%,8.7%,NA,Wahluke School District,Low-Income,NA
+Al Grades,Al Grades,NA,NA,12.4% 4.1% 13.9%,12.4%,4.1%,13.9%,Wahluke School District,Non-Low Income,NA
+Al Grades 1.2%,Al Grades ,1.2%,NA,4.6% 9.8%,4.6%,9.8%,NA,Waitsburg School District,Low-Income,NA
+Al Grades 3.4%,Al Grades ,3.4%,NA,2.8% Suppressed: <8.%,2.8%,Suppressed: <8.%,NA,Waitsburg School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,12.5% 13.1% 15.8%,12.5%,13.1%,15.8%,Walla Walla Public Schools,Low-Income,NA
+Al Grades 3.3%,Al Grades ,3.3%,NA,5.1% 6.5%,5.1%,6.5%,NA,Walla Walla Public Schools,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,15.5% 8.9% 18.9%,15.5%,8.9%,18.9%,Wapato School District,Low-Income,NA
+Al Grades,Al Grades,NA,NA,12.7% 4.6% 11.1%,12.7%,4.6%,11.1%,Wapato School District,Non-Low Income,NA
+Al Grades 6.4%,Al Grades ,6.4%,NA,3.2% 17.1%,3.2%,17.1%,NA,Warden School District,Low-Income,NA
+Al Grades 6.1%,Al Grades ,6.1%,NA,3.5% 23.6%,3.5%,23.6%,NA,Warden School District,Non-Low Income,NA
+Al Grades 11.6%,Al Grades ,11.6%,NA,7.7% 17.6%,7.7%,17.6%,NA,Washington State,Low-Income,NA
+Al Grades 4.1%,Al Grades ,4.1%,NA,2.6% 5.8%,2.6%,5.8%,NA,Washington State,Non-Low Income,NA
+Al Grades 9.6%,Al Grades ,9.6%,NA,8.8% 25.4%,8.8%,25.4%,NA,Washougal School District,Low-Income,NA
+Al Grades 2.8%,Al Grades ,2.8%,NA,2.6% 7.7%,2.6%,7.7%,NA,Washougal School District,Non-Low Income,NA
+Al Grades 8.50%,Al Grades ,8.50%,NA,4.80% 5.3%,4.80%,5.3%,NA,Washtucna School District,Low-Income,NA
+Al Grades Suppressed: N<10,Al Grades ,Suppressed: N<10,NA,Suppressed: N<10 Suppressed: <10%,Suppressed: N<10,Suppressed: <10%,NA,Washtucna School District,Non-Low Income,NA
+Al Grades 8.7%,Al Grades ,8.7%,NA,5.9% 10.8%,5.9%,10.8%,NA,Waterville School District,Low-Income,NA
+Al Grades 1.1%,Al Grades ,1.1%,NA,2.4% 7.3%,2.4%,7.3%,NA,Waterville School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,16.3% 4.4% 15.9%,16.3%,4.4%,15.9%,Wellpinit School District,Low-Income,NA
+Al Grades 3.7%,Al Grades ,3.7%,NA,Suppressed: <5.% Suppressed: <10%,Suppressed: <5.%,Suppressed: <10%,NA,Wellpinit School District,Non-Low Income,NA
+Al Grades 6.3%,Al Grades ,6.3%,NA,4.8% 15.8%,4.8%,15.8%,NA,Wenatchee School District,Low-Income,NA
+Al Grades 1.7%,Al Grades ,1.7%,NA,1.9% 5.3%,1.9%,5.3%,NA,Wenatchee School District,Non-Low Income,NA
+Al Grades 3.1%,Al Grades ,3.1%,NA,2.5% 5.5%,2.5%,5.5%,NA,West Valley School District (Spokane),Low-Income,NA
+Al Grades 2.1%,Al Grades ,2.1%,NA,1.5% 4.5%,1.5%,4.5%,NA,West Valley School District (Spokane),Non-Low Income,NA
+Al Grades 11.9%,Al Grades ,11.9%,NA,7.0% 26.1%,7.0%,26.1%,NA,West Valley School District (Yakima),Low-Income,NA
+Al Grades 4.7%,Al Grades ,4.7%,NA,2.3% 7.8%,2.3%,7.8%,NA,West Valley School District (Yakima),Non-Low Income,NA
+Al Grades 10.0%,Al Grades ,10.0%,NA,4.0% 21.5%,4.0%,21.5%,NA,White Pass School District,Low-Income,NA
+Al Grades 4.0%,Al Grades ,4.0%,NA,2.2% 12.0%,2.2%,12.0%,NA,White Pass School District,Non-Low Income,NA
+Al Grades 8.3%,Al Grades ,8.3%,NA,4.5% 8.4%,4.5%,8.4%,NA,White River School District,Low-Income,NA
+Al Grades 2.1%,Al Grades ,2.1%,NA,1.4% 1.9%,1.4%,1.9%,NA,White River School District,Non-Low Income,NA
+Al Grades 4.4%,Al Grades ,4.4%,NA,3.9% 18.4%,3.9%,18.4%,NA,White Salmon Valley School District,Low-Income,NA
+Al Grades 1.8%,Al Grades ,1.8%,NA,1.4% 5.2%,1.4%,5.2%,NA,White Salmon Valley School District,Non-Low Income,NA
+Al Grades 0.7%,Al Grades ,0.7%,NA,Suppressed: <7.% 1.7%,Suppressed: <7.%,1.7%,NA,Willapa Valley School District,Low-Income,NA
+Al Grades Suppressed: <4.%,Al Grades ,Suppressed: <4.%,NA,Suppressed: <4.% 1.2%,Suppressed: <4.%,1.2%,NA,Willapa Valley School District,Non-Low Income,NA
+Al Grades 2.4%,Al Grades ,2.4%,NA,2.8% 9.0%,2.8%,9.0%,NA,Wilbur School District,Low-Income,NA
+Al Grades 2.0%,Al Grades ,2.0%,NA,Suppressed: <6.% 4.5%,Suppressed: <6.%,4.5%,NA,Wilbur School District,Non-Low Income,NA
+Al Grades 10.7%,Al Grades ,10.7%,NA,Suppressed: <10% 14.6%,Suppressed: <10%,14.6%,NA,Wilson Creek School District,Low-Income,NA
+Al Grades 1.7%,Al Grades ,1.7%,NA,1.6% 5.3%,1.6%,5.3%,NA,Wilson Creek School District,Non-Low Income,NA
+Al Grades 9.8%,Al Grades ,9.8%,NA,5.2% 6.4%,5.2%,6.4%,NA,Winlock School District,Low-Income,NA
+Al Grades,Al Grades,NA,NA,14.5% 8.6% 6.9%,14.5%,8.6%,6.9%,Winlock School District,Non-Low Income,NA
+Al Grades 7.1%,Al Grades ,7.1%,NA,4.0% 18.2%,4.0%,18.2%,NA,Wishkah Valley School District,Low-Income,NA
+Al Grades 2.8%,Al Grades ,2.8%,NA,1.9% 14.0%,1.9%,14.0%,NA,Wishkah Valley School District,Non-Low Income,NA
+Al Grades Suppressed: <10%,Al Grades ,Suppressed: <10%,NA,18.4% 8.80%,18.4%,8.80%,NA,Wishram School District,Low-Income,NA
+Al Grades Suppressed: N<10,Al Grades ,Suppressed: N<10,NA,Suppressed: N<10 Suppressed: N<10,Suppressed: N<10,Suppressed: N<10,NA,Wishram School District,Non-Low Income,NA
+Al Grades 7.7%,Al Grades ,7.7%,NA,7.1% 15.3%,7.1%,15.3%,NA,Woodland School District,Low-Income,NA
+Al Grades 5.4%,Al Grades ,5.4%,NA,3.3% 6.8%,3.3%,6.8%,NA,Woodland School District,Non-Low Income,NA
+Al Grades,Al Grades,NA,NA,19.0% 8.9% 35.3%,19.0%,8.9%,35.3%,Yakima School District,Low-Income,NA
+Al Grades 9.3%,Al Grades ,9.3%,NA,4.4% 22.6%,4.4%,22.6%,NA,Yakima School District,Non-Low Income,NA
+Al Grades 9.4%,Al Grades ,9.4%,NA,6.2% 22.4%,6.2%,22.4%,NA,Yelm Community Schools,Low-Income,NA
+Al Grades 3.9%,Al Grades ,3.9%,NA,2.9% 11.3%,2.9%,11.3%,NA,Yelm Community Schools,Non-Low Income,NA
+Al Grades 8.1%,Al Grades ,8.1%,NA,6.4% 11.2%,6.4%,11.2%,NA,Zillah School District,Low-Income,NA
+Al Grades 1.6%,Al Grades ,1.6%,NA,0.9% 6.0%,0.9%,6.0%,NA,Zillah School District,Non-Low Income,NA

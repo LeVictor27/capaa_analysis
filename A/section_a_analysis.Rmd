@@ -84,6 +84,7 @@ library(grid)
 library(gridExtra)
 library(sf)
 library(spData)
+library(leaidr)
 
 #library(rJava)
 #library(tabulizer) 
@@ -1348,7 +1349,7 @@ plot_absences_perc_change_bygrades <- long_absences_perc_change %>%
 
 plot_absences_perc_change_bygrades
 
-ggsave("/Users/alexliu/Desktop/plot.png")
+#ggsave("/Users/alexliu/Desktop/plot.png")
 ```
 
 ```{r A.2.2.iii Student Absence PERCENTAGE Change sorted by income, fig.height=12, fig.width=10}
@@ -1401,7 +1402,7 @@ plot_absences_perc_change_income <- long_absences_perc_change_income %>%
 
 plot_absences_perc_change_income
 
-ggsave("/Users/alexliu/Desktop/plot_inc.png")
+#ggsave("/Users/alexliu/Desktop/plot_inc.png")
 ```
 
 ***
@@ -1557,11 +1558,17 @@ For spatial plots: missing data (grey areas) results from
 
 1. missing and suppression at district level; 
 2. some districts have data for only one of the SYs, then the changes are going to be NAs; 
-3. some districts in the shapefile do not appear in the ospi data (shows in "match district names with shape file" section)
+3. some districts in the shape file do not appear in the ospi data (shows in "match district names with shape file" section)
 
-```{r A.3.2.1.i The Difference in all non-passing grade from 2018-19 to 2020-21 (white vs nonwhite), echo=FALSE, message=FALSE, warning=FALSE}
+* data for comparison among ethnicity groups was downloaded directly from OSPI website
+* data for comparison among income groups was downloaded and scraped for each district and manually compiled
 
-course_geo <- df_course_outcomes_by_outcome %>%
+* Difference calculated by %nonpass (or %numerical failing) in SY2020-21 minus %nonpass (or %numerical failing) in SY 2018-19
+  + darker purple color indicates more increase in %nonpass (or %numerical failing) in SY2020-21
+
+```{r A.3.2.1.i The Difference in all non-passing grade from 2018-19 to 2020-21 (white and nonwhite), echo=FALSE, message=FALSE, warning=FALSE}
+
+df_nonpass_race <- df_course_outcomes_by_outcome %>%
   select(c(`Organization Name`, `School Year`, 
            `Student Group`, `Grade Level`, 
            `All Non-Passing Grades`)) %>%
@@ -1571,10 +1578,10 @@ course_geo <- df_course_outcomes_by_outcome %>%
 
 #cannot use dcast due to uneven length for each year:
 #split the df by school year; rename `All Non-Passing Grades` column by SY; 
-course_geo_1819 <- filter(course_geo, `School Year` != "2020-21") 
+df_nonpass_race_1819 <- filter(df_nonpass_race, `School Year` != "2020-21") 
 colnames(course_geo_1819)[5] <- "SY2018-19"
   
-course_geo_2021 <- filter(course_geo, `School Year` == "2020-21")
+df_nonpass_race_2021 <- filter(df_nonpass_race, `School Year` == "2020-21")
 colnames(course_geo_2021)[5] <- "SY2020-21"
 
 #merge yearly dfs and calculate the change
@@ -1683,15 +1690,160 @@ for (j in 1:length(shape_name)) {
 #df_name[187]"Wellpinit School District #49" = shape_name[279]"Wellpinit School District"
 ## 7 schools in our dataset have no matches in shape file
 ```
+  
+```{r A.3.2.1.ii The Difference in all non-passing grade from 2018-19 to 2020-21 (low-income and non-low income), message=FALSE}
 
-```{r A.3.2.1.ii The Difference in all non-passing grade from 2018-19 to 2020-21 (low-income vs non-low income)}
+wa <- lea_get("wa")%>% 
+  sf::st_as_sf() 
+
+df_nonpass_inc_raw <- read_csv("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_nonpass_district_byinc.csv")
+
+for (i in 1:nrow(df_nonpass_inc_raw)) {
+  if (is.na(df_nonpass_inc_raw$`2018-19`[i]) & !is.na(df_nonpass_inc_raw$add2[i])) {
+    df_nonpass_inc_raw$`2018-19`[i] <- df_nonpass_inc_raw$`2019-20`[i]
+    df_nonpass_inc_raw$`2019-20`[i] <- df_nonpass_inc_raw$`2020-21`[i]
+    df_nonpass_inc_raw$`2020-21`[i] <- df_nonpass_inc_raw$add2[i]
+  }
+}
+
+df_nonpass_inc <- df_nonpass_inc_raw %>%
+  select(c("StudentGroup", "District", "2018-19", "2019-20", "2020-21")) %>%
+  mutate(`2018-19` = percent(`2018-19`),
+         `2019-20` = percent(`2019-20`),
+         `2020-21` = percent(`2020-21`)) %>%
+  mutate(diff_2021_1819 = `2020-21` - `2018-19`) %>%
+  arrange(District) %>%
+  group_by(District) %>% 
+  mutate(diff_low_nonlow = (`2020-21`[StudentGroup == "Non-Low Income"] - `2020-21`[StudentGroup == "Low-Income"])*-1)
+
+wa_nonpass_inc <- left_join(df_nonpass_inc, wa, by = c("District" = "NAME"), copy=TRUE) 
+
+wa_nonpass_inc %>% 
+  filter(StudentGroup == "Low-Income") %>%
+  sf::st_as_sf() %>% 
+  ggplot() +
+  geom_sf(aes(fill = diff_2021_1819), size = .25) +
+  scale_fill_gradient2(low="#e8e3d3", high="#4b2e83", name="") +
+  theme_void() +
+  labs(title="Change in Percent of All Courses Taken Resulted in No Credit",
+       subtitle = "for low-income student group between SY2018-19 and SY2020-21",
+       caption = "Note: grey areas indicate districts with unavaible data")
+
+# ggsave("/Users/alexliu/Desktop/A.3.2.1.ii nonpass diff year low income.png")
+
+wa_nonpass_inc %>% 
+  filter(StudentGroup == "Non-Low Income") %>%
+  sf::st_as_sf() %>% 
+  ggplot() +
+  geom_sf(aes(fill = diff_2021_1819), size = .25) +
+  scale_fill_gradient2(low="#e8e3d3", high="#4b2e83", name="") +
+  theme_void() +
+  labs(title="Change in Percent of All Courses Taken Resulted in No Credit",
+       subtitle = "for non-low income student group between SY2018-19 and SY2020-21",
+       caption = "Note: grey areas indicate districts with unavaible data")
+
+# ggsave("/Users/alexliu/Desktop/A.3.2.1.ii nonpass diff year nonlow income.png")
 
 ```
 
+```{r A.3.2.1.ii match district names with shape file, eval=FALSE, include=FALSE}
+df_name <- unique(df_nonpass_inc$District)
+shape_name <- sort(unique(wa$NAME))
+`%!in%` <- Negate(`%in%`)
+for (i in 1:length(df_name)) {
+  if (df_name[i] %!in% shape_name) {
+    print(i)
+    print(df_name[i])
+  }
+}
+for (j in 1:length(shape_name)) {
+  if (shape_name[j] %!in% df_name) {
+    print(j)
+    print(shape_name[j])
+  }
+}
+
+```
+
+```{r A.3.2.1.iii The Difference in numerical fail grade from 2018-19 to 2020-21 (low-income and non-low income), message=FALSE, warning=FALSE}
+
+wa <- lea_get("wa")%>% 
+  sf::st_as_sf() 
+
+df_numfail_inc_raw <- read_csv("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/raw/raw_numfail_district_byinc.csv")
+
+for (i in 1:nrow(df_numfail_inc_raw)) {
+  if (is.na(df_numfail_inc_raw$`2018-19`[i]) & !is.na(df_numfail_inc_raw$add2[i])) {
+    df_numfail_inc_raw$`2018-19`[i] <- df_numfail_inc_raw$`2019-20`[i]
+    df_numfail_inc_raw$`2019-20`[i] <- df_numfail_inc_raw$`2020-21`[i]
+    df_numfail_inc_raw$`2020-21`[i] <- df_numfail_inc_raw$add2[i]
+  }
+}
+
+df_numfail_inc <- df_numfail_inc_raw %>%
+  select(c("StudentGroup", "District", "2018-19", "2019-20", "2020-21")) %>%
+  mutate(`2018-19` = percent(`2018-19`),
+         `2019-20` = percent(`2019-20`),
+         `2020-21` = percent(`2020-21`)) %>%
+  mutate(diff_2021_1819 = `2020-21` - `2018-19`) %>%
+  arrange(District) %>%
+  group_by(District) %>% 
+  mutate(diff_low_nonlow = (`2020-21`[StudentGroup == "Non-Low Income"] - `2020-21`[StudentGroup == "Low-Income"])*-1)
+
+wa_numfail_inc <- left_join(df_numfail_inc, wa, by = c("District" = "NAME"), copy=TRUE) 
+
+wa_numfail_inc %>% 
+  filter(StudentGroup == "Low-Income") %>%
+  sf::st_as_sf() %>% 
+  ggplot() +
+  geom_sf(aes(fill = diff_2021_1819), size = .25) +
+  scale_fill_gradient2(low="#e8e3d3", high="#4b2e83", name="") +
+  theme_void() +
+  labs(title="Change in Percent of All Courses Taken Resulted in Numerical Failing Grade",
+       subtitle = "for low-income student group between SY2018-19 and SY2020-21",
+       caption = "Note: grey areas indicate districts with unavaible data")
+
+# ggsave("/Users/alexliu/Desktop/A.3.2.1.iii num fail diff year low income.png")
+
+wa_numfail_inc %>% 
+  filter(StudentGroup == "Non-Low Income") %>%
+  sf::st_as_sf() %>% 
+  ggplot() +
+  geom_sf(aes(fill = diff_2021_1819), size = .25) +
+  scale_fill_gradient2(low="#e8e3d3", high="#4b2e83", name="") +
+  theme_void() +
+  labs(title="Change in Percent of All Courses Taken Resulted in Numerical Failing Grade",
+       subtitle = "for non-low income student group between SY2018-19 and SY2020-21",
+       caption = "Note: grey areas indicate districts with unavaible data")
+
+# ggsave("/Users/alexliu/Desktop/A.3.2.1.iii num fail diff year nonlow income.png")
+```
+
+```{r A.3.2.1.iii match district names with shape file, eval=FALSE, include=FALSE}
+df_name <- unique(df_numfail_inc$District)
+shape_name <- sort(unique(wa$NAME))
+`%!in%` <- Negate(`%in%`)
+for (i in 1:length(df_name)) {
+  if (df_name[i] %!in% shape_name) {
+    print(i)
+    print(df_name[i])
+  }
+}
+for (j in 1:length(shape_name)) {
+  if (shape_name[j] %!in% df_name) {
+    print(j)
+    print(shape_name[j])
+  }
+}
+```
+
+
 > A.3.2.2 The gap in all non-passing in 2020-21 between students of color and white for each district
 
-* gap calculated by white - nonwhite 
-  + positive values indicate nonwhite students have lower non-passing rate
+
+* Gap calculated by %nonpass among low-income minus %nonpass among non-low income in SY2020-21
+  + darker purple color indicates more nonpass grades among students of color
+  + darker purple color indicates more nonpass/num failing grades among low-income students
 
 ```{r A.3.2.2.i The gap in all non-passing in 2020-21 between students of color and white for each district, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -1767,11 +1919,38 @@ ggsave("section_a_analysis_files/figures/plot_spatial_white_nonwhite_gap.png")
 
 ```
 
-
 ```{r A.3.2.2.ii The gap in all non-passing in 2020-21 between students of low-income and non-low income for each district}
+
+wa_nonpass_inc %>% 
+  sf::st_as_sf() %>% 
+  ggplot() +
+  geom_sf(aes(fill = diff_low_nonlow), size = .25) +
+  scale_fill_gradient2(low="#e8e3d3", high="#4b2e83", name="") +
+  theme_void() +
+  labs(title="Gap in All Courses Taken Resulted in No Credit",
+       subtitle = "between low-income student group and non-low income student group in SY2020-21",
+       caption = "Note: grey areas indicate districts with unavaible data")
+
+# ggsave("/Users/alexliu/Desktop/A.3.2.2.ii nonpass gap sy2020-21.png")
+
 
 ```
 
+```{r A.3.2.2.iii The gap in num fail grade in 2020-21 between students of low-income and non-low income for each district}
+
+wa_numfail_inc %>% 
+  sf::st_as_sf() %>% 
+  ggplot() +
+  geom_sf(aes(fill = diff_low_nonlow), size = .25) +
+  scale_fill_gradient2(low="#e8e3d3", high="#4b2e83", name="") +
+  theme_void() +
+  labs(title="Gap in All Courses Taken Resulted in Numerical Failing Grade",
+       subtitle = "between low-income student group and non-low income student group in SY2020-21",
+       caption = "Note: grey areas indicate districts with unavaible data")
+
+# ggsave("/Users/alexliu/Desktop/A.3.2.2.iii num fail gap sy2020-21.png")
+
+```
 
 ## on track: 
 * 9th grade on track: did not get a grade of D or F. The % of students that received grades of A,B, C.
