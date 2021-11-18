@@ -1558,9 +1558,9 @@ students of color (excluding Asian)
 
 For spatial plots: missing data (grey areas) results from 
 
-1. missing and suppression at district level; 
-2. some districts have data for only one of the SYs, then the changes are going to be NAs; 
-3. some districts in the shape file do not appear in the ospi data (shows in "match district names with shape file" section)
+1. missing and suppression at district level; e.g. Olympia School District
+2. some districts have data for only one of the SYs, then the changes are going to be NAs; e.g. Rainier Valley Leadership Academy; e.g. Everett School District
+3. some districts in the shape file do not appear in the ospi data (shows in "match district names with shape file" section), vice versa; e.g. Rainier Valley Leadership Academy
 
 * data for comparison among ethnicity groups was downloaded directly from OSPI website
 * data for comparison among income groups was downloaded and scraped for each district and manually compiled
