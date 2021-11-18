@@ -36,7 +36,7 @@ id_f195 <- drive_get(as_id("https://drive.google.com/file/d/10XytJG-r2zfM3vpbClT
 
 id_demos <- drive_get(as_id("https://drive.google.com/file/d/1coJ9kMZUpRmxNyli6xZ31WITaZdyJXIk/view?usp=sharing"))
 
-id_cwi <- drive_get(as_id("https://drive.google.com/file/d/1TYBldsqu4qX265YUnRd6UbPTn7kHrc-F/view?usp=sharing"))
+id_cwi <- drive_get(as_id("https://drive.google.com/file/d/1--RKu4geGLO9sOxag7pyJtkw40ZYYkeI/view?usp=sharing"))
 
 df_f196 <- id_f196 %>%
   drive_read_raw() %>%
@@ -75,7 +75,10 @@ df_demos_dist <- df_demos %>%
                  "NumberHispanic",
                  "NumberAsianPacificIslander",
                  "NumberMultirac",
-                 "NumberWhite"), 
+                 "NumberWhite",
+                 "NumberFreeorReducedPricedMeals",
+                 "NumberSpecialEducation",
+                 "NumberTransitionalBilingual"), 
                sum)%>% 
   mutate(schyear=as.numeric(schyear))
 
@@ -86,20 +89,24 @@ df_demos_dist <- df_demos_dist%>%
          PctHispanic = NumberHispanic/TotalEnrollment,
          PctAsianPacificIslander = NumberAsianPacificIslander/TotalEnrollment,
          PctMultirac = NumberMultirac/TotalEnrollment,
-         PctWhite = NumberWhite/TotalEnrollment
+         PctWhite = NumberWhite/TotalEnrollment,
+         PctFreeorReducedPricedMeals = NumberFreeorReducedPricedMeals/TotalEnrollment,
+         PctSpecialEducation = NumberSpecialEducation/TotalEnrollment,
+         PctTransitionalBilingual = NumberTransitionalBilingual/TotalEnrollment
          )%>%
-  mutate_at(vars(PctAmericanIndianOrAlaskan:PctWhite), ~replace_na(., 0))
+  mutate_at(vars(PctAmericanIndianOrAlaskan:PctTransitionalBilingual), ~replace_na(., 0))
 
-df_e_merge_raw <- full_join(df_f196_expenditures, df_demos_dist, by=c("coudis_s"="coudis_s", "schyear"="schyear"))
+df_demos_dist$dist_nstu_soc = rowSums((df_demos_dist[,c("NumberAsian", "NumberBlack", "NumberHispanic", "NumberAmericanIndianOrAlaskan", "NumberAsianPacificIslander", "NumberMultirac")]), na.rm = TRUE)
 
-df_e_merge <- df_e_merge_raw %>%
-  mutate(dist_nstu_soc = rowSums(.[c("NumberAsian", "NumberBlack", "NumberHispanic", "NumberAmericanIndianOrAlaskan", "NumberAsianPacificIslander", "NumberMultirac")], na.rm=TRUE),
-         dist_pctstu_soc = as.numeric(dist_nstu_soc/TotalEnrollment),
+df_demos_dist <- df_demos_dist%>%
+  mutate(dist_pctstu_soc = as.numeric(dist_nstu_soc/TotalEnrollment),
          dist_group_soc = case_when(dist_pctstu_soc >= 0  & dist_pctstu_soc < 0.25 ~ '1',
                                     dist_pctstu_soc >= 0.25  & dist_pctstu_soc < 0.50 ~ '2',
                                     dist_pctstu_soc >= 0.50  & dist_pctstu_soc < 0.75 ~ '3',
                                     dist_pctstu_soc >= 0.75  & dist_pctstu_soc <= 1 ~ '4')
   )
+
+df_e_merge_raw <- full_join(df_f196_expenditures, df_demos_dist, by=c("coudis_s"="coudis_s", "schyear"="schyear"))
 
 df_f195_fed <- df_f195%>%
   group_by(CCDDD, year)%>%
@@ -113,9 +120,12 @@ df_f195_fed <- df_f195_fed%>%
          schyear=year,
          rev_fed=amount)
 
+df_cwi <- df_cwi%>%
+  mutate(coudis_s = str_pad(as.character(dist_id), 5, side="left", pad="0"))
+
 df_f196_merge_raw <- full_join(df_f196, df_demos_dist, by=c("coudis"="coudis_s", "schyear"="schyear"))
 
-df_f196_merge_raw<- full_join(df_f196_merge_raw, df_cwi, by=c("coudis"="dist_id", "schyear"="year"))
+df_f196_merge_raw<- full_join(df_f196_merge_raw, df_cwi, by=c("coudis"="coudis_s", "schyear"="year"))
 
 df_f196_merge_raw<- full_join(df_f196_merge_raw, df_f195_fed, by=c("coudis"="coudis", "schyear"="schyear"))
 
@@ -130,26 +140,24 @@ Our guiding research questions include:
 
 # B1: Revenue source for high- and low-poverty districts
 
-```{r B1_revenue_poverty, include=FALSE}
+```{r B1_revenue_data, include=FALSE}
 
+library(caret)
+library(car)
+
+#Pull revenue categories fron F195: Federal, State, Local, and Other
 df_f195_all <- df_f195%>%
   filter(
     item_desc=="TOTAL FEDERAL, GENERAL PURPOSE" |                                        
       item_desc=="TOTAL FEDERAL, SPECIAL PURPOSE" |                                     
       item_desc=="TOTAL LOCAL SUPPORT NONTAX" |                                         
       item_desc=="TOTAL LOCAL TAXES" |                                                  
-      item_desc=="TOTAL OTHER FINANCING SOURCES" |                                      
-      item_desc=="TOTAL REVENUES FROM OTHER ENTITIES" |                                 
-      item_desc=="TOTAL REVENUES FROM OTHER SCHOOL DISTRICTS" |                         
       item_desc=="TOTAL STATE, GENERAL PURPOSE" |                                       
       item_desc=="TOTAL STATE, SPECIAL PURPOSE")%>%
   mutate(rev_source = case_when(str_detect(item_desc, 'FEDERAL') ~ "Federal",
                                 str_detect(item_desc, 'STATE') ~ "State",
                                 str_detect(item_desc, 'LOCAL') ~ "Local",
-                                str_detect(item_desc, 'OTHER') ~ "Other",
                                 TRUE ~ 'NA'))
-
-#QUESTIONS: Include Other category? Calculate Total as Federal + State + Local?
 
 df_f195_collapse <- collap(df_f195_all, amount~ CCDDD + year + rev_source, 
                            FUN = list(fsum))
@@ -159,22 +167,185 @@ df_f195_collapse <- df_f195_collapse%>%
          schyear=year,
          revenue_amount=amount)
 
-df_f195_cwi<- full_join(df_f195_collapse, df_cwi, by=c("coudis"="dist_id", "schyear"="year"))
+#df_f195_collapse_total <- collap(df_f195_collapse, revenue_amount~ coudis + schyear, 
+#                           FUN = list(fsum))
+
+#df_f195_collapse_total <- df_f195_collapse_total%>%
+#  mutate(rev_source ="Total")
+
+#df_f195_bind<- rbind(df_f195_collapse, df_f195_collapse_total)
+
+#Bring in NCES Geographic designation.
+#https://nces.ed.gov/programs/edge/Geographic/SchoolLocations
+
+id_nces_geo <-drive_get(as_id("https://drive.google.com/file/d/1YXv-RxZMVEO3YiIF-RS4IFTClFgUOHgh/view?usp=sharing"))
+
+df_nces_geo <- id_nces_geo %>%
+  drive_read_raw() %>%
+  read_csv()
+
+df_locale_wa <- df_nces_geo%>%
+  filter(STATE=="WA")%>%
+  select(LEAID, NAME, LOCALE, SCHOOLYEAR)%>%
+  mutate(LOCALE=as.character(LOCALE),
+         LEAID=as.numeric(LEAID))
+
+#Calculate poverty rate by school district and census
+
+#Add CPI (Generated by Chris's package) and CWI (Generated by Pooya)
+df_cpi18 <- df_f196%>%
+  select(schyear, cpi18)%>%
+  distinct()
+
+df_cwi_cpi<- merge(df_cpi18, df_cwi, by.x = "schyear", by.y = "year")
+
+df_f195_cwi<- full_join(df_f195_collapse, df_cwi_cpi, by=c("coudis"="coudis_s", "schyear"="schyear"))
 df_f195_merge <- full_join(df_f195_cwi, df_demos_dist, by=c("coudis"="coudis_s", "schyear"="schyear"))
 
+df_f195_merge <- left_join(df_f195_merge, df_locale_wa, by=c("leaid"="LEAID"))
+
+#Adjust dollars by CWI
 df_f195_merge <- df_f195_merge%>%
   mutate(rev_cwi=revenue_amount/cwi,
-         rev_pp_cwi=rev_cwi/TotalEnrollment)
+         rev_pp_cwi=rev_cwi/TotalEnrollment,
+         rev_pp_cwi_18d=rev_pp_cwi*cpi18, 
+         dist_group_soc = as.factor(dist_group_soc))%>%
+    drop_na(dist_group_soc)
 
-#Adjust for district size, urbanicity, average cost of labor, and the percent of students enrolled in special education and classified as limited English proficient.
+levels(df_f195_merge$dist_group_soc) <- c("0-24%","25-49%","50-74%", "75-100%")
+
+#QUESTION: I adjusted the values by revenue category separately and then total the adjusted values together
+#is this the right approach?
+
+#Build figures by revenue source
+##FEDERAL
+df_f195_fed <- df_f195_merge%>%
+  filter(rev_source=="Federal")
+
+model_fed <- lm(rev_pp_cwi_18d ~ TotalEnrollment + LOCALE + PctSpecialEducation + PctTransitionalBilingual,
+             data=df_f195_fed)
+
+df_f195_fed$rev_adjusted <- predict.lm(model_fed, newdata=df_f195_fed)
+
+#STATE
+df_f195_state <- df_f195_merge%>%
+  filter(rev_source=="State")
+
+model_state <- lm(rev_pp_cwi_18d ~ TotalEnrollment + LOCALE + PctSpecialEducation + PctTransitionalBilingual,
+             data=df_f195_state)
+
+df_f195_state$rev_adjusted <- predict.lm(model_state, newdata=df_f195_state)
+
+#LOCAL
+df_f195_loc <- df_f195_merge%>%
+  filter(rev_source=="Local")
+
+model_loc <- lm(rev_pp_cwi_18d ~ TotalEnrollment + LOCALE + PctSpecialEducation + PctTransitionalBilingual,
+             data=df_f195_loc)
+
+df_f195_loc$rev_adjusted <- predict.lm(model_loc, newdata=df_f195_loc)
+
+
+#Adjust for district size (TotalEnrollment), urbanicity (using LOCALE codes), average cost of labor (cwi), and the percent of students enrolled in special education (PctSpecialEducation) and classified as limited English proficient (PctTransitionalBilingual).
 
 ```
 
 Federal, state, and local revenue source for high- and low-poverty districts
 
+```{r B1_revenue_pov, include=FALSE, eval=FALSE}
+
+#QUESTION: Annual poverty rate from 2015-2020? 
+#Calculate poverty rate by school district and ACS?
+
+library(tidycensus)
+readRenviron("~/.Renviron")
+Sys.getenv("CENSUS_API_KEY")
+
+df_var <- load_variables(2018, "acs5", cache = TRUE)
+
+df_dist_pov_raw <- get_acs("school district",
+                             variables = "B17001_002",
+                             summary_var = "B01003_001",
+                             year=2018,
+                             state = "WA", #FIPS code 53
+                             county = "King", #FIPS code 033
+                             geometry = FALSE, 
+                             moe = 95, #margin of error
+                             cache_table = TRUE)
+```
+
 # B2: Revenue source for districts serving students of color
 
-```{r B2_revenue_soc, include=FALSE}
+```{r B2_revenue_soc}
+
+#NOTE: NEED AT ADD 2020
+
+df_f195_fed_figure = df_f195_fed%>%
+  group_by(dist_group_soc, schyear)%>%
+  summarize(rev_adjusted_total=mean(rev_adjusted, na.rm = TRUE))
+
+ggplot(df_f195_fed_figure, 
+       aes(x=schyear, y=rev_adjusted_total, group=dist_group_soc)) +
+  geom_line(aes(colour = dist_group_soc))+
+  theme(panel.background = element_blank(), 
+        axis.line.x = element_line(color = "#D3D3D3"),
+        panel.grid.major.x = element_line(color = "#D3D3D3"),
+        plot.title.position = "plot"
+        ) +
+  labs(title="Figure. Federal Revenue Amount Per Student",
+       subtitle = "Regression adjusted for difference of cost factors including district size, 
+       urbanicity/locale, average cost of labor, and percent of students enrolled in 
+       special education and classified as limited English proficient")+
+  xlab("School Year (Spring)") + 
+  ylab("2018 Dollars") + 
+  geom_vline(xintercept = 2018, colour='#FFFFFF', linetype="dashed")+
+  labs(color="Student of Color \nPercentage") 
+
+####
+
+df_f195_state_figure = df_f195_state%>%
+  group_by(dist_group_soc, schyear)%>%
+  summarize(rev_adjusted_total=mean(rev_adjusted, na.rm = TRUE))
+
+ggplot(df_f195_state_figure, 
+       aes(x=schyear, y=rev_adjusted_total, group=dist_group_soc)) +
+  geom_line(aes(colour = dist_group_soc))+
+  theme(panel.background = element_blank(), 
+        axis.line.x = element_line(color = "#D3D3D3"),
+        panel.grid.major.x = element_line(color = "#D3D3D3"),
+        plot.title.position = "plot"
+        ) +
+  labs(title="Figure. State Revenue Amount Per Student",
+       subtitle = "Regression adjusted for difference of cost factors including district size, 
+       urbanicity/locale, average cost of labor, and percent of students enrolled in 
+       special education and classified as limited English proficient")+
+  xlab("School Year (Spring)") + 
+  ylab("2018 Dollars") + 
+  geom_vline(xintercept = 2018, colour='#FFFFFF', linetype="dashed")+
+  labs(color="Student of Color \nPercentage") 
+
+####
+
+df_f195_loc_figure = df_f195_loc%>%
+  group_by(dist_group_soc, schyear)%>%
+  summarize(rev_adjusted_total=mean(rev_adjusted, na.rm = TRUE))
+
+ggplot(df_f195_loc_figure, 
+       aes(x=schyear, y=rev_adjusted_total, group=dist_group_soc)) +
+  geom_line(aes(colour = dist_group_soc))+
+  theme(panel.background = element_blank(), 
+        axis.line.x = element_line(color = "#D3D3D3"),
+        panel.grid.major.x = element_line(color = "#D3D3D3"),
+        plot.title.position = "plot"
+        ) +
+  labs(title="Figure. Local Revenue Amount Per Student",
+       subtitle = "Regression adjusted for difference of cost factors including district size, 
+       urbanicity/locale, average cost of labor, and percent of students enrolled in 
+       special education and classified as limited English proficient")+
+  xlab("School Year (Spring)") + 
+  ylab("2018 Dollars") + 
+  geom_vline(xintercept = 2018, colour='#FFFFFF', linetype="dashed")+
+  labs(color="Student of Color \nPercentage") 
 
 
 
