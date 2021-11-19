@@ -27,6 +27,7 @@ knitr::opts_chunk$set(echo = FALSE,
 library(tidyverse)
 library(googledrive)
 library(haven)
+library(ggtext)
 
 id_f196 <- drive_get(as_id("https://drive.google.com/file/d/1sGIIj3hplOHq7qPL7S7YTmQByzuCcHVU/view?usp=sharing"))
 
@@ -252,27 +253,140 @@ df_f195_loc$rev_adjusted <- predict.lm(model_loc, newdata=df_f195_loc)
 
 Federal, state, and local revenue source for high- and low-poverty districts
 
-```{r B1_revenue_pov, include=FALSE, eval=FALSE}
+```{r B1_revenue_pov, include=FALSE}
 
 #QUESTION: Annual poverty rate from 2015-2020? 
 #Calculate poverty rate by school district and ACS?
 
-library(tidycensus)
-readRenviron("~/.Renviron")
-Sys.getenv("CENSUS_API_KEY")
+#Using SAIPE because tidycensus ACS2014-2018 isn't allowing school dist geography
+#https://www.census.gov/data/datasets/2019/demo/saipe/2019-school-districts.html
 
-df_var <- load_variables(2018, "acs5", cache = TRUE)
+id_saipe_2019 <- drive_get(as_id("https://drive.google.com/file/d/12iSqavUVCtMeCLn63XuPiMN4Sa0-v8L1/view?usp=sharing"))
 
-df_dist_pov_raw <- get_acs("school district",
-                             variables = "B17001_002",
-                             summary_var = "B01003_001",
-                             year=2018,
-                             state = "WA", #FIPS code 53
-                             county = "King", #FIPS code 033
-                             geometry = FALSE, 
-                             moe = 95, #margin of error
-                             cache_table = TRUE)
+df_saipe_2019_raw <- id_saipe_2019 %>%
+  drive_read_raw() %>%
+  read_csv()
+
+df_saipe_2019_raw$leaid <- str_replace_all(df_saipe_2019_raw$leaid, " ", "")
+
+df_saipe_2019 <- df_saipe_2019_raw%>%
+  mutate(pctpov5to17_per5to17 = est_pop_pov5to17/pop_5to17,
+         pctpov5to17_pertotalpop = est_pop_pov5to17/pop_total)%>%
+  select(-dist_name)
+
+df_saipe_2019$deciles_5to17 <- ntile(df_saipe_2019$pctpov5to17_per5to17, 10)
+
+df_f195_fed<- merge(df_f195_fed, df_saipe_2019, by.x = "leaid", by.y = "leaid")
+df_f195_state<- merge(df_f195_state, df_saipe_2019, by.x = "leaid", by.y = "leaid")
+df_f195_loc<- merge(df_f195_loc, df_saipe_2019, by.x = "leaid", by.y = "leaid")
 ```
+
+
+```{r B1_revenue_pov_plots}
+df_f195_fed_figure_pov <- df_f195_fed%>%
+  filter(deciles_5to17==1 | deciles_5to17 == 9)%>%
+  mutate(deciles_5to17 = as.factor(deciles_5to17))
+  
+levels(df_f195_fed_figure_pov$deciles_5to17) <- c("Low-Poverty", "High-Poverty")
+
+ggplot(df_f195_fed_figure_pov, 
+       aes(x=schyear,y=rev_adjusted, fill=deciles_5to17)) + 
+  stat_summary(geom="line", fun="mean", alpha=0.5) +
+  stat_summary(geom="ribbon", 
+               fun.data = mean_se, #mean_cl_normal
+               aes(fill=deciles_5to17), alpha=0.25) +
+  labs(title="Figure. Federal Revenue Amount Per Student",
+       subtitle = "Regression adjusted for difference of cost factors including district size, 
+       urbanicity/locale, average cost of labor, and percent of students enrolled in 
+       special education and classified as limited English proficient",
+       caption="Note: High and low-poverty districts estimated at the 10th and 90th percentile 
+       of poverty rate within the state, with an equal number of districts in each quantile")+
+  xlab("School Year (Spring)") + 
+  ylab("2018 Dollars") + 
+  geom_vline(xintercept = 2018, colour='#FFFFFF', linetype="dashed")+
+  theme(panel.background = element_blank(), 
+        legend.title = element_blank(),
+        axis.line.x = element_line(color = "#D3D3D3"),
+        panel.grid.major.x = element_line(color = "#D3D3D3"),
+        plot.title.position = "plot",
+        plot.caption =  element_markdown(hjust = 0)
+        ) +
+  scale_fill_manual(values=c("#4b2e83", "#85754d"), 
+                    name="fill")
+
+###
+
+df_f195_state_figure_pov <- df_f195_state%>%
+  filter(deciles_5to17==1 | deciles_5to17 == 9)%>%
+  mutate(deciles_5to17 = as.factor(deciles_5to17))
+  
+levels(df_f195_state_figure_pov$deciles_5to17) <- c("Low-Poverty", "High-Poverty")
+
+ggplot(df_f195_state_figure_pov, 
+       aes(x=schyear,y=rev_adjusted, fill=deciles_5to17)) + 
+  stat_summary(geom="line", fun="mean", alpha=0.5) +
+  stat_summary(geom="ribbon", 
+               fun.data = mean_se, #mean_cl_normal
+               aes(fill=deciles_5to17), alpha=0.25) +
+  labs(title="Figure. State Revenue Amount Per Student",
+       subtitle = "Regression adjusted for difference of cost factors including district size, 
+       urbanicity/locale, average cost of labor, and percent of students enrolled in 
+       special education and classified as limited English proficient",
+       caption="Note: High and low-poverty districts estimated at the 10th and 90th percentile 
+       of poverty rate within the state, with an equal number of districts in each quantile")+
+  xlab("School Year (Spring)") + 
+  ylab("2018 Dollars") + 
+  geom_vline(xintercept = 2018, colour='#FFFFFF', linetype="dashed")+
+  theme(panel.background = element_blank(), 
+        legend.title = element_blank(),
+        axis.line.x = element_line(color = "#D3D3D3"),
+        panel.grid.major.x = element_line(color = "#D3D3D3"),
+        plot.title.position = "plot",
+        plot.caption =  element_markdown(hjust = 0)
+        ) +
+  scale_fill_manual(values=c("#4b2e83", "#85754d"), 
+                    name="fill")
+
+###
+df_f195_loc_figure_pov <- df_f195_loc%>%
+  filter(deciles_5to17==1 | deciles_5to17 == 9)%>%
+  mutate(deciles_5to17 = as.factor(deciles_5to17))
+  
+levels(df_f195_loc_figure_pov$deciles_5to17) <- c("Low-Poverty", "High-Poverty")
+
+ggplot(df_f195_loc_figure_pov, 
+       aes(x=schyear,y=rev_adjusted, fill=deciles_5to17)) + 
+  stat_summary(geom="line", fun="mean", alpha=0.5) +
+  stat_summary(geom="ribbon", 
+               fun.data = mean_se, #mean_cl_normal
+               aes(fill=deciles_5to17), alpha=0.25) +
+  labs(title="Figure. Local Revenue Amount Per Student",
+       subtitle = "Regression adjusted for difference of cost factors including district size, 
+       urbanicity/locale, average cost of labor, and percent of students enrolled in 
+       special education and classified as limited English proficient",
+       caption="Note: High and low-poverty districts estimated at the 10th and 90th percentile 
+       of poverty rate within the state, with an equal number of districts in each quantile")+
+  xlab("School Year (Spring)") + 
+  ylab("2018 Dollars") + 
+  geom_vline(xintercept = 2018, colour='#FFFFFF', linetype="dashed")+
+  theme(panel.background = element_blank(), 
+        legend.title = element_blank(),
+        axis.line.x = element_line(color = "#D3D3D3"),
+        panel.grid.major.x = element_line(color = "#D3D3D3"),
+        plot.title.position = "plot",
+        plot.caption =  element_markdown(hjust = 0)
+        ) +
+  scale_fill_manual(values=c("#4b2e83", "#85754d"), 
+                    name="fill")
+
+```
+
+- Poverty defined using US Census SAIPE District Estimates for 2019 
+- Poverty percentage calculated by (Estimated Number of Relevant Children 5 to 17 years old in Poverty Related to the Householder/Population of Relevant Children 5 to 17 years of Age)
+- Plots include the mean with standard error bars of adjusted dollar values for each revenue source  
+- No significant changes from 2015-2019 for each revenue category on regression adjusted values for high and low poverty districts
+- As expected, low poverty districts receive a greater share of local revenue per student compared to high poverty districts
+- High poverty districts receiver a greater share of state and federal revenue per student compared to low poverty districts
 
 # B2: Revenue source for districts serving students of color
 
@@ -280,13 +394,9 @@ df_dist_pov_raw <- get_acs("school district",
 
 #NOTE: NEED AT ADD 2020
 
-df_f195_fed_figure = df_f195_fed%>%
-  group_by(dist_group_soc, schyear)%>%
-  summarize(rev_adjusted_total=mean(rev_adjusted, na.rm = TRUE))
-
-ggplot(df_f195_fed_figure, 
-       aes(x=schyear, y=rev_adjusted_total, group=dist_group_soc)) +
-  geom_line(aes(colour = dist_group_soc))+
+ggplot(df_f195_fed, 
+       aes(x=schyear, y=rev_adjusted, group=dist_group_soc)) +
+  stat_summary(aes(colour=dist_group_soc), fun=mean, geom="line")+
   theme(panel.background = element_blank(), 
         axis.line.x = element_line(color = "#D3D3D3"),
         panel.grid.major.x = element_line(color = "#D3D3D3"),
@@ -303,13 +413,9 @@ ggplot(df_f195_fed_figure,
 
 ####
 
-df_f195_state_figure = df_f195_state%>%
-  group_by(dist_group_soc, schyear)%>%
-  summarize(rev_adjusted_total=mean(rev_adjusted, na.rm = TRUE))
-
-ggplot(df_f195_state_figure, 
-       aes(x=schyear, y=rev_adjusted_total, group=dist_group_soc)) +
-  geom_line(aes(colour = dist_group_soc))+
+ggplot(df_f195_state, 
+       aes(x=schyear, y=rev_adjusted, group=dist_group_soc)) +
+  stat_summary(aes(colour=dist_group_soc), fun=mean, geom="line")+
   theme(panel.background = element_blank(), 
         axis.line.x = element_line(color = "#D3D3D3"),
         panel.grid.major.x = element_line(color = "#D3D3D3"),
@@ -326,13 +432,13 @@ ggplot(df_f195_state_figure,
 
 ####
 
-df_f195_loc_figure = df_f195_loc%>%
-  group_by(dist_group_soc, schyear)%>%
-  summarize(rev_adjusted_total=mean(rev_adjusted, na.rm = TRUE))
-
-ggplot(df_f195_loc_figure, 
-       aes(x=schyear, y=rev_adjusted_total, group=dist_group_soc)) +
-  geom_line(aes(colour = dist_group_soc))+
+ggplot(df_f195_loc, 
+       aes(x=schyear, y=rev_adjusted, group=dist_group_soc)) +
+  stat_summary(aes(colour=dist_group_soc), fun=mean, geom="line")+
+  #stat_summary(geom="line", fun="mean", alpha=0.5) +
+  #stat_summary(geom="ribbon", 
+  #             fun.data = mean_se, #mean_cl_normal
+  #             aes(fill=dist_group_soc), alpha=0.25) +
   theme(panel.background = element_blank(), 
         axis.line.x = element_line(color = "#D3D3D3"),
         panel.grid.major.x = element_line(color = "#D3D3D3"),
@@ -347,11 +453,14 @@ ggplot(df_f195_loc_figure,
   geom_vline(xintercept = 2018, colour='#FFFFFF', linetype="dashed")+
   labs(color="Student of Color \nPercentage") 
 
-
-
 ```
 
-Federal, state, and local revenue source for districts serving students of color
+- I didn't add error bars due to overlap. Adding would be simple if it's necessary
+- More change between years across all quartiles, no consistent slope from 2015-2019
+- Interesting groups for each revenue source
+- Federal revenue has quartiles 1st, 2nd, 3rd grouped together below top quartile
+- State has highest and lowest quartiles receiving a greater dollar amount, when mid-ranged quartiles receive less in comparison
+- Local appears to be the inverse of federal, with top quartile receiving less local revenue compared to all other quartiles
 
 # B3: Spatial distribution of school funding
 
@@ -370,6 +479,7 @@ df_f196_merge <- df_f196_merge_raw%>%
          rev_fed_pp_18d=(rev_fed_18d_Total/dis_enroll),
          rev_st_pp_18d=(rev_st_18d_Total/dis_enroll),
          rev_loc_pp_18d=(localrev_201819Spring_18d/dis_enroll),
+         rev_total_pp_18d=rev_fed_pp_18d+rev_st_pp_18d+rev_loc_pp_18d,
          post_mcl_reform = ifelse(schyear>= 2019, "1", "0"))
 
 df_f196_merge <- df_f196_merge%>%
@@ -377,33 +487,37 @@ df_f196_merge <- df_f196_merge%>%
   mutate(
     rev_fed_mean = mean(rev_fed_pp_18d, na.rm = TRUE),
     rev_st_mean = mean(rev_st_pp_18d, na.rm = TRUE), 
-    rev_loc_mean = mean(rev_loc_pp_18d, na.rm = TRUE))
+    rev_loc_mean = mean(rev_loc_pp_18d, na.rm = TRUE),
+    rev_total_mean = mean(rev_total_pp_18d, na.rm = TRUE))
 
 df_f196_merge <- df_f196_merge%>%
   group_by(coudis, post_mcl_reform)%>%
   mutate(rev_fed_mean_reform = mean(rev_fed_pp_18d, na.rm = TRUE), 
          rev_st_mean_reform = mean(rev_st_pp_18d, na.rm = TRUE), 
-         rev_loc_mean_reform = mean(rev_loc_pp_18d, na.rm = TRUE))
+         rev_loc_mean_reform = mean(rev_loc_pp_18d, na.rm = TRUE),
+         rev_total_mean_reform = mean(rev_total_pp_18d, na.rm = TRUE))
 
 df_f196_merge <- df_f196_merge%>%
   mutate(
     rev_fed_diff= (rev_fed_pp_18d-rev_fed_mean),
     rev_st_diff= (rev_st_pp_18d-rev_st_mean),
-    rev_loc_diff=(rev_loc_pp_18d-rev_loc_mean))
+    rev_loc_diff=(rev_loc_pp_18d-rev_loc_mean),
+    rev_total_diff=(rev_total_pp_18d-rev_total_mean))
 
-mccleary_revenue <- collap(df_f196_merge, rev_fed_mean_reform + rev_st_mean_reform + rev_loc_mean_reform~ leaid + post_mcl_reform, 
+mccleary_revenue <- collap(df_f196_merge, rev_fed_mean_reform + rev_st_mean_reform + rev_loc_mean_reform + rev_total_mean_reform~ leaid + post_mcl_reform, 
                            FUN = list(fmean))
 
 mccleary_rev_wide <- mccleary_revenue%>%
   group_by(leaid)%>% 
   pivot_wider(names_from = post_mcl_reform, 
-              values_from = c(rev_fed_mean_reform, rev_st_mean_reform, rev_loc_mean_reform))
+              values_from = c(rev_fed_mean_reform, rev_st_mean_reform, rev_loc_mean_reform, rev_total_mean_reform))
 
 mccleary_rev_wide <- mccleary_rev_wide%>%
   mutate(
     rev_fed_mean_reform_diff = (rev_fed_mean_reform_1 - rev_fed_mean_reform_0),
     rev_st_mean_reform_diff = (rev_st_mean_reform_1 - rev_st_mean_reform_0),
-    rev_loc_mean_reform_diff = (rev_loc_mean_reform_1 - rev_loc_mean_reform_0))
+    rev_loc_mean_reform_diff = (rev_loc_mean_reform_1 - rev_loc_mean_reform_0),
+    rev_total_mean_reform_diff = (rev_total_mean_reform_1 - rev_total_mean_reform_0))
 
 wa_df196 <- left_join(df_f196_merge, wa, by = c("leaid" = "GEOID"), copy=TRUE) 
 
@@ -510,6 +624,16 @@ wa_df196 %>%
   sf::st_as_sf() %>% 
   filter(schyear==2019)%>%
   ggplot() +
+  geom_sf(aes(fill = rev_total_pp_18d), size = .25) +
+  scale_fill_gradient2(low="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
+  theme_void() +
+  labs(title="Figure. Total Revenue Per Pupil, 2018-2019")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+wa_df196 %>%
+  sf::st_as_sf() %>% 
+  filter(schyear==2019)%>%
+  ggplot() +
   geom_sf(aes(fill = rev_fed_diff), size = .25) +
   scale_fill_gradient2(low="#FF0000", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
   theme_void() +
@@ -538,6 +662,18 @@ wa_df196 %>%
   scale_fill_gradient2(low="#FF0000", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
   theme_void() +
   labs(title="Figure. Local Levy Revenue Per Pupil, 2018-2019",
+       subtitle = "Dollar Difference Against State Mean for the School Year")+
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+
+wa_df196 %>%
+  sf::st_as_sf() %>% 
+  filter(schyear==2019)%>%
+  ggplot() +
+  geom_sf(aes(fill = rev_total_diff), size = .25) +
+  scale_fill_gradient2(low="#FF0000", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
+  theme_void() +
+  labs(title="Figure. Total Revenue Per Pupil, 2018-2019",
        subtitle = "Dollar Difference Against State Mean for the School Year")+
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5))
@@ -580,11 +716,20 @@ wa_mccleary_rev_wide %>%
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5))
 
+wa_mccleary_rev_wide %>%
+  sf::st_as_sf() %>% 
+  ggplot() +
+  geom_sf(aes(fill = rev_total_mean_reform_diff), size = .25) +
+  scale_fill_gradient2(low="#FF0000", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
+  theme_void() +
+  labs(title="Figure. Total Revenue Difference Post-McCleary Reform",
+       subtitle = "Between Spring SY 2016-2018 (3 Year Average) and 2019-2020 (2 Year Average)")+
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+
 ```
 
-Maps of (1) state revenue per pupil; (2) federal revenue per pupil; and (3) local revenue per pupil; (4) total revenue per-pupil
-
-% change in revenue per pupil over 3 year period (2015-16, 2016-17, 2017-18, 3 year average) to difference of the two year average (2018-19 and 19-2020), divided by average of pre-McCleary as base to get percentage change
+- Difference is calculated as % change in revenue per pupil over 3 year period (2015-16, 2016-17, 2017-18, 3 year average) to difference of the two year average (2018-19 and 19-2020), divided by average of pre-McCleary as base to get percentage change
 
 # B4: Expenditure categories 
 
@@ -692,41 +837,6 @@ df_e_2020_avg%>%
 
 ```
 
-In Section B4, we present information about expenditure category by two students groups: low- and high-poverty and students of color and white students.
 
-We focus on the 2019-2020 school year, the second year of the McCleary reform.
-
-
-
-```{r other, include=FALSE}
-
-x <- df_f196_merge_raw%>%
-  filter(schyear>=2019)%>%
-  select(
-    rfactor_cis_2019,
-    PctAmericanIndianOrAlaskan,
-    PctAsian,
-    PctAsianPacificIslander,
-    PctBlack,
-    PctHispanic,
-    PctMultirac,
-    PctWhite
-    )                   
-
-y <- x%>%
-  pivot_longer(!rfactor_cis_2019, names_to = "race", values_to = "pct")%>%
-  mutate(rfactor_cis_2019=as.character(rfactor_cis_2019),
-         race=as.character(race))
-
-z <- collap(y, pct ~ rfactor_cis_2019 + race, 
-                           FUN = list(fmean))
-
-ggplot(z, aes(x = rfactor_cis_2019, y=pct, fill=race, label = format(round(pct, 2), nsmall = 2) )) + 
-  geom_bar(stat = "identity")+
-  geom_text(size = 3, position = position_stack(vjust = 0.5))
-
-
-
-
-```
+- We focus on the 2019-2020 school year, the second year of the McCleary reform.
 
