@@ -20,17 +20,14 @@ knitr::opts_chunk$set(echo = FALSE,
                       )
 ```
 
-* Notes 11/17
-  + A.1, A.2,and A.3 are completed
-  + next: working on pathway and graduation
-  + A.3 check for missing district-level data for students of color
-  + A.3 match district names in OSPI files and shape files
+* Notes 11/24
+  + add plots for A3
+    1. statewide breakdown by income groups for three school years
+    2. statewide change between sy2018-19 and sy2020-21 by race and income 
+  + pathway
 
-* Notes after 11/10 meeting
-  + In term of change, positive values indicate increase in SY2020-21 and negative values indicate decrease in SY2020-21 for all the plots in this file. 
-  + Without specific demonstration, all differences are calculated between SY2018-19 (pre pandemic) and SY2020-21
+**Without specific demonstration, all differences/changes are calculated by values in SY2020-21 minus values in SY2018-19. Hence, positive differences/changes indicate increase in SY2020-21 and negative differences/changes indicate decrease in SY2020-21 for all the plots in this markdown file.**
 
-  
 ```{r data, include=FALSE}
 library(tidyverse)
 library(googledrive)
@@ -41,6 +38,7 @@ id_reopening_survey <- drive_get(as_id("https://drive.google.com/file/d/1YbyBi1L
 id_course_outcomes_by_student <- drive_get(as_id("https://drive.google.com/file/d/1hfA_RgRAldfsLXzH6hg776kV_x96xDgI/view?usp=sharing"))
 id_course_outcomes_by_outcome <- drive_get(as_id("https://drive.google.com/file/d/1hcUTvX5xYIVyejpyS73z0Xo-64w2uRCZ/view?usp=sharing"))
 id_discipline <- drive_get(as_id("https://drive.google.com/file/d/1hkh1eV3QJ0ZkJRRB1VIlUIaJDE4yYoYF/view?usp=sharing"))
+id_sqss_modified <- drive_get(as_id("https://drive.google.com/file/d/1hk1CUCF0tGZuZJlon6TRr0AIsw5REsmb/view?usp=sharing"))
 
 df_enrollment <- id_enrollment %>%
   drive_read_string() %>%
@@ -71,6 +69,11 @@ df_discpline <- id_discipline %>%
   drive_read_string() %>%
   read_csv(col_name=TRUE)
 
+df_sqss <- id_sqss_modified %>%
+  drive_read_string() %>%
+  read_csv(col_names=TRUE)
+#https://data.wa.gov/Education/COVID-19-Modified-School-Year-SQSS-Data/29kb-bn26
+
 #OSPI Suppression Rules
 #https://k12.wa.us/sites/default/files/public/StudentInformation/SuppressionRulesforPublicReporting.pdf
 
@@ -98,10 +101,11 @@ uw_palette <- colorRampPalette(c("#4b2e83", "#e8e3d3"))
 black_white <- colorRampPalette(c("white", "black"))
 ```
 
-
-# A.1. Student Enrollment Both Count and change
+# A.1. Student Enrollment Both Count and Change
 
 Students of color or low income students are further disadvantaged during the pandemic in terms of enrollment. Particularly lower grade levels
+
+## A.1.1 Enrollment count
 
 > A.1.1 Student Enrollment Count for Kindergarteners 6th and 9th Graders
 
@@ -313,6 +317,8 @@ plot_enroll_count_grades
 ggsave("section_a_analysis_files/figures/A.1.1 Student Enrollment Count for Kindergarteners 6th and 9th Graders.png")
 ```
 
+## A.1.2 Enrollment percentage
+
 > A.1.2 Student Enrollment Percentagee for Kindergarteners 6th and 9th Graders
 
 * percentage of student enrollment for sy2020-21
@@ -460,7 +466,9 @@ plot_enroll_count_grades
 
 ```
 
-> A.1.3. Student Enrollment Change for Kindergarteners 6th and 9th Graders
+## A.1.3 Enrollment Change (SY 2020-21 - SY 2019-20) 
+
+> A.1.3 Student Enrollment Change for Kindergarteners 6th and 9th Graders
 
 Change from **SY 2019-20** to SY 2020-21; NO SY 2018-29 ENROLL COUNTS DATA AT GRADE LEVEL; 
 
@@ -748,9 +756,10 @@ plot_change_enroll_income_grades_v
 
 ***
 
-# A.2. Student absence both count and change
+# A.2. Student Absence Both Count and Change 
+
 Students of color or low income students are further disadvantaged during the pandemic in terms of abs. Particularly lower grade levels
-grade levels: Grade K, 3rd, 6th, 8th, 9th, 10th grade.
+grade levels: pre K, 3rd, 6th, 8th, 9th, 10th grade.
 
 * measure: average absences per student
 * for total absences
@@ -806,6 +815,10 @@ df_absences <- bind_rows(Kindergarten = df_absences_prek,
                          `10th Grade` = df_absences_10th, 
                          .id = "GradeLevel")
 ```
+
+## A.2.1 Absence count
+
+> A.2.1 Student Absence Count for Kindergarteners, 3rd, 6th, 8th, 9th, and 10th Graders
 
 ```{r A.2.1.i Student Absence Count sorted by races data, include=FALSE}
 
@@ -1083,6 +1096,10 @@ for (i in seq_along(grade_levels)) {
   plot_absences_count_inc_separate[[i]] <- p
 }
 ```
+
+## A.2.2 Absence change (SY 2020-21 - SY 2018-19)
+
+> A.2.2 Student Absence Change for Kindergarteners, 3rd, 6th, 8th, 9th, and 10th Graders
 
 ```{r A.2.2.i Student Absence Change sorted by races data, include=FALSE}
 
@@ -1410,6 +1427,9 @@ plot_absences_perc_change_income
 ***
 
 # A.3. Course Taking 
+
+## A.3.1. Statewide breakdown by groups
+
 > A.3.1. Statewide breakdown by groups
 
 * for Percentage of All Courses Taken Resulted in Non-Passing Grade
@@ -1551,8 +1571,192 @@ ggsave("section_a_analysis_files/figures/A.3.1. Statewide breakdown by groups.pn
 
 ```
 
+```{r r A.3.1.ii Statewide breakdown by income, message=FALSE, warning=FALSE}
 
-> A.3.2.1 Geographical differences across districts in all non-passing grade from 2018-19 to 2020-21
+course_by_income <- read_csv("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/nonpass_state_byinc.csv") %>%
+  mutate(`All Non-Passing Grades` = percent(`All Non-Passing Grades`/100))
+
+state_ave_20_21 <- percent('11.0%')
+  
+course_by_income$`Grade Level` <- 
+  factor(course_by_income$`Grade Level`, levels = c("9", "10", "11", "12", "All Grades"))
+course_by_income$`School Year` <- 
+  factor(course_by_income$`School Year`, levels = c("2020-21", "2019-20", "2018-19"))
+
+plot_nonpass_inc_20_21 <- course_by_income %>%
+  filter(`School Year` == "2020-21") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Non-Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0.11, linetype = "dashed") +
+  geom_text(aes(0, 0.11, label = "state average = 11%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "for school year 2020-21") +
+  labs(x = "Student Groups", y = "All Non-Passing Grades") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.2)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.9),
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
+
+plot_nonpass_inc_19_20 <- course_by_income %>%
+  filter(`School Year` == "2019-20") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Non-Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0.048, linetype = "dashed") +
+  geom_text(aes(0, 0.048, label = "state average = 4.8%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "for school year 2019-20") +
+  labs(x = "Student Groups", y = "All Non-Passing Grades") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.2)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.9),
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+ plot_nonpass_inc_18_19 <- course_by_income %>%
+  filter(`School Year` == "2018-19") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Non-Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0.074, linetype = "dashed") +
+  geom_text(aes(0, 0.074, label = "state average = 7.4%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "for school year 2018-19") +
+   labs(x = "Student Groups", y = "All Non-Passing Grades") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.2)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.9),
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+ #       legend.justification = c(0, 1),
+ #       legend.position = c(0.9, 0.75),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+plot_nonpass_inc_20_21
+plot_nonpass_inc_19_20
+plot_nonpass_inc_18_19
+
+```
+
+**Change/Difference is calculated by `All Non-Passing Grades`[`School Year` == "2020-21"] - `All Non-Passing Grades`[`School Year` == "2018-19"]**
+
+## A.3.1. Statewide change (SY 2020-21 - SY 2018-19)
+
+```{r A.3.1.2.i Statewide breakdown by race CHANGE, message=FALSE, warning=FALSE}
+
+course_by_race <- course_by_race %>%
+  group_by(`Student Group`, `Grade Level`) %>%
+  mutate(Change = `All Non-Passing Grades`[`School Year` == "2020-21"] - `All Non-Passing Grades`[`School Year` == "2018-19"])
+
+course_by_race %>%
+  filter(`School Year` == "2020-21") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y= Change)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  ggtitle("Change in Percent of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "between SY2018-19 and SY2020-21") +
+  labs(x = "Student Groups", 
+       y = "All Non-Passing Grades",
+       caption = "Note: change is calculated by percent in SY2020-21 minus percent in SY2018-19") +
+  scale_y_continuous(labels = percent, limits = c(-0.005, 0.12)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `Change`), position = position_dodge(0.9),
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 12, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+ggsave("/Users/alexliu/Desktop/A.3.1.2.i Statewide breakdown by race change.png")
+
+```
+
+```{r A.3.1.2.ii Statewide breakdown by income CHANGE, message=FALSE, warning=FALSE}
+
+course_by_income <- course_by_income %>%
+  group_by(`Student Group`, `Grade Level`) %>%
+  mutate(Change = `All Non-Passing Grades`[`School Year` == "2020-21"] - `All Non-Passing Grades`[`School Year` == "2018-19"])
+
+course_by_income %>%
+  filter(`School Year` == "2020-21") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y= Change)) + 
+  geom_col(position="dodge", width = 0.7) +
+ # geom_hline(yintercept = 0, linetype = "dashed") +
+  ggtitle("Change in Percent of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "between SY2018-19 and SY2020-21") +
+  labs(x = "Student Groups", 
+       y = "All Non-Passing Grades",
+       caption = "Note: change is calculated by percent in SY2020-21 minus percent in SY2018-19") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.08)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `Change`), position = position_dodge(0.9),
+            hjust = 0, vjust = 0.25, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.3.1.2.ii Statewide breakdown by income change.png")
+
+```
+
+## A.3.2 Spatial Maps 
+
+> A.3.2.1 Geographical differences across districts in all non-passing grade and numerical failing grade  (SY2020-21 - SY2018-19)
 
 students of color (excluding Asian)
 
@@ -1788,6 +1992,8 @@ df_nonpass_inc <- df_nonpass_inc_raw %>%
   group_by(District) %>% 
   mutate(diff_low_nonlow = (`2020-21`[StudentGroup == "Non-Low Income"] - `2020-21`[StudentGroup == "Low-Income"])*-1)
 
+#write.csv(df_nonpass_inc, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/nonpass_byincome.csv",row.names=FALSE)
+
 df_nonpass_low <- filter(df_nonpass_inc, StudentGroup == "Low-Income")
 wa_nonpass_low <- full_join(wa, df_nonpass_low, by = c("NAME" = "District"), copy=TRUE) 
 df_nonpass_nonlow <- filter(df_nonpass_inc, StudentGroup == "Non-Low Income")
@@ -1912,7 +2118,7 @@ for (j in 1:length(shape_name)) {
 }
 ```
 
-> A.3.2.2 The gap in all non-passing in 2020-21 between students of color and white for each district
+> A.3.2.2 The gap in all non-passing and numerical failing in SY2020-21 between students of color and white for each district
 
 * Gap calculated by %nonpass among low-income minus %nonpass among non-low income in SY2020-21
   + darker purple color indicates more nonpass/num failing grades among students of color
@@ -2040,6 +2246,8 @@ wa_numfail_race_gap %>%
 
 ```
 
+> A.3.2.2 The gap in all non-passing and numerical failing in SY2020-21 between low-income and non-low income students for each district
+
 ```{r A.3.2.2.iii The gap in all non-passing in 2020-21 between students of low-income and non-low income for each district}
 
 wa_nonpass_gap <- full_join(wa, df_nonpass_inc, by = c("NAME" = "District"), copy=TRUE) 
@@ -2077,25 +2285,107 @@ wa_numfail_gap %>%
 
 ```
 
-## on track: 
-* 9th grade on track: did not get a grade of D or F. The % of students that received grades of A,B, C.
-* Regular attendance, meaning that has more than 90% attendance during the year
-* Dual credit (not prestigious): (AP/IB courses is more prestigious); therefore, less useful
-* COVID-19 modified (beginning of the school year to march, 2019-20 school year). The “modified” may indicate that. then OSPI created a fall to march dataset for multiple years of data
+# A.4. SQSS
 
-```{r course_outcomes, include=FALSE}
+We will do two types of analyses for the following three measures: (1) by racial-ethnic groups; (b) by income; (c) geographical distribution of gaps between groups (white vs students of color; low versus high income) across districts. 
 
-df_course_outcomes_by_student
+## 9th grade on track
 
-df_course_outcomes_by_outcome
+> State total
+
+```{r A.4.1.i 9th grade on track state total by race}
+
+# 9th grade on track: did not get a grade of D or F. The % of students that received grades of A,B, C.
+
+df_state_sqss_ontrack <- df_sqss %>%
+  filter(DistrictName == "State Total") %>%
+  filter(Measure == "Ninth Grade on Track",
+         `Grade Level` == 9) %>%
+  filter(StudentGroupType %in% c("AllStudents", "FederalRaceEthnicity"))
+
 ```
 
-## Graduation (the class of 2020). 
+```{r A.4.1.ii 9th grade on track state total by income}
+
+df_state_sqss_ontrack <- df_sqss %>%
+  filter(DistrictName == "State Total") %>%
+  filter(Measure == "Ninth Grade on Track",
+         `Grade Level` == 9) %>%
+  filter(StudentGroupType %in% c("AllStudents", "Income"))
+
+```
+
+## Regular attendance
+
+> State total
+
+```{r A.4.2.i Regular attendance state total by race}
+
+# Regular attendance, meaning that has more than 90% attendance during the year
+df_state_sqss_regattend <- df_sqss %>%
+  filter(DistrictName == "State Total") %>%
+  filter(Measure == "Regular Attendance") %>%
+  filter(StudentGroupType %in% c("AllStudents", "FederalRaceEthnicity")) %>%
+  arrange(`Grade Level`, SchoolYear)
+
+```
+
+```{r A.4.2.ii Regular attendance state total by income}
+
+df_state_sqss_regattend <- df_sqss %>%
+  filter(DistrictName == "State Total") %>%
+  filter(Measure == "Regular Attendance") %>%
+  filter(StudentGroupType %in% c("AllStudents", "Income")) %>%
+  arrange(`Grade Level`, SchoolYear)
+
+```
+
+## Dual credits
+
+> State total
+
+```{r A.4.3.i Dual credit state total by race}
+
+# Dual credits: (AP/IB courses is more prestigious). Interviewees suggested variation in how dual credits have been implemented in schools.
+
+df_state_sqss_regattend <- df_sqss %>%
+  filter(DistrictName == "State Total") %>%
+  filter(Measure == "Dual Credit") %>%
+  filter(StudentGroupType %in% c("AllStudents", "FederalRaceEthnicity")) %>%
+  arrange(`Grade Level`, SchoolYear)
+
+```
+
+```{r A.4.3.i Dual credit state total by income}
+
+df_state_sqss_regattend <- df_sqss %>%
+  filter(DistrictName == "State Total") %>%
+  filter(Measure == "Dual Credit") %>%
+  filter(StudentGroupType %in% c("AllStudents", "Income")) %>%
+  arrange(`Grade Level`, SchoolYear)
+
+```
+
+# A.5. Graduation (the class of 2020)
+
 https://www.k12.wa.us/data-reporting/data-displays/graduation-pathways-display
-Different pathways by income and students of color 
-```{r graduation, include=FALSE}
+We have individual school level data. 
+Different pathways by income and students of color (only state level as the first step)
 
-df_graduation_pathways
+> State level
+
+* Includes all students in the Class of 2020; including those who graduated, are continuing their education, or have left school.
+
+```{r A.5.1.i Graduation pathway at state level by race}
+
+
+
 
 ```
 
+```{r A.5.1.ii Graduation pathway at state level by income}
+
+
+
+
+```
