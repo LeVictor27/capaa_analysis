@@ -242,7 +242,7 @@ df_f195_fed <- df_f195_merge%>%
 model_fed <- lm(rev_pp_cwi_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual,
              data=df_f195_fed)
 
-model_fed_nocwi <- lm(rev_pp_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual,
+model_fed_nocwi <- lm(rev_pp_cwi ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual,
              data=df_f195_fed)
 
 df_f195_fed$rev_adjusted <- predict.lm(model_fed, newdata=df_f195_fed)
@@ -255,7 +255,7 @@ df_f195_state <- df_f195_merge%>%
 model_state <- lm(rev_pp_cwi_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual,
              data=df_f195_state)
 
-model_state_nocwi <- lm(rev_pp_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual,
+model_state_nocwi <- lm(rev_pp_cwi ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual,
              data=df_f195_state)
 
 df_f195_state$rev_adjusted <- predict.lm(model_state, newdata=df_f195_state)
@@ -268,7 +268,7 @@ df_f195_loc <- df_f195_merge%>%
 model_loc <- lm(rev_pp_cwi_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual,
              data=df_f195_loc)
 
-model_loc_nocwi <- lm(rev_pp_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual,
+model_loc_nocwi <- lm(rev_pp_cwi ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual,
              data=df_f195_loc)
 
 df_f195_loc$rev_adjusted <- predict.lm(model_loc, newdata=df_f195_loc)
@@ -329,6 +329,7 @@ df_f195_loc<- merge(df_f195_loc, df_saipe_2019, by.x = "leaid", by.y = "leaid")
 df_f195_total<- merge(df_f195_total, df_saipe_2019, by.x = "leaid", by.y = "leaid")
 ```
 
+## Revenue Category Over Time
 
 ```{r B1_revenue_pov_plots}
 df_f195_fed_figure_pov <- df_f195_fed%>%
@@ -561,7 +562,98 @@ ggplot(df_f195_total_figure_pov,
 
 ```
 
-\
+## Revenue Breakdown by Category
+
+```{r B1_revenue_breakdown}
+
+df_f195_cat <- df_f195%>%
+  mutate(rev_category = case_when(
+    str_detect(item_desc, regex("\\bTOTAL FEDERAL, GENERAL PURPOSE\\b", ignore_case=FALSE)) ~ "Federal",                          
+    str_detect(item_desc, regex("\\bTOTAL FEDERAL, SPECIAL PURPOSE\\b", ignore_case=FALSE)) ~ "Federal",
+    str_detect(item_desc, regex("\\bTOTAL STATE, GENERAL PURPOSE\\b", ignore_case=FALSE)) ~ "State",                                
+    str_detect(item_desc, regex("\\bTOTAL STATE, SPECIAL PURPOSE\\b", ignore_case=FALSE)) ~ "State",
+    str_detect(item_desc, regex("\\bTOTAL LOCAL SUPPORT NONTAX\\b", ignore_case=FALSE)) ~ "Local",                                    
+    str_detect(item_desc, regex("\\bTOTAL LOCAL TAXES\\b", ignore_case=FALSE)) ~ "Local",                                             
+    str_detect(item_desc, regex("\\bTOTAL OTHER FINANCING SOURCES\\b", ignore_case=FALSE)) ~ "Other",                           
+    str_detect(item_desc, regex("\\bTOTAL REVENUES FROM OTHER ENTITIES\\b", ignore_case=FALSE)) ~ "Other",                            
+    str_detect(item_desc, regex("\\bTOTAL REVENUES FROM OTHER SCHOOL DISTRICTS\\b", ignore_case=FALSE)) ~ "Other",   
+    TRUE ~ NA_character_
+    )
+  )
+
+df_f195_cat <- df_f195_cat%>%
+  fill(rev_category, .direction = "down")%>%
+  filter(amount>0)
+
+df_f195_all_cwi<- full_join(df_f195_cat, df_cwi_cpi, by=c("CCDDD"="coudis_s", "year"="schyear"))
+df_f195_all_merge_raw <- full_join(df_f195_all_cwi, df_demos_dist, by=c("CCDDD"="coudis_s", "year"="schyear"))
+
+df_f195_all_merge <- df_f195_all_merge_raw%>%
+  filter(!str_detect(item_desc, "\\bTOTAL FEDERAL, GENERAL PURPOSE\\b"),
+         !str_detect(item_desc, "\\bTOTAL FEDERAL, SPECIAL PURPOSE\\b"),
+         !str_detect(item_desc, "\\bTOTAL LOCAL SUPPORT NONTAX\\b"),
+         !str_detect(item_desc, "\\bTOTAL LOCAL TAXES\\b"),
+         !str_detect(item_desc, "\\bTOTAL STATE, GENERAL PURPOSE\\b"),
+         !str_detect(item_desc, "\\bTOTAL STATE, SPECIAL PURPOSE\\b"),
+         !str_detect(item_desc, "\\TOTAL OTHER FINANCING SOURCES\\b"),
+         !str_detect(item_desc, "\\TOTAL REVENUES FROM OTHER ENTITIES\\b"),
+         !str_detect(item_desc, "\\TOTAL REVENUES FROM OTHER SCHOOL DISTRICTS\\b"))
+
+df_f195_all_merge <- df_f195_all_merge%>%
+  filter(year == 2019)%>% 
+  drop_na(dist_group_soc)%>%
+  mutate(dist_group_soc = as.factor(dist_group_soc),
+         amount_pp = (amount/TotalEnrollment))
+
+levels(df_f195_all_merge$dist_group_soc) <- c("0-24%","25-49%","50-74%", "75-100%")
+
+df_f195_all_merge_sum <- df_f195_all_merge%>%
+  group_by(CCDDD, item_desc, dist_group_soc, rev_category)%>%
+  summarize(amount_pp_total=sum(amount_pp))
+
+df_f195_all_merge_avg <- df_f195_all_merge_sum %>%
+  group_by(dist_group_soc, item_desc)%>%
+  summarize(amount_pp_avg=mean(amount_pp_total),
+            rev_category=rev_category)
+
+df_f195_all_merge_avg%>%
+  filter(item_desc!="NA",
+         amount_pp_avg > 100)%>%
+  ggplot(aes(reorder(item_desc, amount_pp_avg), 
+        y=amount_pp_avg, fill=rev_category)) +
+  geom_bar(position = position_dodge(width=0.5), stat="identity")+
+  coord_flip()+
+  theme(panel.background = element_blank(), 
+        axis.line.x = element_line(color = "#D3D3D3"),
+        panel.grid.major.x = element_line(color = "#D3D3D3"),
+        plot.title.position = "plot"
+        ) +
+  labs(title="Figure. Average Per-Student Dollar Amount by All Revenue Categories, 2019-2020")+
+  scale_fill_discrete(limits = c("Federal", "State", "Local", "Other"))+
+  xlab("") + 
+  ylab("")
+
+df_f195_all_merge_avg%>%
+  filter(item_desc!="NA",
+         amount_pp_avg > 100)%>%
+    ggplot(aes(reorder(item_desc, amount_pp_avg), 
+        y=amount_pp_avg, fill=rev_category, group=dist_group_soc)) +
+  geom_bar(position = position_dodge(width=0.5), stat="identity")+
+  coord_flip()+
+  theme(panel.background = element_blank(), 
+        axis.line.x = element_line(color = "#D3D3D3"),
+        panel.grid.major.x = element_line(color = "#D3D3D3"),
+        plot.title.position = "plot"
+        ) +
+  labs(title="Figure. Average Per-Student Dollar Amount by All Revenue Categories, 2019-2020",
+       subtitle="By District Ratio Student of Color")+
+  scale_fill_discrete(limits = c("Federal", "State", "Local", "Other"))+
+  xlab("") + 
+  ylab("") + 
+  facet_wrap(~dist_group_soc,
+             nrow=1)
+```
+
 - Poverty defined using US Census SAIPE District Estimates for 2019 
 - Poverty percentage calculated by (Estimated Number of Relevant Children 5 to 17 years old in Poverty Related to the Householder/Population of Relevant Children 5 to 17 years of Age)
 - Plots include the mean with standard error bars of adjusted dollar values for each revenue source  
