@@ -110,7 +110,7 @@ Students of color or low income students are further disadvantaged during the pa
 
 > A.1.1 Student Enrollment Count for Kindergarteners 6th and 9th Graders
 
-```{r Student Enrollment Count for All Grade Levels, eval=FALSE, include=FALSE}
+```{r Student Enrollment Count for All Grade Levels, include=FALSE}
 
 month_in_df <- c("October", "November", "December", "January")
 
@@ -379,7 +379,7 @@ plot_enroll_perc <- long_enroll_perc_races %>%
 
 plot_enroll_perc
 
-ggsave("section_a_analysis_files/figures/Student Enrollment Percentage for All Grader Levels.png")
+#ggsave("section_a_analysis_files/figures/Student Enrollment Percentage for All Grader Levels.png")
 
 
 ```
@@ -2875,7 +2875,7 @@ df_state_dual_race %>%
        y = "% Taking College in The High School") +
   scale_y_continuous(labels = percent, limits = c(0, 1)) +
   scale_fill_manual(values = uw_reverse(3)) +
-  geom_text(aes(label = PercentTakingAP), position = position_dodge(0.75),
+  geom_text(aes(label = PercentTakingCollegeInTheHighSchool), position = position_dodge(0.75),
             hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
   theme_light() +
   coord_flip() +
@@ -2905,7 +2905,7 @@ df_state_dual_race %>%
        y = "% Taking CTE Tech Prep") +
   scale_y_continuous(labels = percent, limits = c(0, 1)) +
   scale_fill_manual(values = uw_reverse(3)) +
-  geom_text(aes(label = PercentTakingAP), position = position_dodge(0.75),
+  geom_text(aes(label = PercentTakingCTETechPrep), position = position_dodge(0.75),
             hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
   theme_light() +
   coord_flip() +
@@ -3041,7 +3041,7 @@ df_state_dual_inc %>%
        y = "% Taking College in The High School") +
   scale_y_continuous(labels = percent, limits = c(0, 1)) +
   scale_fill_manual(values = uw_reverse(3)) +
-  geom_text(aes(label = PercentTakingAP), position = position_dodge(0.75),
+  geom_text(aes(label = PercentTakingCollegeInTheHighSchool), position = position_dodge(0.75),
             hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
   theme_light() +
   coord_flip() +
@@ -3057,7 +3057,7 @@ df_state_dual_inc %>%
         axis.title.y  = element_text(size=12),
         strip.text.x = element_text(size = 12, colour = "black"))
 
-ggsave("/Users/alexliu/Desktop/A.4.3.ii Dual credit state total by inc CollegeInTheHighSchool.png")
+#ggsave("/Users/alexliu/Desktop/A.4.3.ii Dual credit state total by inc CollegeInTheHighSchool.png")
 
 df_state_dual_inc %>%
   filter(`Grade Level` == "All Grades") %>%
@@ -3071,7 +3071,7 @@ df_state_dual_inc %>%
        y = "% Taking CTE Tech Prep") +
   scale_y_continuous(labels = percent, limits = c(0, 1)) +
   scale_fill_manual(values = uw_reverse(3)) +
-  geom_text(aes(label = PercentTakingAP), position = position_dodge(0.75),
+  geom_text(aes(label = PercentTakingCTETechPrep), position = position_dodge(0.75),
             hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
   theme_light() +
   coord_flip() +
@@ -3087,7 +3087,7 @@ df_state_dual_inc %>%
         axis.title.y  = element_text(size=12),
         strip.text.x = element_text(size = 12, colour = "black"))
 
-ggsave("/Users/alexliu/Desktop/A.4.3.ii Dual credit state total by inc CTETechPrep.png")
+#ggsave("/Users/alexliu/Desktop/A.4.3.ii Dual credit state total by inc CTETechPrep.png")
 
 ```
 
@@ -3191,3 +3191,5 @@ long_state_grad_path %>%
 
 #ggsave("/Users/alexliu/Desktop/A.5.1.ii Graduation pathway at state level by income.png")
 ```
+
+
