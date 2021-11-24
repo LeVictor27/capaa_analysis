@@ -2570,7 +2570,7 @@ df_state_regattend_race %>%
   geom_col(position="dodge", width = 0.7) +
   ggtitle("Percentage of Regular Attendence",
           subtitle = "for all grades") +
-  labs(x = "Student Groups", 
+  labs(x = "School Years", 
        y = "% Regular Attendance") +
   scale_y_continuous(labels = percent, limits = c(0, 1)) +
   scale_fill_manual(values = uw_reverse(8)) +
@@ -2669,6 +2669,8 @@ df_state_regattend_inc %>%
 
 > Change in regular attendance pre- and post-COVID for "all grades"
 
+change in percentage (%2021 - %1819), NOT percentage change (%2021 - %1819)/%1819
+
 ```{r A.4.2.iii Regular attendance state total by race CHANGE, message=FALSE, warning=FALSE}
 
 state_regatt_race_change <- df_state_regattend_race %>%
@@ -2747,27 +2749,213 @@ state_regatt_inc_change %>%
 
 ## Dual credits
 
-> State total
+> State total (dual credits, AP, IB) for all grades (data at grade level 10-12 available)  
+
+Dual credits: (AP/IB courses is more prestigious). Interviewees suggested variation in how dual credits have been implemented in schools.
 
 ```{r A.4.3.i Dual credit state total by race}
 
-# Dual credits: (AP/IB courses is more prestigious). Interviewees suggested variation in how dual credits have been implemented in schools.
-
-df_state_sqss_regattend <- df_sqss %>%
+df_state_dual_race <- df_sqss %>%
   filter(DistrictName == "State Total") %>%
   filter(Measure == "Dual Credit") %>%
   filter(StudentGroupType %in% c("AllStudents", "FederalRaceEthnicity")) %>%
-  arrange(`Grade Level`, SchoolYear) 
+  mutate(PercentTakingAP = percent(PercentTakingAP),
+         PercentTakingIB = percent(PercentTakingIB),
+         PercentDualCredits = percent(Numerator/Denominator),
+         SchoolYear = as.character(SchoolYear)) 
+
+df_state_dual_race %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentDualCredits`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking Dual Credits",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking Dual Credits") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = `PercentDualCredits` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.i Dual credit state total by race Dual Credits.png")
+
+df_state_dual_race %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentTakingAP`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking AP",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking AP") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = PercentTakingAP), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.i Dual credit state total by race AP.png")
+
+df_state_dual_race %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentTakingIB`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking IB",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking IB") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = PercentTakingIB), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.i Dual credit state total by race IB.png")
 
 ```
 
-```{r A.4.3.i Dual credit state total by income}
+```{r A.4.3.ii Dual credit state total by income}
 
-df_state_sqss_regattend <- df_sqss %>%
+df_state_dual_inc <- df_sqss %>%
   filter(DistrictName == "State Total") %>%
   filter(Measure == "Dual Credit") %>%
   filter(StudentGroupType %in% c("AllStudents", "Income")) %>%
-  arrange(`Grade Level`, SchoolYear)
+  mutate(PercentTakingAP = percent(PercentTakingAP),
+         PercentTakingIB = percent(PercentTakingIB),
+         PercentDualCredits = percent(Numerator/Denominator),
+         SchoolYear = as.character(SchoolYear)) 
+
+df_state_dual_inc %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentDualCredits`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking Dual Credits",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking Dual Credits") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = `PercentDualCredits` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.ii Dual credit state total by inc Dual Credits.png")
+
+df_state_dual_inc %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentTakingAP`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking AP",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking AP") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = PercentTakingAP), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.ii Dual credit state total by inc AP.png")
+
+df_state_dual_inc %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentTakingIB`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking IB",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking IB") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = PercentTakingIB), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.ii Dual credit state total by inc IB.png")
 
 ```
 
