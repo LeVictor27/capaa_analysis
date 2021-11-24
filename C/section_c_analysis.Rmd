@@ -349,10 +349,653 @@ df_s275 %>%
 
 ```
 
+C6. Teacher workforce (Racial/Ethnic composition, educational attainment and experiences), by Student (high-vs-low poverty; by high- vs. -low students of color).
 ```{r C6}
+
+df_s275_dist <- df_s275 %>% 
+  filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
+  mutate(rfactor = as.character(rfactor_cis_2019)) %>% 
+  group_by(coudis_s, rfactor) %>% 
+  summarize(mean_dist_tch_black = mean(race == "B", na.rm = TRUE),
+            mean_dist_tch_asian = mean(race == "A", na.rm = TRUE),
+            mean_dist_tch_hisp = mean(hispanic == "Y", na.rm = TRUE),
+            mean_dist_tch_white = mean(race == "W", na.rm = TRUE),
+            mean_dist_tch_nonwhite = mean(race != "W" & race != "A", na.rm = TRUE),
+            
+            dist_pctstu_black = mean(replace_na(dis_pctstu_black, 0)),
+            dist_pctstu_asian = mean(replace_na(dis_pctstu_asian, 0)),
+            dist_pctstu_hispanic = mean(replace_na(dis_pctstu_hispanic, 0)),
+            dist_pctstu_white = mean(replace_na(dis_pctstu_white, 0)),
+            dist_pctstu_nonwhite = mean(1 - replace_na(dis_pctstu_white, 0) - replace_na(dis_pctstu_asian, 0)),
+            
+            dist_pctstu_frpl = mean(replace_na(dis_pctstu_frl, 0)),
+
+            mean_dist_tch_bachelor = mean(hdeg %in% c("B", "H", "G"), na.rm = TRUE),
+            mean_dist_tch_master = mean(hdeg %in% c("M", "m"), na.rm = TRUE),
+            mean_dist_tch_doctorate = mean(hdeg == "D", na.rm = TRUE),
+            mean_dist_tch_master_plus = mean(hdeg %in% c("M", "m", "D"), na.rm = TRUE),
+            mean_dist_tch_nobachelor = mean(hdeg %in% c("", "S", "V"), na.rm = TRUE),
+
+            mean_dist_tch_exp = mean(exp, na.rm = TRUE),
+
+            dist_nonwhite_cat = if_else(dist_pctstu_nonwhite < 0.26, "0 to 25%",
+                                        if_else(dist_pctstu_nonwhite >= 0.26 & dist_pctstu_nonwhite < 0.51, "26 to 50%",
+                                                if_else(dist_pctstu_nonwhite >= 0.51 & dist_pctstu_nonwhite < 0.76, "51 to 75%",
+                                                        if_else(dist_pctstu_nonwhite >= 0.76, "76 to 100%", "FLAG")))),
+            dist_poverty_cat = if_else(dist_pctstu_frpl < 0.26, "0 to 25%",
+                                       if_else(dist_pctstu_frpl >= 0.26 & dist_pctstu_frpl < 0.51, "26 to 50%",
+                                               if_else(dist_pctstu_frpl >= 0.51 & dist_pctstu_frpl < 0.76, "51 to 75%",
+                                                       if_else(dist_pctstu_frpl >= 0.76, "76 to 100%", "FLAG"))))
+            )
+
+
+### teacher racial composition and share of students of color
+df_s275_dist %>% 
+  ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_nonwhite)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x = "Share of students of color",
+       y = "Share of non-white teachers",
+       title = "Scatterplot of share of nonwhite teachers and students of color across WA school districts in AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>%
+  ggplot(aes(x = mean_dist_tch_nonwhite, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 0.5) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of non-white teachers",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of non-white teachers across WA school districts in AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_nonwhite, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 0.5) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of non-white teachers",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of non-white teachers across WA school districts in AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+
+### teacher racial composition and share of students in poverty
+df_s275_dist %>% 
+  ggplot(aes(x = dist_pctstu_frpl, y = mean_dist_tch_nonwhite)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x = "Share of students receiving FRPL",
+       y = "Share of non-white teachers",
+       title = "Scatterplot of share of nonwhite teachers and students poverty (measured by FRPL) across WA school districts in AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>%
+  ggplot(aes(x = mean_dist_tch_nonwhite, color = dist_poverty_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 0.4) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of non-white teachers",
+       y = "",
+       color = "Share of students\nreceiving FRPL",
+       title = "Density of non-white teachers across WA school districts in AY 2018-2019 by low to high shares of students poverty (measured by FRPL)",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_poverty_cat %in% c("0 to 25%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_nonwhite, color = dist_poverty_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 0.4) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of non-white teachers",
+       y = "",
+       color = "Share of students\nreceiving FRPL",
+       title = "Density of non-white teachers across WA school districts in AY 2018-2019 by low to high shares of students poverty (measured by FRPL)",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+
+### teacher educational attainment and share of students of color
+# bachelor
+df_s275_dist %>%
+  ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_bachelor)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of students of color in a district",
+       y = "Share of teachers with bachelor's",
+       title = "Scatterplot of share of teachers with highest degree as bachelor's and share of students of color across WA school districts\nin AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>%
+  ggplot(aes(x = mean_dist_tch_bachelor, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 0.9) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with bachelor's",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of share of teachers with highest degree as bachelor's across WA school districts\nin AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_bachelor, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 0.9) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with bachelor's",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of share of teachers with highest degree as bachelor's across WA school districts\nin AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+# master
+df_s275_dist %>%
+  ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_master)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of students of color in a district",
+       y = "Share of teachers with master's",
+       title = "Scatterplot of share of teachers with highest degree as master's and share of students of color across WA school districts\nin AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>%
+  ggplot(aes(x = mean_dist_tch_master, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 1) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with master's",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of share of teachers with highest degree as master's across WA school districts\nin AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_master, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 1) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with master's",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of share of teachers with highest degree as master's across WA school districts\nin AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+# doctorate
+df_s275_dist %>%
+  ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_doctorate)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of students of color in a district",
+       y = "Share of teachers with doctorate's",
+       title = "Scatterplot of share of teachers with highest degree as doctorate's and share of students of color across WA school districts\nin AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>%
+  ggplot(aes(x = mean_dist_tch_doctorate, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 0.15) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with doctorate's",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of share of teachers with highest degree as doctorate's across WA school districts\nin AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_nonwhite_cat %in% c("0 to 10%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_doctorate, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, .15) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with doctorate's",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of share of teachers with highest degree as doctorate's across WA school districts\nin AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+# master or doctorate
+df_s275_dist %>%
+  ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_master_plus)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of students of color in a district",
+       y = "Share of teachers with master's/doctorate",
+       title = "Scatterplot of share of teachers with highest degree as master's or doctorate and share of students of color across WA school districts\nin AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>%
+  ggplot(aes(x = mean_dist_tch_master_plus, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 1) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with master's/doctorate",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of share of teachers with highest degree as master's or doctorate across WA school districts\nin AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_master, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 1) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with master's/doctorate",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of share of teachers with highest degree as master's or doctorate across WA school districts\nin AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+
+# no bachelor
+df_s275_dist %>%
+  ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_nobachelor)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of students of color in a district",
+       y = "Share of teachers with no bachelor's",
+       title = "Scatterplot of share of teachers with no bachelor's and share of students of color across WA school districts\nin AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>%
+  ggplot(aes(x = mean_dist_tch_nobachelor, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 0.3) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with no bachelor's",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of share of teachers with no bachelor's degree across WA school districts\nin AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_nobachelor, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, .3) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with no bachelor's",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of share of teachers with no bachelor's degree across WA school districts\nin AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+
+
+### teacher educational attainment and share of students in poverty
+# bachelor
+df_s275_dist %>%
+  ggplot(aes(x = dist_pctstu_frpl, y = mean_dist_tch_bachelor)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of students receiving FRPL",
+       y = "Share of teachers with bachelor's",
+       title = "Scatterplot of share of teachers with highest degree as bachelor's and share of students poverty (measured by FRPL) across WA school districts\nin AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>%
+  ggplot(aes(x = mean_dist_tch_bachelor, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 0.9) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with bachelor's",
+       y = "",
+       color = "Share of students\nreceiving FRPL",
+       title = "Density of share of teachers with highest degree as bachelor's across WA school districts\nin AY 2018-2019 by low to high shares of students poverty (measured by FRPL) ",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_bachelor, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 0.9) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with bachelor's",
+       y = "",
+       color = "Share of students\nreceiving FRPL",
+       title = "Density of share of teachers with highest degree as bachelor's across WA school districts\nin AY 2018-2019 by low to high shares of students poverty (measured by FRPL)",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+# master
+df_s275_dist %>%
+  ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_master)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of students receiving FRPL",
+       y = "Share of teachers with master's",
+       title = "Scatterplot of share of teachers with highest degree as master's and share of students poverty (measured by FRPL)  across WA school districts\nin AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>%
+  ggplot(aes(x = mean_dist_tch_master, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 1) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with master's",
+       y = "",
+       color = "Share of students\nreceiving FRPL",
+       title = "Density of share of teachers with highest degree as master's across WA school districts\nin AY 2018-2019 by low to high shares of students poverty (measured by FRPL)",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_master, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 1) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with master's",
+       y = "",
+       color = "Share of students\nreceiving FRPL",
+       title = "Density of share of teachers with highest degree as master's across WA school districts\nin AY 2018-2019 by low to high shares of students poverty (measured by FRPL)",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+
+# master or doctorate
+df_s275_dist %>%
+  ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_master_plus)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of students receiving FRPL",
+       y = "Share of teachers with master's/doctorate",
+       title = "Scatterplot of share of teachers with highest degree as master's or doctorate and share of students poverty (measured by FRPL)  across WA school districts\nin AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>%
+  ggplot(aes(x = mean_dist_tch_master_plus, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 1) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with master's/doctorate",
+       y = "",
+       color = "Share of students\nreceiving FRPL",
+       title = "Density of share of teachers with highest degree as master's or doctorate across WA school districts\nin AY 2018-2019 by low to high shares of students poverty (measured by FRPL)",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_master_plus, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 1) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with master's/doctorate",
+       y = "",
+       color = "Share of students\nreceiving FRPL",
+       title = "Density of share of teachers with highest degree as master's or doctorate across WA school districts\nin AY 2018-2019 by low to high shares of students poverty (measured by FRPL)",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+
+# no bachelor
+df_s275_dist %>%
+  ggplot(aes(x = dist_pctstu_frpl, y = mean_dist_tch_nobachelor)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of students receiving FRPL",
+       y = "Share of teachers with no bachelor's",
+       title = "Scatterplot of share of teachers with no bachelor's and share of students poverty (measured by FRPL) across WA school districts\nin AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>%
+  ggplot(aes(x = mean_dist_tch_nobachelor, color = dist_poverty_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 0.3) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with no bachelor's",
+       y = "",
+       color = "Share of students\nreceiving FRPL",
+       title = "Density of share of teachers with no bachelor's degree across WA school districts\nin AY 2018-2019 by low to high shares of students poverty (measured by FRPL)",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_poverty_cat %in% c("0 to 25%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_nobachelor, color = dist_poverty_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, .3) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of teachers with no bachelor's",
+       y = "",
+       color = "Share of students\nreceiving FRPL",
+       title = "Density of share of teachers with no bachelor's degree across WA school districts\nin AY 2018-2019 by low to high shares of students poverty (measured by FRPL)",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+
+
+
+### teacher experience and share of students of color
+df_s275_dist %>%
+  ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_exp)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of students of color",
+       y = "Average teacher experience (in years)",
+       title = "Scatterplot of average teachers experience and share of students of color across WA school districts\nin AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  ggplot(aes(x = mean_dist_tch_exp, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 30) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Average teacher experience (in years)",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of average teacher experience across WA school districts in AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_exp, color = dist_nonwhite_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 30) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Average teacher experience (in years)",
+       y = "",
+       color = "Share of students of\ncolor in a district",
+       title = "Density of average teacher experience across WA school districts in AY 2018-2019 by low to high shares of students of color",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+
+
+### teacher experience and share of students in poverty
+df_s275_dist %>%
+  ggplot(aes(x = dist_pctstu_frpl, y = mean_dist_tch_exp)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Share of students receiving FRPL",
+       y = "Average teacher experience (in years)",
+       title = "Scatterplot of average teachers experience and share of students poverty (measured by FRPL) across WA school districts\nin AY 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  ggplot(aes(x = mean_dist_tch_exp, color = dist_poverty_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 30) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Average teacher experience (in years)",
+       y = "",
+       color = "Share of students\nreceiving FRPL",
+       title = "Density of average teacher experience across WA school districts in AY 2018-2019 by low to high shares of students poverty (measured by FRPL)",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
+df_s275_dist %>% 
+  filter(dist_poverty_cat %in% c("0 to 25%", "76 to 100%")) %>% 
+  ggplot(aes(x = mean_dist_tch_exp, color = dist_poverty_cat)) +
+  geom_density(aes(y=..scaled..)) + 
+  xlim(0, 30) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x =  "Average teacher experience (in years)",
+       y = "",
+       color = "Share of students\nreceiving FRPL",
+       title = "Density of average teacher experience across WA school districts in AY 2018-2019 by low to high shares of students poverty (measured by FRPL)",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+
 
 ```
 
+C7. Line charts: 
+Teacher turnover (/ teacher newcomers to the district per 1000 students; average experiences of teachers)= districts’ poverty rates
 ```{r C7}
+
+df_s275_turnover <- df_s275 %>% 
+  filter(cert != "") %>% 
+  group_by(cert) %>% 
+  mutate(next_yr_coudis = dplyr::lead(coudis_s, order_by = schyear),
+         tch_turnover = if_else(coudis_s == next_yr_coudis & !is.na(next_yr_coudis), "same_dist_tch",
+                                if_else(coudis_s != next_yr_coudis & !is.na(next_yr_coudis), "diff_dist_tch",
+                                        if_else(is.na(next_yr_coudis), "leave", "FLAG"))),
+         tch_newcomer = if_else(is.na(dplyr::lag(cert, order_by = schyear)), 1, 0)) %>% 
+  ungroup() %>% 
+  group_by(coudis_s, schyear) %>% 
+  mutate(dist_pctstu_nonwhite = mean(1 - replace_na(dis_pctstu_white, 0) - replace_na(dis_pctstu_asian, 0)),
+            dist_pctstu_frpl = mean(replace_na(dis_pctstu_frl, 0)),
+            dist_nonwhite_cat = if_else(dist_pctstu_nonwhite < 0.26, "0 to 25%",
+                                        if_else(dist_pctstu_nonwhite >= 0.26 & dist_pctstu_nonwhite < 0.51, "26 to 50%",
+                                                if_else(dist_pctstu_nonwhite >= 0.51 & dist_pctstu_nonwhite < 0.76, "51 to 75%",
+                                                        if_else(dist_pctstu_nonwhite >= 0.76, "76 to 100%", "FLAG")))),
+            dist_poverty_cat = if_else(dist_pctstu_frpl < 0.26, "0 to 25%",
+                                       if_else(dist_pctstu_frpl >= 0.26 & dist_pctstu_frpl < 0.51, "26 to 50%",
+                                               if_else(dist_pctstu_frpl >= 0.51 & dist_pctstu_frpl < 0.76, "51 to 75%",
+                                                       if_else(dist_pctstu_frpl >= 0.76, "76 to 100%", "FLAG")))),
+         dist_enroll_size = mean(dis_enroll.y)) %>% 
+  ungroup()
+
+
+# teacher turnover y students of color and poverty
+df_s275_turnover %>% 
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%") & schyear < 2020) %>%
+  group_by(schyear, dist_nonwhite_cat) %>% 
+  summarize(tch_leavers = mean(tch_turnover == "leave"),
+            tch_movers = mean(tch_turnover == "diff_dist_tch")) %>% 
+  ggplot(aes(x = schyear, color = dist_nonwhite_cat)) +
+  geom_line(aes(y = tch_leavers, linetype = "Leavers")) +
+  geom_point(aes(y = tch_leavers, color = dist_nonwhite_cat)) +
+  ylim(0, 0.15) +
+  geom_line(aes(y = tch_movers, linetype = "Movers")) + 
+  geom_point(aes(y = tch_movers, color = dist_nonwhite_cat)) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  scale_linetype_manual(values = c('Leavers' = 'solid', 'Movers' = 'dashed'), labs(color = 'Turnover type')) +
+  labs(x = "",
+       y = "turnover rate",
+       color = "Share of students\nof color",
+       title = "Average teacher turnover rate by high vs. low students of color in WA state between AY 2015-2016 to 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nleavers are teachers who left the teaching profession or the system and movers are those who move to another district.")
+
+
+
+df_s275_turnover %>% 
+  filter(dist_poverty_cat %in% c("0 to 25%", "76 to 100%") & schyear < 2020) %>%
+  group_by(schyear, dist_poverty_cat) %>% 
+  summarize(tch_leavers = mean(tch_turnover == "leave"),
+            tch_movers = mean(tch_turnover == "diff_dist_tch")) %>% 
+  ggplot(aes(x = schyear, color = dist_poverty_cat)) +
+  geom_line(aes(y = tch_leavers, linetype = "Leavers")) +
+  geom_point(aes(y = tch_leavers, color = dist_poverty_cat)) +
+  ylim(0, 0.15) +
+  geom_line(aes(y = tch_movers, linetype = "Movers")) + 
+  geom_point(aes(y = tch_movers, color = dist_poverty_cat)) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  scale_linetype_manual(values = c('Leavers' = 'solid', 'Movers' = 'dashed'), labs(color = 'Turnover type')) +
+  labs(x = "",
+       y = "turnover rate",
+       color = "Share of students\nreceiving FRPL",
+       title = "Average teacher turnover rate by high vs. low poverty in WA state between AY 2015-2016 to 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nleavers are teachers who left the teaching profession or the system and movers are those who move to another district.")
+
+
+
+# teacher newcomers
+df_s275_turnover %>% 
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%") & schyear > 2016 & schyear < 2020) %>%
+  group_by(schyear, dist_nonwhite_cat) %>% 
+  summarize(tch_newcomer = mean(tch_newcomer == 1)) %>% 
+  ggplot(aes(x = schyear, y = tch_newcomer, color = dist_nonwhite_cat)) +
+  geom_line() +
+  geom_point() +
+  ylim(0, .15) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  scale_linetype_manual(values = c('Leavers' = 'solid', 'Movers' = 'dashed'), labs(color = 'Turnover type')) +
+  scale_x_continuous(breaks = c(2017, 2018, 2019)) +
+labs(x = "",
+     y = "newcomers rate",
+     color = "Share of students\nof color",
+     title = "Average teacher newcomers rate by high vs. low students of color in WA state between AY 2015-2016 to 2018-2019",
+     caption = "In all estimates, asians are excluded from non-white or people of color categories.\nnewcomer is defined as a teacher who was not present in the system in the prior year.")
+
+
+df_s275_turnover %>% 
+  filter(dist_poverty_cat %in% c("0 to 25%", "76 to 100%") & schyear > 2016 & schyear < 2020) %>%
+  group_by(schyear, dist_poverty_cat) %>% 
+  summarize(tch_newcomer = mean(tch_newcomer == 1)) %>% 
+  ggplot(aes(x = schyear, y = tch_newcomer, color = dist_poverty_cat)) +
+  geom_line() +
+  geom_point() +
+  ylim(0, .15) +
+  theme_bw() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  scale_linetype_manual(values = c('Leavers' = 'solid', 'Movers' = 'dashed'), labs(color = 'Turnover type')) +
+  scale_x_continuous(breaks = c(2017, 2018, 2019))
+  labs(x = "",
+       y = "newcomers rate",
+       color = "Share of students\nreceiving FRPL",
+       title = "Average teacher newcomers rate by high vs. low poverty in WA state between AY 2015-2016 to 2018-2019",
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nnewcomer is defined as a teacher who was not present in the system in the prior year.")
 
 ```
