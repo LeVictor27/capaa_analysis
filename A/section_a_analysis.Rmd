@@ -3466,7 +3466,7 @@ long_state_agg_path_inc %>%
   scale_y_continuous(labels = percent, limits = c(0, 1)) +
   scale_fill_manual(name ="Pathways", values = uw_reverse(8)) +
   geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
-            hjust = -0.1, vjust = 0.4, colour = "black", size = 1) +
+            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
   theme_light() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
