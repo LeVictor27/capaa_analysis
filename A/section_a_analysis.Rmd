@@ -20,17 +20,11 @@ knitr::opts_chunk$set(echo = FALSE,
                       )
 ```
 
-* Notes 11/17
-  + A.1, A.2,and A.3 are completed
-  + next: working on pathway and graduation
-  + A.3 check for missing district-level data for students of color
-  + A.3 match district names in OSPI files and shape files
+* Notes 11/30 
+  + update: graduation pathway
 
-* Notes after 11/10 meeting
-  + In term of change, positive values indicate increase in SY2020-21 and negative values indicate decrease in SY2020-21 for all the plots in this file. 
-  + Without specific demonstration, all differences are calculated between SY2018-19 (pre pandemic) and SY2020-21
+**Without specific demonstration, all differences/changes are calculated by values in SY2020-21 minus values in SY2018-19. Hence, positive differences/changes indicate increase in SY2020-21 and negative differences/changes indicate decrease in SY2020-21 for all the plots in this markdown file.**
 
-  
 ```{r data, include=FALSE}
 library(tidyverse)
 library(googledrive)
@@ -41,6 +35,7 @@ id_reopening_survey <- drive_get(as_id("https://drive.google.com/file/d/1YbyBi1L
 id_course_outcomes_by_student <- drive_get(as_id("https://drive.google.com/file/d/1hfA_RgRAldfsLXzH6hg776kV_x96xDgI/view?usp=sharing"))
 id_course_outcomes_by_outcome <- drive_get(as_id("https://drive.google.com/file/d/1hcUTvX5xYIVyejpyS73z0Xo-64w2uRCZ/view?usp=sharing"))
 id_discipline <- drive_get(as_id("https://drive.google.com/file/d/1hkh1eV3QJ0ZkJRRB1VIlUIaJDE4yYoYF/view?usp=sharing"))
+id_sqss_modified <- drive_get(as_id("https://drive.google.com/file/d/1hk1CUCF0tGZuZJlon6TRr0AIsw5REsmb/view?usp=sharing"))
 
 df_enrollment <- id_enrollment %>%
   drive_read_string() %>%
@@ -71,6 +66,11 @@ df_discpline <- id_discipline %>%
   drive_read_string() %>%
   read_csv(col_name=TRUE)
 
+df_sqss <- id_sqss_modified %>%
+  drive_read_string() %>%
+  read_csv(col_names=TRUE)
+#https://data.wa.gov/Education/COVID-19-Modified-School-Year-SQSS-Data/29kb-bn26
+
 #OSPI Suppression Rules
 #https://k12.wa.us/sites/default/files/public/StudentInformation/SuppressionRulesforPublicReporting.pdf
 
@@ -95,17 +95,19 @@ library(leaidr)
 ```{r uw_palette, include=FALSE}
 # from purple to gold (low=gold, high=purple)
 uw_palette <- colorRampPalette(c("#4b2e83", "#e8e3d3"))
+uw_reverse <- colorRampPalette(c("#e8e3d3", "#4b2e83"))
 black_white <- colorRampPalette(c("white", "black"))
 ```
 
-
-# A.1. Student Enrollment Both Count and change
+# A.1. Student Enrollment Both Count and Change
 
 Students of color or low income students are further disadvantaged during the pandemic in terms of enrollment. Particularly lower grade levels
 
+## A.1.1 Enrollment count
+
 > A.1.1 Student Enrollment Count for Kindergarteners 6th and 9th Graders
 
-```{r Student Enrollment Count for All Grade Levels, eval=FALSE, include=FALSE}
+```{r Student Enrollment Count for All Grade Levels, include=FALSE}
 
 month_in_df <- c("October", "November", "December", "January")
 
@@ -313,6 +315,8 @@ plot_enroll_count_grades
 ggsave("section_a_analysis_files/figures/A.1.1 Student Enrollment Count for Kindergarteners 6th and 9th Graders.png")
 ```
 
+## A.1.2 Enrollment percentage
+
 > A.1.2 Student Enrollment Percentagee for Kindergarteners 6th and 9th Graders
 
 * percentage of student enrollment for sy2020-21
@@ -372,7 +376,7 @@ plot_enroll_perc <- long_enroll_perc_races %>%
 
 plot_enroll_perc
 
-ggsave("section_a_analysis_files/figures/Student Enrollment Percentage for All Grader Levels.png")
+#ggsave("section_a_analysis_files/figures/Student Enrollment Percentage for All Grader Levels.png")
 
 
 ```
@@ -460,7 +464,9 @@ plot_enroll_count_grades
 
 ```
 
-> A.1.3. Student Enrollment Change for Kindergarteners 6th and 9th Graders
+## A.1.3 Enrollment Change (SY 2020-21 - SY 2019-20) 
+
+> A.1.3 Student Enrollment Change for Kindergarteners 6th and 9th Graders
 
 Change from **SY 2019-20** to SY 2020-21; NO SY 2018-29 ENROLL COUNTS DATA AT GRADE LEVEL; 
 
@@ -748,9 +754,10 @@ plot_change_enroll_income_grades_v
 
 ***
 
-# A.2. Student absence both count and change
+# A.2. Student Absence Both Count and Change 
+
 Students of color or low income students are further disadvantaged during the pandemic in terms of abs. Particularly lower grade levels
-grade levels: Grade K, 3rd, 6th, 8th, 9th, 10th grade.
+grade levels: pre K, 3rd, 6th, 8th, 9th, 10th grade.
 
 * measure: average absences per student
 * for total absences
@@ -806,6 +813,10 @@ df_absences <- bind_rows(Kindergarten = df_absences_prek,
                          `10th Grade` = df_absences_10th, 
                          .id = "GradeLevel")
 ```
+
+## A.2.1 Absence count
+
+> A.2.1 Student Absence Count for Kindergarteners, 3rd, 6th, 8th, 9th, and 10th Graders
 
 ```{r A.2.1.i Student Absence Count sorted by races data, include=FALSE}
 
@@ -1083,6 +1094,10 @@ for (i in seq_along(grade_levels)) {
   plot_absences_count_inc_separate[[i]] <- p
 }
 ```
+
+## A.2.2 Absence change (SY 2020-21 - SY 2018-19)
+
+> A.2.2 Student Absence Change for Kindergarteners, 3rd, 6th, 8th, 9th, and 10th Graders
 
 ```{r A.2.2.i Student Absence Change sorted by races data, include=FALSE}
 
@@ -1410,6 +1425,9 @@ plot_absences_perc_change_income
 ***
 
 # A.3. Course Taking 
+
+## A.3.1. Statewide breakdown by groups
+
 > A.3.1. Statewide breakdown by groups
 
 * for Percentage of All Courses Taken Resulted in Non-Passing Grade
@@ -1551,8 +1569,198 @@ ggsave("section_a_analysis_files/figures/A.3.1. Statewide breakdown by groups.pn
 
 ```
 
+```{r r A.3.1.ii Statewide breakdown by income, message=FALSE, warning=FALSE}
 
-> A.3.2.1 Geographical differences across districts in all non-passing grade from 2018-19 to 2020-21
+course_by_income <- read_csv("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/nonpass_state_byinc.csv") %>%
+  mutate(`All Non-Passing Grades` = percent(`All Non-Passing Grades`/100))
+
+state_ave_20_21 <- percent('11.0%')
+  
+course_by_income$`Grade Level` <- 
+  factor(course_by_income$`Grade Level`, levels = c("9", "10", "11", "12", "All Grades"))
+course_by_income$`School Year` <- 
+  factor(course_by_income$`School Year`, levels = c("2020-21", "2019-20", "2018-19"))
+
+plot_nonpass_inc_20_21 <- course_by_income %>%
+  filter(`School Year` == "2020-21") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Non-Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0.11, linetype = "dashed") +
+  geom_text(aes(0, 0.11, label = "state average = 11%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "for school year 2020-21") +
+  labs(x = "Student Groups", y = "All Non-Passing Grades") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.2)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black")) 
+
+#ggsave("/Users/alexliu/Desktop/A.3.1.ii Statewide breakdown by income SY2021.png")
+
+plot_nonpass_inc_19_20 <- course_by_income %>%
+  filter(`School Year` == "2019-20") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Non-Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0.048, linetype = "dashed") +
+  geom_text(aes(0, 0.048, label = "state average = 4.8%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "for school year 2019-20") +
+  labs(x = "Student Groups", y = "All Non-Passing Grades") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.2)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.3.1.ii Statewide breakdown by income SY1920.png")
+
+ plot_nonpass_inc_18_19 <- course_by_income %>%
+  filter(`School Year` == "2018-19") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Non-Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0.074, linetype = "dashed") +
+  geom_text(aes(0, 0.074, label = "state average = 7.4%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "for school year 2018-19") +
+   labs(x = "Student Groups", y = "All Non-Passing Grades") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.2)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=14),
+        axis.title.y  = element_text(size=14),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.3.1.ii Statewide breakdown by income SY1819.png")
+
+plot_nonpass_inc_20_21
+plot_nonpass_inc_19_20
+plot_nonpass_inc_18_19
+
+```
+
+**Change/Difference is calculated by `All Non-Passing Grades`[`School Year` == "2020-21"] - `All Non-Passing Grades`[`School Year` == "2018-19"]**
+
+## A.3.1. Statewide change (SY 2020-21 - SY 2018-19)
+
+```{r A.3.1.2.i Statewide breakdown by race CHANGE, message=FALSE, warning=FALSE}
+
+course_by_race <- course_by_race %>%
+  group_by(`Student Group`, `Grade Level`) %>%
+  mutate(Change = `All Non-Passing Grades`[`School Year` == "2020-21"] - `All Non-Passing Grades`[`School Year` == "2018-19"])
+
+course_by_race %>%
+  filter(`School Year` == "2020-21") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y= Change)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  ggtitle("Change in Percent of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "between SY2018-19 and SY2020-21") +
+  labs(x = "Student Groups", 
+       y = "Change in Percentage",
+       caption = "A positive value means that the percentage of all courses taken resulted in 
+       non-passing grade has increased between 2018-19 and 2020-21 for the given student group") +
+  scale_y_continuous(labels = percent, limits = c(-0.005, 0.12)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `Change`), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 12, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.3.1.2.i Statewide breakdown by race change.png")
+
+```
+
+```{r A.3.1.2.ii Statewide breakdown by income CHANGE, message=FALSE, warning=FALSE}
+
+course_by_income <- course_by_income %>%
+  group_by(`Student Group`, `Grade Level`) %>%
+  mutate(Change = `All Non-Passing Grades`[`School Year` == "2020-21"] - `All Non-Passing Grades`[`School Year` == "2018-19"])
+
+course_by_income %>%
+  filter(`School Year` == "2020-21") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y= Change)) + 
+  geom_col(position="dodge", width = 0.7) +
+ # geom_hline(yintercept = 0, linetype = "dashed") +
+  ggtitle("Change in Percent of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "between SY2018-19 and SY2020-21") +
+  labs(x = "Student Groups", 
+       y = "Change in Percentage",
+       caption = "A positive value means that the percent of all courses taken resulted in 
+       non-passing grade has increased between 2018-19 and 2020-21 for the given student group") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.08)) +
+  scale_fill_manual(values = uw_palette(5)) +
+  geom_text(aes(label = `Change`), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.3.1.2.ii Statewide breakdown by income change.png")
+
+```
+
+## A.3.2 Spatial Maps 
+
+> A.3.2.1 Geographical differences across districts in all non-passing grade and numerical failing grade  (SY2020-21 - SY2018-19)
 
 students of color (excluding Asian)
 
@@ -1788,6 +1996,8 @@ df_nonpass_inc <- df_nonpass_inc_raw %>%
   group_by(District) %>% 
   mutate(diff_low_nonlow = (`2020-21`[StudentGroup == "Non-Low Income"] - `2020-21`[StudentGroup == "Low-Income"])*-1)
 
+#write.csv(df_nonpass_inc, "/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/nonpass_byincome.csv",row.names=FALSE)
+
 df_nonpass_low <- filter(df_nonpass_inc, StudentGroup == "Low-Income")
 wa_nonpass_low <- full_join(wa, df_nonpass_low, by = c("NAME" = "District"), copy=TRUE) 
 df_nonpass_nonlow <- filter(df_nonpass_inc, StudentGroup == "Non-Low Income")
@@ -1912,7 +2122,7 @@ for (j in 1:length(shape_name)) {
 }
 ```
 
-> A.3.2.2 The gap in all non-passing in 2020-21 between students of color and white for each district
+> A.3.2.2 The gap in all non-passing and numerical failing in SY2020-21 between students of color and white for each district
 
 * Gap calculated by %nonpass among low-income minus %nonpass among non-low income in SY2020-21
   + darker purple color indicates more nonpass/num failing grades among students of color
@@ -2040,6 +2250,8 @@ wa_numfail_race_gap %>%
 
 ```
 
+> A.3.2.2 The gap in all non-passing and numerical failing in SY2020-21 between low-income and non-low income students for each district
+
 ```{r A.3.2.2.iii The gap in all non-passing in 2020-21 between students of low-income and non-low income for each district}
 
 wa_nonpass_gap <- full_join(wa, df_nonpass_inc, by = c("NAME" = "District"), copy=TRUE) 
@@ -2077,25 +2289,1200 @@ wa_numfail_gap %>%
 
 ```
 
-## on track: 
-* 9th grade on track: did not get a grade of D or F. The % of students that received grades of A,B, C.
-* Regular attendance, meaning that has more than 90% attendance during the year
-* Dual credit (not prestigious): (AP/IB courses is more prestigious); therefore, less useful
-* COVID-19 modified (beginning of the school year to march, 2019-20 school year). The “modified” may indicate that. then OSPI created a fall to march dataset for multiple years of data
+# A.4. SQSS
 
-```{r course_outcomes, include=FALSE}
+We will do two types of analyses for the following three measures: (1) by racial-ethnic groups; (b) by income; (c) geographical distribution of gaps between groups (white vs students of color; low versus high income) across districts. 
 
-df_course_outcomes_by_student
+## 9th grade on track
 
-df_course_outcomes_by_outcome
+> State total breakdown by race-ethinicity and income 
+
+```{r A.4.1.i 9th grade on track state total by race, message=FALSE, warning=FALSE}
+
+# 9th grade on track: did not get a grade of D or F. The % of students that received grades of A,B, C.
+
+df_state_ontrack_race <- df_sqss %>%
+  filter(DistrictName == "State Total") %>%
+  filter(Measure == "Ninth Grade on Track",
+         `Grade Level` == 9) %>%
+  filter(StudentGroupType %in% c("AllStudents", "FederalRaceEthnicity")) %>%
+  mutate(`% On Track` = percent(Numerator/Denominator)) %>%
+  mutate(SchoolYear = as.character(SchoolYear))
+
+df_state_ontrack_race %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `% On Track`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percentage of 9th Grade Students on Track") +
+  labs(x = "Student Groups", 
+       y = "Percentage of Students on Track",
+       caption = "Missing values are suppressed") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = `% On Track` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.1.i 9th grade on track state total by race sy.png")
+
+df_state_ontrack_race %>%
+  ggplot(aes(fill= `StudentGroup`,
+             x= `SchoolYear`, 
+             y= `% On Track`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percentage of 9th Grade Students on Track") +
+  labs(x = "School Years", 
+       y = "Percentage of Students on Track",
+       caption = "Missing values are suppressed") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(8)) +
+  geom_text(aes(label = `% On Track` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="Student Group")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.1.i 9th grade on track state total by race stugroup.png")
+
+
 ```
 
-## Graduation (the class of 2020). 
+```{r A.4.1.ii 9th grade on track state total by income}
+
+df_state_ontrack_inc <- df_sqss %>%
+  filter(DistrictName == "State Total") %>%
+  filter(Measure == "Ninth Grade on Track",
+         `Grade Level` == 9) %>%
+  filter(StudentGroupType %in% c("AllStudents", "Income")) %>%
+  mutate(`% On Track` = percent(Numerator/Denominator)) %>%
+  mutate(SchoolYear = as.character(SchoolYear))
+
+df_state_ontrack_inc %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `% On Track`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percentage of 9th Grade Students on Track") +
+  labs(x = "Student Groups", 
+       y = "Percentage of Students on Track") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = `% On Track` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.1.ii 9th grade on track state total by income sy.png")
+
+df_state_ontrack_inc %>%
+  ggplot(aes(fill= `StudentGroup`,
+             x= `SchoolYear`, 
+             y= `% On Track`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percentage of 9th Grade Students on Track") +
+  labs(x = "School Years", 
+       y = "Percentage of Students on Track",
+       caption = "Missing values are suppressed") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = `% On Track` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="Student Group")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+# ggsave("/Users/alexliu/Desktop/A.4.1.ii 9th grade on track state total by race stugroup.png")
+
+```
+
+> Change in 9th grade on track pre- and post-COVID 
+
+```{r A.4.1.iii 9th grade on track state total by race CHANGE, message=FALSE, warning=FALSE}
+
+state_ontrack_race_change <- df_state_ontrack_race %>%
+    group_by(`StudentGroup`) %>%
+    mutate(Change = `% On Track`[SchoolYear == 2020] - `% On Track`[SchoolYear == 2018])
+
+state_ontrack_race_change %>%
+  ggplot(aes(x= `StudentGroup`, 
+             y= `Change`)) + 
+  geom_col(position="dodge", width = 0.7, fill = "#4b2e83") +
+  ggtitle("Change in Percentage of 9th Grade Students on Track",
+          subtitle = "between SY2018-19 and SY2020-21") +
+  labs(x = "Student Groups",
+       y = "Change in Percentage",
+       caption = "A negative value means that the percentage of 9th grade students on track 
+       has decreased between 2018-19 and 2020-21 for the given student group;
+       Missing values are suppressed") +
+  scale_y_continuous(labels = percent, limits = c(-0.08, 0)) +
+  geom_text(aes(label = `Change` ), position = position_dodge(0.75),
+            hjust = 1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.8),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.1.iii 9th grade on track state total by race CHANGE.png")
+
+```
+
+```{r A.4.1.iv 9th grade on track state total by income CHANGE}
+
+state_ontrack_inc_change <- df_state_ontrack_inc %>%
+    group_by(`StudentGroup`) %>%
+    mutate(Change = `% On Track`[SchoolYear == 2020] - `% On Track`[SchoolYear == 2018])
+
+state_ontrack_inc_change %>%
+  ggplot(aes(x= `StudentGroup`, 
+             y= `Change`)) + 
+  geom_col(position="dodge", width = 0.7, fill = "#4b2e83") +
+  ggtitle("Change in Percentage of 9th Grade Students on Track",
+          subtitle = "between SY2018-19 and SY2020-21") +
+  labs(x = "Student Groups",
+       y = "Change in Percentage",
+       caption = "A negative value means that the percentage of 9th grade students on track 
+       has decreased between 2018-19 and 2020-21 for the given student group") +
+  scale_y_continuous(labels = percent, limits = c(-0.04, 0)) +
+  geom_text(aes(label = `Change` ), position = position_dodge(0.75),
+            hjust = 1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.8),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.1.iv 9th grade on track state total by inc CHANGE.png")
+```
+
+## Regular attendance
+
+> State total regular attendance for "all grades" (data at grade level is available)
+
+```{r A.4.2.i Regular attendance state total by race}
+
+# Regular attendance, meaning that has more than 90% attendance during the year
+df_state_regattend_race <- df_sqss %>%
+  filter(DistrictName == "State Total") %>%
+  filter(Measure == "Regular Attendance") %>%
+  filter(StudentGroupType %in% c("AllStudents", "FederalRaceEthnicity")) %>%
+  mutate(`% Regular Attend` = percent(Numerator/Denominator)) %>%
+  mutate(SchoolYear = as.character(SchoolYear))
+
+df_state_regattend_race %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `% Regular Attend`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percentage of Regular Attendence",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Regular Attendance") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = `% Regular Attend` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.2.i Regular attendance state total by race sy all.png")
+
+df_state_regattend_race %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `StudentGroup`,
+             x= `SchoolYear`, 
+             y= `% Regular Attend`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percentage of Regular Attendence",
+          subtitle = "for all grades") +
+  labs(x = "School Years", 
+       y = "% Regular Attendance") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(8)) +
+  geom_text(aes(label = `% Regular Attend` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="Student Group")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.2.i Regular attendance state total by race stugroup all.png")
+
+
+```
+
+```{r A.4.2.ii Regular attendance state total by income}
+
+df_state_regattend_inc <- df_sqss %>%
+  filter(DistrictName == "State Total") %>%
+  filter(Measure == "Regular Attendance") %>%
+  filter(StudentGroupType %in% c("AllStudents", "Income")) %>%
+  arrange(`Grade Level`, SchoolYear) %>%
+  mutate(`% Regular Attend` = percent(Numerator/Denominator)) %>%
+  mutate(SchoolYear = as.character(SchoolYear))
+
+df_state_regattend_inc %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `% Regular Attend`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percentage of Regular Attendence",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Regular Attendance") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = `% Regular Attend` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.2.ii Regular attendance state total by inc sy all.png")
+
+df_state_regattend_inc %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `StudentGroup`,
+             x= `SchoolYear`, 
+             y= `% Regular Attend`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percentage of Regular Attendence",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Regular Attendance") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = `% Regular Attend` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="Student Group")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.2.ii Regular attendance state total by inc stugroup all.png")
+
+```
+
+> Change in regular attendance pre- and post-COVID for "all grades"
+
+change in percentage (%2021 - %1819), NOT percentage change (%2021 - %1819)/%1819
+
+```{r A.4.2.iii Regular attendance state total by race CHANGE, message=FALSE, warning=FALSE}
+
+state_regatt_race_change <- df_state_regattend_race %>%
+  group_by(StudentGroup, `Grade Level`) %>%
+  filter(`Grade Level` == "All Grades") %>%
+  mutate(Change = `% Regular Attend`[SchoolYear == 2020] - `% Regular Attend`[SchoolYear == 2018], )
+
+state_regatt_race_change %>%
+  ggplot(aes(x= `StudentGroup`, 
+             y= `Change`)) + 
+  geom_col(position="dodge", width = 0.7, fill = "#4b2e83") +
+  ggtitle("Change in Percentage of Regular Attendance",
+          subtitle = "between SY2018-19 and SY2020-21 for all grades") +
+  labs(x = "Student Groups",
+       y = "Change in Percentage",
+       caption = "A negative value means that the percentage of 9th grade students on track 
+       has decreased between 2018-19 and 2020-21 for the given student group") +
+  scale_y_continuous(labels = percent, limits = c(-0.08, 0.02)) +
+  geom_text(aes(label = `Change` ), position = position_dodge(0.75),
+            hjust = 1, vjust = 0.5, colour = "black", size = 2) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.2.iii Regular attendance state total by race CHANGE.png")
+
+```
+
+```{r A.4.2.iv Regular attendance state total by income CHANGE}
+
+state_regatt_inc_change <- df_state_regattend_inc %>%
+  group_by(StudentGroup, `Grade Level`) %>%
+  filter(`Grade Level` == "All Grades") %>%
+  mutate(Change = `% Regular Attend`[SchoolYear == 2020] - `% Regular Attend`[SchoolYear == 2018], )
+
+state_regatt_inc_change %>%
+  ggplot(aes(x= `StudentGroup`, 
+             y= `Change`)) + 
+  geom_col(position="dodge", width = 0.7, fill = "#4b2e83") +
+  ggtitle("Change in Percentage of Regular Attendance",
+          subtitle = "between SY2018-19 and SY2020-21 for all grades") +
+  labs(x = "Student Groups",
+       y = "Change in Percentage",
+       caption = "A negative value means that the percentage of 9th grade students on track 
+       has decreased between 2018-19 and 2020-21 for the given student group") +
+  scale_y_continuous(labels = percent, limits = c(-0.04, 0.0)) +
+  geom_text(aes(label = `Change` ), position = position_dodge(0.75),
+            hjust = 1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.2.iv Regular attendance state total by inc CHANGE.png")
+```
+
+## Dual credits
+
+> State total (dual credits, AP, IB) for all grades (data at grade level 10-12 available)  
+
+Dual credits: (AP/IB courses is more prestigious). Interviewees suggested variation in how dual credits have been implemented in schools.
+
+* Overall % students taking dual credits increased
+  + decrease in % taking AP and IB
+  + increase in % taking College in The High School and CTE Tech Prep. 
+  + around 1% taking Cambridge and Running Start (not plotted)
+  + number of students taking certain dual credits courses: 
+      + CTE Tech Prep > AP > College in The High School > Running Start > IB > Cambridge
+
+```{r A.4.3.i Dual credit state total by race}
+
+df_state_dual_race <- df_sqss %>%
+  filter(DistrictName == "State Total") %>%
+  filter(Measure == "Dual Credit") %>%
+  filter(StudentGroupType %in% c("AllStudents", "FederalRaceEthnicity")) %>%
+  mutate(PercentTakingAP = percent(PercentTakingAP),
+         PercentTakingIB = percent(PercentTakingIB),
+         PercentTakingCTETechPrep = percent(PercentTakingCTETechPrep),
+         PercentTakingCollegeInTheHighSchool = percent(PercentTakingCollegeInTheHighSchool),
+         PercentDualCredits = percent(Numerator/Denominator),
+         SchoolYear = as.character(SchoolYear)) 
+
+df_state_dual_race %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentDualCredits`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking Dual Credits",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking Dual Credits") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = `PercentDualCredits` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.i Dual credit state total by race Dual Credits.png")
+
+df_state_dual_race %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentTakingAP`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking AP",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking AP") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = PercentTakingAP), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.i Dual credit state total by race AP.png")
+
+df_state_dual_race %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentTakingIB`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking IB",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking IB") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = PercentTakingIB), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.i Dual credit state total by race IB.png")
+
+df_state_dual_race %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentTakingCollegeInTheHighSchool`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking College in The High School",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking College in The High School") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = PercentTakingCollegeInTheHighSchool), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.i Dual credit state total by race CollegeInTheHighSchool.png")
+
+df_state_dual_race %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentTakingCTETechPrep`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking CTE Tech Prep",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking CTE Tech Prep") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = PercentTakingCTETechPrep), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.i Dual credit state total by race CTETechPrep.png")
+
+
+```
+
+```{r A.4.3.ii Dual credit state total by income}
+
+df_state_dual_inc <- df_sqss %>%
+  filter(DistrictName == "State Total") %>%
+  filter(Measure == "Dual Credit") %>%
+  filter(StudentGroupType %in% c("AllStudents", "Income")) %>%
+  mutate(PercentTakingAP = percent(PercentTakingAP),
+         PercentTakingIB = percent(PercentTakingIB),
+         PercentTakingCTETechPrep = percent(PercentTakingCTETechPrep),
+         PercentTakingCollegeInTheHighSchool = percent(PercentTakingCollegeInTheHighSchool),
+         PercentDualCredits = percent(Numerator/Denominator),
+         SchoolYear = as.character(SchoolYear)) 
+
+df_state_dual_inc %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentDualCredits`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking Dual Credits",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking Dual Credits") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = `PercentDualCredits` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.ii Dual credit state total by inc Dual Credits.png")
+
+df_state_dual_inc %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentTakingAP`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking AP",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking AP") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = PercentTakingAP), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.ii Dual credit state total by inc AP.png")
+
+df_state_dual_inc %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentTakingIB`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking IB",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking IB") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = PercentTakingIB), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.ii Dual credit state total by inc IB.png")
+
+df_state_dual_inc %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentTakingCollegeInTheHighSchool`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking College in The High School",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking College in The High School") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = PercentTakingCollegeInTheHighSchool), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.ii Dual credit state total by inc CollegeInTheHighSchool.png")
+
+df_state_dual_inc %>%
+  filter(`Grade Level` == "All Grades") %>%
+  ggplot(aes(fill= `SchoolYear`,
+             x= `StudentGroup`, 
+             y= `PercentTakingCTETechPrep`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Percent of Students Taking CTE Tech Prep",
+          subtitle = "for all grades") +
+  labs(x = "Student Groups", 
+       y = "% Taking CTE Tech Prep") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(values = uw_reverse(3)) +
+  geom_text(aes(label = PercentTakingCTETechPrep), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE, title="School Year")) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 1, size = 9, color = "grey50"),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.4.3.ii Dual credit state total by inc CTETechPrep.png")
+
+```
+
+# A.5. Graduation (the class of 2020)
+
 https://www.k12.wa.us/data-reporting/data-displays/graduation-pathways-display
-Different pathways by income and students of color 
-```{r graduation, include=FALSE}
+We have individual school level data. 
+Different pathways by income and students of color (only state level as the first step)
 
-df_graduation_pathways
+> State level
 
+* Includes all students in the Class of 2020; including those who graduated, are continuing their education, or have left school.
+
+```{r A.5.1.i Graduation pathway at state level by race}
+
+df_state_grad_path <- read.csv("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/Class of 2020 Graduation Pathways.csv") 
+
+colnames(df_state_grad_path) <- c("StudentGroup", 
+                                  "% Completed ELA/Math Pathway",
+                                  "% Completed ASVAB Pathway",
+                                  "% Completed CTE Graduation Pathway",
+                                  "% Completed CIA",
+                                  "% No Pathway")
+
+long_state_grad_path <- melt(df_state_grad_path, 
+                             id.vars = "StudentGroup",
+                             measure.vars = colnames(df_state_grad_path)[2:6],
+                             variable.name = "Pathways",
+                             value.name="% Completed") %>%
+  arrange(StudentGroup, Pathways)
+
+long_state_grad_path$`% Completed` <- percent(long_state_grad_path$`% Completed`/100)
+
+long_state_grad_path$Pathways <- factor(long_state_grad_path$Pathways, 
+                                        levels=c("% No Pathway",
+                                                 "% Completed CIA",
+                                                 "% Completed CTE Graduation Pathway",
+                                                 "% Completed ASVAB Pathway",
+                                                 "% Completed ELA/Math Pathway"))
+
+long_state_grad_path %>%
+  filter(`StudentGroup` != "Low-Income ") %>%
+  ggplot(aes(fill= `Pathways`,
+             x= `StudentGroup`, 
+             y= `% Completed`)) + 
+  geom_col(position="dodge", width = 0.9) +
+  ggtitle("Class of 2020 Graduation Pathways",
+          subtitle = "includes all students in the Class of 2020") +
+  labs(x = "Student Groups", 
+       y = "Percentage of Students Completed") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.9)) +
+  scale_fill_manual(values = uw_reverse(5)) +
+  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
+            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.5.1.i Graduation pathway at state level by race.png")
 ```
+
+```{r A.5.1.ii Graduation pathway at state level by income}
+
+long_state_grad_path %>%
+  filter(`StudentGroup` %in% c("All Students ", "Low-Income ")) %>%
+  ggplot(aes(fill= `Pathways`,
+             x= `StudentGroup`, 
+             y= `% Completed`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  ggtitle("Class of 2020 Graduation Pathways",
+          subtitle = "includes all students in the Class of 2020") +
+  labs(x = "Student Groups", 
+       y = "Percentage of Students Completed") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.9)) +
+  scale_fill_manual(values = uw_reverse(5)) +
+  geom_text(aes(label = `% Completed` ), position = position_dodge(0.75),
+            hjust = -0.1, vjust = 0.5, colour = "black", size = 2) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.5.1.ii Graduation pathway at state level by income.png")
+```
+> Aggregated state total 
+
+ 
+Graduation pathways (plotted) | Notation
+----------------------------- | ----------------------------------
+"ELA and Math Both"           | met both an ELA and Math Pathway
+"CTE"                         | met CTE Pathway
+"ASVAB"                       | met ASVAB Pathway
+"ELA Assessment"              | completed an ELA Assessment/Test
+"ELA Course"                  | completed an ELA Course
+"Math Assessment"             | completed an Math Assessment/Test
+"Math Course"                 | completed a Math Course
+
+Other paythways (not plotted):
+
+"ELA State Test"    "ELA ACT"           "ELA SAT"           "ELA AP Test"      "ELA IB Test"       
+"ELA AP Course"     "ELA IB Course"     "ELA Bridge"        "ELA Cambridge"    "ELA Dual Credit"   
+"Math State Test"   "Math ACT"          "Math SAT"          "Math AP Test"     "Math IB Test"      
+"Math AP Course"    "Math IB Course"    "Math Bridge"       "Math Cambridge"   "Math Dual Credit"
+
+```{r A.5.2.i graduation pathway, aggregate state total, by race}
+
+df_state_pathway <- df_graduation_pathways %>%
+  filter(`School Name` == "District Total") %>%
+  drop_na() 
+
+for (i in 10:ncol(df_state_pathway)) {
+  df_state_pathway[i] <- round(df_state_pathway[i] * df_state_pathway[9], 0)
+}
+
+state_agg_path <- aggregate(df_state_pathway[,9:ncol(df_state_pathway)], 
+                            df_state_pathway[7], FUN = sum )
+
+for (i in 3:ncol(state_agg_path)) {
+  state_agg_path[i] <- state_agg_path[i]/state_agg_path[2]
+  state_agg_path[i] <- lapply(state_agg_path[i], function(x) percent(x))
+}
+
+fed_ethnicities <- c("All Students",
+                     "American Indian/ Alaskan Native",
+                     "Asian",
+                     "Black/ African American", 
+                     "Hispanic/ Latino of any race(s)",
+                     "Native Hawaiian/ Other Pacific Islander",
+                     "Two or More Races",
+                     "White")
+#change in selection of pathways
+plotting_pathways <- factor(c("ELA and Math Both",
+                              "CTE",
+                              "ASVAB",
+                              "ELA Assessment",
+                              "ELA Course",        
+                              "Math Assessment",
+                              "Math Course"), 
+                            levels = c("ELA and Math Both",
+                              "CTE",
+                              "ASVAB",
+                              "ELA Assessment",
+                              "ELA Course",        
+                              "Math Assessment",
+                              "Math Course"))
+
+long_state_agg_path_race <- state_agg_path %>%
+  select("Student Group", all_of(plotting_pathways)) %>%
+  filter(`Student Group` %in% fed_ethnicities) %>%
+  melt(., id.vars = "Student Group",
+       measure.vars = plotting_pathways,
+       variable.name = "Pathways",
+       value.name="% Completed") %>%
+  arrange(`Student Group`, Pathways)
+
+long_state_agg_path_race %>%
+  ggplot(aes(fill= fct_rev(`Pathways`),
+             x= `Student Group`, 
+             y= `% Completed`)) + 
+  geom_col(position="dodge", width = 0.9) +
+  ggtitle("Class of 2020 Graduation Pathways") +
+  labs(x = "Student Groups", 
+       y = "Percentage of Students Completed") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(name ="Pathways", values = uw_reverse(7)) +
+  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
+            hjust = -0.1, vjust = 0.4, colour = "black", size = 1) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.5.2.i graduation pathway aggregate state total by race.png")
+  
+```
+
+```{r A.5.2.ii graduation pathway, aggregate state total, by income}
+income_group <- c("All Students",
+                  "Low-Income",
+                  "Non-Low Income")
+#change in selection of pathways
+plotting_pathways <- factor(c("ELA and Math Both",
+                              "CTE",
+                              "ASVAB",
+                              "ELA Assessment",
+                              "ELA Course",        
+                              "Math Assessment",
+                              "Math Course"), 
+                            levels = c("ELA and Math Both",
+                              "CTE",
+                              "ASVAB",
+                              "ELA Assessment",
+                              "ELA Course",        
+                              "Math Assessment",
+                              "Math Course"))
+
+long_state_agg_path_inc <- state_agg_path %>%
+  select("Student Group", all_of(plotting_pathways)) %>%
+  filter(`Student Group` %in% income_group) %>%
+  melt(., id.vars = "Student Group",
+       measure.vars = plotting_pathways,
+       variable.name = "Pathways",
+       value.name="% Completed") %>%
+  arrange(`Student Group`, Pathways)
+
+long_state_agg_path_inc %>%
+  ggplot(aes(fill= fct_rev(`Pathways`),
+             x= `Student Group`, 
+             y= `% Completed`)) + 
+  geom_col(position="dodge", width = 0.9) +
+  ggtitle("Class of 2020 Graduation Pathways") +
+  labs(x = "Student Groups", 
+       y = "Percentage of Students Completed") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(name ="Pathways", values = uw_reverse(7)) +
+  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
+            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.5.2.ii graduation pathway aggregate state total by income.png")
+```
+
+```{r A.5.2.iii graduation pathway agg state total w nopath by race}
+fed_ethnicities <- c("All Students",
+                     "American Indian/ Alaskan Native",
+                     "Asian",
+                     "Black/ African American", 
+                     "Hispanic/ Latino of any race(s)",
+                     "Native Hawaiian/ Other Pacific Islander",
+                     "Two or More Races",
+                     "White")
+
+#change in selection of pathways
+plotting_pathways <- factor(c("ELA and Math Both",
+                              "CTE",
+                              "ASVAB",
+                              "ELA Assessment",
+                              "ELA Course",        
+                              "Math Assessment",
+                              "Math Course"), 
+                            levels = c("ELA and Math Both",
+                              "CTE",
+                              "ASVAB",
+                              "ELA Assessment",
+                              "ELA Course",        
+                              "Math Assessment",
+                              "Math Course"))
+
+no_pathways <- long_state_grad_path %>%
+  filter(Pathways == "% No Pathway",
+         StudentGroup != "Low-Income ") %>%
+  mutate(Pathways = "No Pathway",
+         StudentGroup = fed_ethnicities)
+colnames(no_pathways)[1] <- "Student Group"
+
+long_state_agg_path_race <- state_agg_path %>%
+  select("Student Group", all_of(plotting_pathways)) %>%
+  filter(`Student Group` %in% fed_ethnicities) %>%
+  melt(., id.vars = "Student Group",
+       measure.vars = plotting_pathways,
+       variable.name = "Pathways",
+       value.name="% Completed") %>%
+  bind_rows(., no_pathways) %>%
+  arrange(`Student Group`, Pathways)
+
+long_state_agg_path_race %>%
+  ggplot(aes(fill= fct_rev(`Pathways`),
+             x= `Student Group`, 
+             y= `% Completed`)) + 
+  geom_col(position="dodge", width = 0.9) +
+  ggtitle("Class of 2020 Graduation Pathways") +
+  labs(x = "Student Groups", 
+       y = "Percentage of Students Completed") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(name ="Pathways", values = uw_reverse(8)) +
+  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
+            hjust = -0.1, vjust = 0.4, colour = "black", size = 1) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.5.2.iii graduation pathway agg state total w nopath by race.png")
+```
+
+```{r A.5.2.iv graduation pathway agg state total w nopath by inc}
+
+#change in selection of pathways
+plotting_pathways <- factor(c("ELA and Math Both",
+                              "CTE",
+                              "ASVAB",
+                              "ELA Assessment",
+                              "ELA Course",        
+                              "Math Assessment",
+                              "Math Course"), 
+                            levels = c("ELA and Math Both",
+                              "CTE",
+                              "ASVAB",
+                              "ELA Assessment",
+                              "ELA Course",        
+                              "Math Assessment",
+                              "Math Course"))
+
+no_pathways <- long_state_grad_path %>%
+  filter(Pathways == "% No Pathway",
+         StudentGroup %in% c("Low-Income ", "All Students ")) %>%
+  mutate(Pathways = "No Pathway",
+         StudentGroup = c("All Students", "Low-Income"))
+colnames(no_pathways)[1] <- "Student Group"
+
+long_state_agg_path_inc <- state_agg_path %>%
+  select("Student Group", all_of(plotting_pathways)) %>%
+  filter(`Student Group` %in% income_group) %>%
+  melt(., id.vars = "Student Group",
+       measure.vars = plotting_pathways,
+       variable.name = "Pathways",
+       value.name="% Completed") %>%
+  bind_rows(., no_pathways) %>%
+  arrange(`Student Group`, Pathways)
+
+long_state_agg_path_inc %>%
+  ggplot(aes(fill= fct_rev(`Pathways`),
+             x= `Student Group`, 
+             y= `% Completed`)) + 
+  geom_col(position="dodge", width = 0.9) +
+  ggtitle("Class of 2020 Graduation Pathways") +
+  labs(x = "Student Groups", 
+       y = "Percentage of Students Completed",
+       caption = "Data is unavailable for percent of non-low income students that did not meet graduation pathways") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(name ="Pathways", values = uw_reverse(8)) +
+  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
+            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.5.2.iv graduation pathway agg state total w nopath by inc.png")
+```
+
+
 

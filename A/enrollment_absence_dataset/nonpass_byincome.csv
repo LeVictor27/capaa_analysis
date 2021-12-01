@@ -1,0 +1,461 @@
+"StudentGroup","District","2018-19","2019-20","2020-21","diff_2021_1819","diff_low_nonlow"
+"Low-Income","Aberdeen School District",16.10%,11.90%,30.80%,14.70%,14.10%
+"Non-Low Income","Aberdeen School District",9.50%,6.60%,16.70%,7.20%,14.10%
+"Low-Income","Adna School District",1.80%,1.90%,5.80%,4.00%,4.00%
+"Non-Low Income","Adna School District",1.10%,0.60%,1.80%,0.70%,4.00%
+"Low-Income","Anacortes School District",7.30%,3.30%,3.20%,-4.10%,1.70%
+"Non-Low Income","Anacortes School District",2.40%,1.10%,1.50%,-0.90%,1.70%
+"Low-Income","Arlington School District",10.10%,5.90%,21.00%,10.90%,11.80%
+"Non-Low Income","Arlington School District",4.00%,2.30%,9.20%,5.20%,11.80%
+"Low-Income","Asotin-Anatone School District",7.70%,2.40%,5.20%,-2.50%,4.20%
+"Non-Low Income","Asotin-Anatone School District",0.50%,0.30%,1.00%,0.50%,4.20%
+"Low-Income","Auburn School District",10.90%,5.30%,18.80%,7.90%,11.20%
+"Non-Low Income","Auburn School District",4.90%,2.20%,7.60%,2.70%,11.20%
+"Low-Income","Bainbridge Island School District",3.70%,4.70%,3.40%,-0.30%,2.30%
+"Non-Low Income","Bainbridge Island School District",0.80%,0.40%,1.10%,0.30%,2.30%
+"Low-Income","Bates Technical College", NA,68.20%,61.60%, NA,46.30%
+"Non-Low Income","Bates Technical College",35.00%,49.70%,15.30%,-19.70%,46.30%
+"Low-Income","Battle Ground School District",9.90%,6.70%,15.80%,5.90%,9.10%
+"Non-Low Income","Battle Ground School District",4.50%,2.50%,6.70%,2.20%,9.10%
+"Low-Income","Bellevue School District",10.60%,6.60%,14.10%,3.50%,11.00%
+"Non-Low Income","Bellevue School District",2.10%,1.10%,3.10%,1.00%,11.00%
+"Low-Income","Bellingham School District",13.00%,6.60%,13.60%,0.60%,9.70%
+"Non-Low Income","Bellingham School District",3.80%,2.10%,3.90%,0.10%,9.70%
+"Low-Income","Bethel School District",16.30%,13.00%,36.50%,20.20%,16.00%
+"Non-Low Income","Bethel School District",8.00%,5.60%,20.50%,12.50%,16.00%
+"Low-Income","Bickleton School District", NA,4.00%, NA, NA, NA
+"Non-Low Income","Bickleton School District", NA, NA, NA, NA, NA
+"Low-Income","Blaine School District",7.20%,3.00%,10.10%,2.90%,7.30%
+"Non-Low Income","Blaine School District",2.50%,1.00%,2.80%,0.30%,7.30%
+"Low-Income","Bremerton School District",12.10%,9.00%, NA, NA, NA
+"Non-Low Income","Bremerton School District",8.40%,5.30%, NA, NA, NA
+"Low-Income","Brewster School District",8.30%,4.30%,14.40%,6.10%,10.70%
+"Non-Low Income","Brewster School District",7.60%,2.80%,3.70%,-3.90%,10.70%
+"Low-Income","Bridgeport School District",3.50%,12.10%,14.00%,10.50%,4.90%
+"Non-Low Income","Bridgeport School District",2.40%,10.00%,9.10%,6.70%,4.90%
+"Low-Income","Burlington-Edison School District",12.40%,9.70%,30.60%,18.20%,20.90%
+"Non-Low Income","Burlington-Edison School District",3.50%,2.30%,9.70%,6.20%,20.90%
+"Low-Income","Camas School District",6.00%,7.70%,17.30%,11.30%,10.90%
+"Non-Low Income","Camas School District",1.40%,1.40%,6.40%,5.00%,10.90%
+"Low-Income","Cape Flattery School District",2.90%,2.00%,9.30%,6.40%,-0.10%
+"Non-Low Income","Cape Flattery School District",0.80%, NA,9.40%,8.60%,-0.10%
+"Low-Income","Cascade School District",7.30%,4.70%,15.90%,8.60%,9.20%
+"Non-Low Income","Cascade School District",2.90%,1.80%,6.70%,3.80%,9.20%
+"Low-Income","Cashmere School District",7.40%,3.90%,11.40%,4.00%,7.80%
+"Non-Low Income","Cashmere School District",2.60%,0.70%,3.60%,1.00%,7.80%
+"Low-Income","Castle Rock School District",5.10%,2.90%,22.70%,17.60%,13.50%
+"Non-Low Income","Castle Rock School District",2.30%,1.50%,9.20%,6.90%,13.50%
+"Low-Income","Central Kitsap School District",13.30%,7.70%,21.60%,8.30%,11.20%
+"Non-Low Income","Central Kitsap School District",5.70%,4.60%,10.40%,4.70%,11.20%
+"Low-Income","Central Valley School District",12.90%,6.90%,16.70%,3.80%,9.40%
+"Non-Low Income","Central Valley School District",3.80%,2.30%,7.30%,3.50%,9.40%
+"Low-Income","Centralia School District",9.40%,5.40%,23.30%,13.90%,9.90%
+"Non-Low Income","Centralia School District",5.10%,2.10%,13.40%,8.30%,9.90%
+"Low-Income","Chehalis School District",9.30%,5.40%,14.90%,5.60%,8.40%
+"Non-Low Income","Chehalis School District",4.40%,1.90%,6.50%,2.10%,8.40%
+"Low-Income","Cheney School District",6.60%,2.00%,7.70%,1.10%,5.40%
+"Non-Low Income","Cheney School District",2.30%,0.80%,2.30%,0.00%,5.40%
+"Low-Income","Chewelah School District",10.20%,5.90%,13.10%,2.90%,7.60%
+"Non-Low Income","Chewelah School District",3.10%,1.10%,5.50%,2.40%,7.60%
+"Low-Income","Chief Leschi Schools", NA,3.10%,11.50%, NA,-15.40%
+"Non-Low Income","Chief Leschi Schools",13.30%,4.20%,26.90%,13.60%,-15.40%
+"Low-Income","Chimacum School District",8.00%,5.20%,29.10%,21.10%,13.50%
+"Non-Low Income","Chimacum School District",5.30%,1.60%,15.60%,10.30%,13.50%
+"Low-Income","Clarkston School District",9.50%,4.70%,15.20%,5.70%,10.00%
+"Non-Low Income","Clarkston School District",3.70%,2.10%,5.20%,1.50%,10.00%
+"Low-Income","Cle Elum-Roslyn School District",8.30%,6.10%,16.30%,8.00%,10.20%
+"Non-Low Income","Cle Elum-Roslyn School District",2.90%,2.40%,6.10%,3.20%,10.20%
+"Low-Income","Clover Park School District",15.60%,10.00%,22.10%,6.50%,9.40%
+"Non-Low Income","Clover Park School District",7.60%,4.10%,12.70%,5.10%,9.40%
+"Low-Income","Colfax School District",7.80%,8.60%,8.40%,0.60%,5.20%
+"Non-Low Income","Colfax School District",1.90%,3.00%,3.20%,1.30%,5.20%
+"Low-Income","College Place School District",5.90%,13.10%,14.20%,8.30%,7.80%
+"Non-Low Income","College Place School District",2.00%,4.50%,6.40%,4.40%,7.80%
+"Low-Income","Colton School District", NA, NA,24.10%, NA, NA
+"Non-Low Income","Colton School District",1.60%,0.60%, NA, NA, NA
+"Low-Income","Columbia School District",6.00%,7.00%,17.50%,11.50%,2.70%
+"Non-Low Income","Columbia School District", NA, NA,14.80%, NA,2.70%
+"Low-Income","Columbia School District (Walla Walla)",17.30%,8.80%,32.60%,15.30%,22.60%
+"Non-Low Income","Columbia School District (Walla Walla)",6.50%,1.40%,10.00%,3.50%,22.60%
+"Low-Income","Colville School District",6.80%,2.80%,15.80%,9.00%,10.80%
+"Non-Low Income","Colville School District",2.60%,0.80%,5.00%,2.40%,10.80%
+"Low-Income","Concrete School District",5.90%,4.90%,27.80%,21.90%,2.70%
+"Non-Low Income","Concrete School District",2.80%,5.40%,25.10%,22.30%,2.70%
+"Low-Income","Coulee-Hartline School District",1.70%, NA,8.40%,6.70%,7.10%
+"Non-Low Income","Coulee-Hartline School District", NA, NA,1.30%, NA,7.10%
+"Low-Income","Coupeville School District",8.20%,3.90%,9.90%,1.70%,5.50%
+"Non-Low Income","Coupeville School District",3.00%,1.40%,4.40%,1.40%,5.50%
+"Low-Income","Crescent School District",3.80%,5.10%,9.90%,6.10%,1.50%
+"Non-Low Income","Crescent School District", NA, NA,8.40%, NA,1.50%
+"Low-Income","Creston School District", NA, NA, NA, NA, NA
+"Non-Low Income","Creston School District", NA,2.80%, NA, NA, NA
+"Low-Income","Curlew School District",3.10%,1.80%,3.90%,0.80%, NA
+"Non-Low Income","Curlew School District", NA, NA, NA, NA, NA
+"Low-Income","Cusick School District",9.80%,3.40%,4.10%,-5.70%,-0.40%
+"Non-Low Income","Cusick School District",5.10%, NA,4.50%,-0.60%,-0.40%
+"Low-Income","Darrington School District",9.70%,26.30%,34.30%,24.60%,21.20%
+"Non-Low Income","Darrington School District",5.90%,9.50%,13.10%,7.20%,21.20%
+"Low-Income","Davenport School District",1.00%,0.60%,3.90%,2.90%,2.70%
+"Non-Low Income","Davenport School District", NA, NA,1.20%, NA,2.70%
+"Low-Income","Dayton School District",6.30%,3.50%,12.20%,5.90%,10.70%
+"Non-Low Income","Dayton School District", NA, NA,1.50%, NA,10.70%
+"Low-Income","Deer Park School District",2.20%,0.90%,2.00%,-0.20%,1.10%
+"Non-Low Income","Deer Park School District",1.00%,0.40%,0.90%,-0.10%,1.10%
+"Low-Income","East Valley School District (Spokane)",13.40%,6.50%,15.30%,1.90%,9.30%
+"Non-Low Income","East Valley School District (Spokane)",6.20%,2.70%,6.00%,-0.20%,9.30%
+"Low-Income","East Valley School District (Yakima)",4.10%,2.40%,13.40%,9.30%,10.20%
+"Non-Low Income","East Valley School District (Yakima)",1.10%,0.70%,3.20%,2.10%,10.20%
+"Low-Income","Eastmont School District",8.60%,5.80%,18.70%,10.10%,12.90%
+"Non-Low Income","Eastmont School District",3.30%,2.10%,5.80%,2.50%,12.90%
+"Low-Income","Easton School District",13.60%,3.70%,7.30%,-6.30%, NA
+"Non-Low Income","Easton School District",19.70%, NA, NA, NA, NA
+"Low-Income","Eatonville School District",7.40%,3.10%,11.90%,4.50%,6.70%
+"Non-Low Income","Eatonville School District",3.60%,0.90%,5.20%,1.60%,6.70%
+"Low-Income","Edmonds School District",13.60%,6.40%, NA, NA, NA
+"Non-Low Income","Edmonds School District",5.40%,2.40%, NA, NA, NA
+"Low-Income","Ellensburg School District",9.80%,6.10%,25.20%,15.40%,17.10%
+"Non-Low Income","Ellensburg School District",3.60%,2.20%,8.10%,4.50%,17.10%
+"Low-Income","Elma School District",6.80%,4.00%,16.60%,9.80%,6.10%
+"Non-Low Income","Elma School District",3.50%,2.80%,10.50%,7.00%,6.10%
+"Low-Income","Entiat School District",14.10%,9.20%,16.90%,2.80%,6.90%
+"Non-Low Income","Entiat School District",7.20%,2.50%,10.00%,2.80%,6.90%
+"Low-Income","Enumclaw School District",12.70%,7.30%,29.30%,16.60%,19.10%
+"Non-Low Income","Enumclaw School District",3.70%,2.20%,10.20%,6.50%,19.10%
+"Low-Income","Ephrata School District",7.80%,3.00%,13.60%,5.80%,10.50%
+"Non-Low Income","Ephrata School District",2.10%,0.80%,3.10%,1.00%,10.50%
+"Low-Income","Everett School District",14.90%,7.40%,16.80%,1.90%,10.60%
+"Non-Low Income","Everett School District", NA, NA,6.20%, NA,10.60%
+"Low-Income","Evergreen School District (Clark)",11.80%,6.20%,15.60%,3.80%,9.80%
+"Non-Low Income","Evergreen School District (Clark)",5.20%,2.70%,5.80%,0.60%,9.80%
+"Low-Income","Federal Way School District",15.60%,14.30%,26.70%,11.10%,14.60%
+"Non-Low Income","Federal Way School District",7.30%,5.40%,12.10%,4.80%,14.60%
+"Low-Income","Ferndale School District",13.30%,6.60%,27.30%,14.00%,15.20%
+"Non-Low Income","Ferndale School District",5.70%,2.80%,12.10%,6.40%,15.20%
+"Low-Income","Fife Public Schools",5.80%,3.40%,13.90%,8.10%,8.70%
+"Non-Low Income","Fife Public Schools",2.60%,1.40%,5.20%,2.60%,8.70%
+"Low-Income","Finley School District",7.60%,3.20%,8.60%,1.00%,2.60%
+"Non-Low Income","Finley School District",4.90%,2.20%,6.00%,1.10%,2.60%
+"Low-Income","Franklin Pierce School District",9.40%,5.30%,13.60%,4.20%,3.50%
+"Non-Low Income","Franklin Pierce School District",6.40%,4.30%,10.10%,3.70%,3.50%
+"Low-Income","Freeman School District",7.30%,3.10%,6.80%,-0.50%,5.50%
+"Non-Low Income","Freeman School District",0.50%,0.30%,1.30%,0.80%,5.50%
+"Low-Income","Garfield School District",4.70%,3.40%,10.00%,5.30%,4.60%
+"Non-Low Income","Garfield School District", NA, NA,5.40%, NA,4.60%
+"Low-Income","Glenwood School District",2.90%, NA, NA, NA, NA
+"Non-Low Income","Glenwood School District", NA,3.30%,16.70%, NA, NA
+"Low-Income","Goldendale School District",8.50%,4.30%,14.90%,6.40%,8.80%
+"Non-Low Income","Goldendale School District",2.50%,1.70%,6.10%,3.60%,8.80%
+"Low-Income","Grand Coulee Dam School District",7.20%,4.70%,21.70%,14.50%,9.30%
+"Non-Low Income","Grand Coulee Dam School District",5.70%,0.60%,12.40%,6.70%,9.30%
+"Low-Income","Grandview School District",6.90%,5.80%,20.00%,13.10%,8.60%
+"Non-Low Income","Grandview School District",5.10%,3.50%,11.40%,6.30%,8.60%
+"Low-Income","Granger School District",7.60%,5.20%,23.20%,15.60%,13.40%
+"Non-Low Income","Granger School District",3.20%,2.80%,9.80%,6.60%,13.40%
+"Low-Income","Granite Falls School District",11.40%,6.40%,22.50%,11.10%,5.30%
+"Non-Low Income","Granite Falls School District",8.30%,4.40%,17.20%,8.90%,5.30%
+"Low-Income","Harrington School District",4.50%,4.20%,11.10%,6.60%,9.80%
+"Non-Low Income","Harrington School District",3.80%,1.20%,1.30%,-2.50%,9.80%
+"Low-Income","Highland School District",8.80%,4.20%,17.70%,8.90%,7.20%
+"Non-Low Income","Highland School District",4.80%,1.10%,10.50%,5.70%,7.20%
+"Low-Income","Highline School District",13.30%,10.60%,6.00%,-7.30%,3.00%
+"Non-Low Income","Highline School District",7.60%,3.60%,3.00%,-4.60%,3.00%
+"Low-Income","Hockinson School District",3.90%,5.40%,20.70%,16.80%,16.80%
+"Non-Low Income","Hockinson School District",2.30%,1.90%,3.90%,1.60%,16.80%
+"Low-Income","Hoquiam School District",16.90%,6.30%,34.20%,17.30%,21.10%
+"Non-Low Income","Hoquiam School District",8.50%,3.80%,13.10%,4.60%,21.10%
+"Low-Income","Inchelium School District",14.30%,9.90%,22.90%,8.60%,16.20%
+"Non-Low Income","Inchelium School District",9.40%,6.10%,6.70%,-2.70%,16.20%
+"Low-Income","Issaquah School District",12.00%,7.50%,27.30%,15.30%,22.50%
+"Non-Low Income","Issaquah School District",2.20%,0.80%,4.80%,2.60%,22.50%
+"Low-Income","Kalama School District",5.50%,3.50%,17.20%,11.70%,11.30%
+"Non-Low Income","Kalama School District",3.30%,1.20%,5.90%,2.60%,11.30%
+"Low-Income","Kennewick School District",12.20%,13.00%,32.60%,20.40%,19.40%
+"Non-Low Income","Kennewick School District",5.20%,5.30%,13.20%,8.00%,19.40%
+"Low-Income","Kent School District",11.90%,6.60%,0.40%,-11.50%,-0.10%
+"Non-Low Income","Kent School District",4.80%,2.80%,0.50%,-4.30%,-0.10%
+"Low-Income","Kettle Falls School District",3.70%,1.70%,9.60%,5.90%,6.30%
+"Non-Low Income","Kettle Falls School District",0.80%,0.60%,3.30%,2.50%,6.30%
+"Low-Income","Kiona-Benton School District",11.20%,43.40%, NA, NA, NA
+"Non-Low Income","Kiona-Benton School District",6.50%,5.00%,24.70%,18.20%, NA
+"Low-Income","Kittitas School District",9.30%,5.60%,10.30%,1.00%,5.70%
+"Non-Low Income","Kittitas School District",2.50%,2.80%,4.60%,2.10%,5.70%
+"Low-Income","La Center School District",12.40%,8.20%,26.40%,14.00%,18.80%
+"Non-Low Income","La Center School District",3.50%,2.50%,7.60%,4.10%,18.80%
+"Low-Income","La Conner School District",15.00%,11.10%,27.10%,12.10%,21.00%
+"Non-Low Income","La Conner School District",2.20%,2.00%,6.10%,3.90%,21.00%
+"Low-Income","Lake Chelan School District",7.50%,4.00%,10.50%,3.00%,6.70%
+"Non-Low Income","Lake Chelan School District",2.90%,1.00%,3.80%,0.90%,6.70%
+"Low-Income","Lake Stevens School District",7.30%,5.70%,2.30%,-5.00%,1.70%
+"Non-Low Income","Lake Stevens School District",3.20%,2.00%,0.60%,-2.60%,1.70%
+"Low-Income","Lake Washington School District",11.60%,10.60%,0.50%,-11.10%, NA
+"Non-Low Income","Lake Washington School District",1.80%,1.50%, NA, NA, NA
+"Low-Income","Lakewood School District",14.60%,8.20%,17.10%,2.50%,10.80%
+"Non-Low Income","Lakewood School District",4.80%,2.90%,6.30%,1.50%,10.80%
+"Low-Income","Liberty School District",3.70%, NA,10.00%,6.30%,6.70%
+"Non-Low Income","Liberty School District",0.70%, NA,3.30%,2.60%,6.70%
+"Low-Income","Lind School District",7.00%,5.80%,13.90%,6.90%, NA
+"Non-Low Income","Lind School District",3.70%, NA, NA, NA, NA
+"Low-Income","Longview Public Schools",9.00%,4.40%,22.20%,13.20%,12.10%
+"Non-Low Income","Longview Public Schools",3.10%,2.00%,10.10%,7.00%,12.10%
+"Low-Income","Lummi Tribal Agency",14.30%,6.80%,30.70%,16.40%,8.60%
+"Non-Low Income","Lummi Tribal Agency",2.00%,3.20%,22.10%,20.10%,8.60%
+"Low-Income","Lyle School District",4.30%,10.90%,19.10%,14.80%,2.20%
+"Non-Low Income","Lyle School District",7.10%,7.80%,16.90%,9.80%,2.20%
+"Low-Income","Lynden School District",10.30%,5.80%,1.20%,-9.10%,0.80%
+"Non-Low Income","Lynden School District",5.20%,1.80%,0.40%,-4.80%,0.80%
+"Low-Income","Mabton School District",12.30%,8.50%,41.80%,29.50%,21.30%
+"Non-Low Income","Mabton School District",10.30%,2.60%,20.50%,10.20%,21.30%
+"Low-Income","Manson School District",2.50%,4.70%,7.00%,4.50%,4.20%
+"Non-Low Income","Manson School District",1.90%,1.30%,2.80%,0.90%,4.20%
+"Low-Income","Mary M. Knight School District",19.60%,15.60%,13.80%,-5.80%,-5.90%
+"Non-Low Income","Mary M. Knight School District",21.10%,14.00%,19.70%,-1.40%,-5.90%
+"Low-Income","Mary Walker School District",4.50%,1.40%,16.40%,11.90%,6.10%
+"Non-Low Income","Mary Walker School District",2.10%,0.90%,10.30%,8.20%,6.10%
+"Low-Income","Marysville School District",15.50%,7.70%,9.80%,-5.70%,4.70%
+"Non-Low Income","Marysville School District",8.30%,3.80%,5.10%,-3.20%,4.70%
+"Low-Income","Mead School District",6.00%,4.30%,13.20%,7.20%,9.20%
+"Non-Low Income","Mead School District",1.70%,1.10%,4.00%,2.30%,9.20%
+"Low-Income","Medical Lake School District",5.20%,3.40%,1.30%,-3.90%,0.70%
+"Non-Low Income","Medical Lake School District",2.00%,1.20%,0.60%,-1.40%,0.70%
+"Low-Income","Mercer Island School District",3.80%,4.10%,4.70%,0.90%,4.20%
+"Non-Low Income","Mercer Island School District",0.60%,0.30%,0.50%,-0.10%,4.20%
+"Low-Income","Methow Valley School District",4.50%,4.30%,1.80%,-2.70%,0.40%
+"Non-Low Income","Methow Valley School District",0.80%,1.30%,1.40%,0.60%,0.40%
+"Low-Income","Monroe School District",10.70%,5.00%,15.60%,4.90%,8.80%
+"Non-Low Income","Monroe School District",4.10%,1.70%,6.80%,2.70%,8.80%
+"Low-Income","Montesano School District",8.00%,4.00%,17.90%,9.90%,13.70%
+"Non-Low Income","Montesano School District",1.50%,1.20%,4.20%,2.70%,13.70%
+"Low-Income","Moses Lake School District",18.10%,12.10%,31.00%,12.90%,18.80%
+"Non-Low Income","Moses Lake School District",8.00%,3.70%,12.20%,4.20%,18.80%
+"Low-Income","Mossyrock School District",4.60%,2.30%,8.90%,4.30%,4.50%
+"Non-Low Income","Mossyrock School District", NA, NA,4.40%, NA,4.50%
+"Low-Income","Mount Baker School District",11.60%,7.70%,3.10%,-8.50%,2.40%
+"Non-Low Income","Mount Baker School District",4.90%,2.70%,0.70%,-4.20%,2.40%
+"Low-Income","Mount Vernon School District",8.80%,5.00%,15.80%,7.00%,10.70%
+"Non-Low Income","Mount Vernon School District",3.10%,1.30%,5.10%,2.00%,10.70%
+"Low-Income","Mukilteo School District",11.10%,5.10%, NA, NA, NA
+"Non-Low Income","Mukilteo School District",4.50%,2.10%, NA, NA, NA
+"Low-Income","Naches Valley School District",4.00%,1.90%,7.70%,3.70%,4.30%
+"Non-Low Income","Naches Valley School District",1.70%,0.80%,3.40%,1.70%,4.30%
+"Low-Income","Napavine School District",6.70%,2.30%,10.50%,3.80%,5.00%
+"Non-Low Income","Napavine School District",3.10%,1.30%,5.50%,2.40%,5.00%
+"Low-Income","Naselle-Grays River Valley School District",1.60%,1.20%,1.50%,-0.10%,1.20%
+"Non-Low Income","Naselle-Grays River Valley School District",1.50%,0.60%,0.30%,-1.20%,1.20%
+"Low-Income","Newport School District",7.10%,4.90%,1.50%,-5.60%,0.80%
+"Non-Low Income","Newport School District",2.90%,1.10%,0.70%,-2.20%,0.80%
+"Low-Income","Nine Mile Falls School District",4.30%,3.70%,9.30%,5.00%,8.00%
+"Non-Low Income","Nine Mile Falls School District",1.30%,0.50%,1.30%,0.00%,8.00%
+"Low-Income","Nooksack Valley School District",6.30%,4.80%,13.80%,7.50%,9.10%
+"Non-Low Income","Nooksack Valley School District",1.90%,1.50%,4.70%,2.80%,9.10%
+"Low-Income","North Beach School District",12.70%,6.00%,13.80%,1.10%,6.60%
+"Non-Low Income","North Beach School District",5.80%,3.00%,7.20%,1.40%,6.60%
+"Low-Income","North Franklin School District",1.50%,0.80%,1.80%,0.30%,-0.10%
+"Non-Low Income","North Franklin School District", NA, NA,1.90%, NA,-0.10%
+"Low-Income","North Kitsap School District",10.50%,2.90%,19.10%,8.60%,12.10%
+"Non-Low Income","North Kitsap School District",4.20%,1.20%,7.00%,2.80%,12.10%
+"Low-Income","North Mason School District",11.20%,10.40%,30.80%,19.60%,16.90%
+"Non-Low Income","North Mason School District",6.40%,4.60%,13.90%,7.50%,16.90%
+"Low-Income","North Thurston Public Schools",12.10%,7.10%,4.10%,-8.00%,2.90%
+"Non-Low Income","North Thurston Public Schools",5.50%,2.70%,1.20%,-4.30%,2.90%
+"Low-Income","Northshore School District",5.60%,4.30%,7.20%,1.60%,5.60%
+"Non-Low Income","Northshore School District",1.40%,1.20%,1.60%,0.20%,5.60%
+"Low-Income","Oak Harbor School District",10.60%,6.70%,14.90%,4.30%,10.30%
+"Non-Low Income","Oak Harbor School District",3.70%,2.50%,4.60%,0.90%,10.30%
+"Low-Income","Oakville School District",4.90%,2.10%,8.00%,3.10%,-3.30%
+"Non-Low Income","Oakville School District",1.80%,4.80%,11.30%,9.50%,-3.30%
+"Low-Income","Ocean Beach School District",7.00%,3.20%,15.90%,8.90%,7.70%
+"Non-Low Income","Ocean Beach School District",2.40%, NA,8.20%,5.80%,7.70%
+"Low-Income","Ocosta School District",6.30%,5.10%,25.00%,18.70%,17.70%
+"Non-Low Income","Ocosta School District",1.70%,2.90%,7.30%,5.60%,17.70%
+"Low-Income","Odessa School District",1.60%,1.50%,2.30%,0.70%,0.70%
+"Non-Low Income","Odessa School District",0.90%, NA,1.60%,0.70%,0.70%
+"Low-Income","Okanogan School District",5.10%,4.90%,15.90%,10.80%,7.90%
+"Non-Low Income","Okanogan School District",1.90%,1.90%,8.00%,6.10%,7.90%
+"Low-Income","Omak School District",14.80%,11.10%,17.20%,2.40%,9.60%
+"Non-Low Income","Omak School District",9.00%,5.30%,7.60%,-1.40%,9.60%
+"Low-Income","Onalaska School District",3.90%,3.40%,9.40%,5.50%,3.90%
+"Non-Low Income","Onalaska School District",3.20%,3.30%,5.50%,2.30%,3.90%
+"Low-Income","Orcas Island School District",4.70%,4.40%,5.00%,0.30%,3.60%
+"Non-Low Income","Orcas Island School District",5.00%,2.90%,1.40%,-3.60%,3.60%
+"Low-Income","Oroville School District",10.30%,12.60%,17.30%,7.00%,6.50%
+"Non-Low Income","Oroville School District",0.90%,5.80%,10.80%,9.90%,6.50%
+"Low-Income","Orting School District",6.30%,3.10%,16.10%,9.80%,9.00%
+"Non-Low Income","Orting School District",2.30%,2.30%,7.10%,4.80%,9.00%
+"Low-Income","Othello School District",9.50%,6.30%,9.90%,0.40%,5.60%
+"Non-Low Income","Othello School District",5.20%,4.10%,4.30%,-0.90%,5.60%
+"Low-Income","Palouse School District", NA,3.90%,21.30%, NA,19.70%
+"Non-Low Income","Palouse School District",0.60%, NA,1.60%,1.00%,19.70%
+"Low-Income","Pasco School District",18.10%,18.10%,38.00%,19.90%,18.60%
+"Non-Low Income","Pasco School District",8.20%,8.70%,19.40%,11.20%,18.60%
+"Low-Income","Pateros School District",3.80%,6.90%,8.10%,4.30%,6.40%
+"Non-Low Income","Pateros School District", NA,6.70%,1.70%, NA,6.40%
+"Low-Income","Pe Ell School District",5.80%,2.20%,13.60%,7.80%,2.70%
+"Non-Low Income","Pe Ell School District",2.30%, NA,10.90%,8.60%,2.70%
+"Low-Income","Peninsula School District",11.20%,9.80%,20.90%,9.70%,14.40%
+"Non-Low Income","Peninsula School District",3.40%,2.60%,6.50%,3.10%,14.40%
+"Low-Income","Port Angeles School District",13.00%,7.90%,26.90%,13.90%,17.00%
+"Non-Low Income","Port Angeles School District",5.10%,2.60%,9.90%,4.80%,17.00%
+"Low-Income","Port Townsend School District",7.50%,3.30%,1.50%,-6.00%,0.70%
+"Non-Low Income","Port Townsend School District",3.40%,1.40%,0.80%,-2.60%,0.70%
+"Low-Income","Prosser School District",14.20%,10.20%,31.90%,17.70%,20.10%
+"Non-Low Income","Prosser School District",4.20%,3.60%,11.80%,7.60%,20.10%
+"Low-Income","Pullman School District",6.50%,3.20%,8.00%,1.50%,6.80%
+"Non-Low Income","Pullman School District",1.00%,0.40%,1.20%,0.20%,6.80%
+"Low-Income","Puyallup School District",8.90%,9.30%,18.20%,9.30%,9.90%
+"Non-Low Income","Puyallup School District",4.10%,4.10%,8.30%,4.20%,9.90%
+"Low-Income","Quilcene School District",2.10%,5.00%,2.70%,0.60%,0.70%
+"Non-Low Income","Quilcene School District",0.90%,1.20%,2.00%,1.10%,0.70%
+"Low-Income","Quillayute Valley School District",23.80%,21.10%,27.10%,3.30%,8.90%
+"Non-Low Income","Quillayute Valley School District",17.80%,14.70%,18.20%,0.40%,8.90%
+"Low-Income","Quincy School District",10.80%,5.40%,20.90%,10.10%,10.80%
+"Non-Low Income","Quincy School District",4.00%,2.70%,10.10%,6.10%,10.80%
+"Low-Income","Rainier School District",5.90%,4.40%,19.80%,13.90%,15.90%
+"Non-Low Income","Rainier School District",2.30%,1.00%,3.90%,1.60%,15.90%
+"Low-Income","Rainier Valley Leadership Academy", NA,2.70%,0.80%, NA,-1.60%
+"Non-Low Income","Rainier Valley Leadership Academy", NA,10.80%,2.40%, NA,-1.60%
+"Low-Income","Raymond School District",4.80%,5.00%,19.60%,14.80%,7.40%
+"Non-Low Income","Raymond School District",4.90%,1.50%,12.20%,7.30%,7.40%
+"Low-Income","Reardan-Edwall School District",2.70%,1.50%,6.30%,3.60%,1.20%
+"Non-Low Income","Reardan-Edwall School District",1.30%,0.40%,5.10%,3.80%,1.20%
+"Low-Income","Renton School District",13.90%,10.00%,19.70%,5.80%,12.90%
+"Non-Low Income","Renton School District",5.90%,2.90%,6.80%,0.90%,12.90%
+"Low-Income","Richland School District",13.20%,15.90%,34.20%,21.00%,24.50%
+"Non-Low Income","Richland School District",4.00%,5.20%,9.70%,5.70%,24.50%
+"Low-Income","Ridgefield School District",9.70%,4.40%,21.90%,12.20%,16.10%
+"Non-Low Income","Ridgefield School District",3.20%,1.30%,5.80%,2.60%,16.10%
+"Low-Income","Ritzville School District",10.90%,5.80%,13.80%,2.90%,11.20%
+"Non-Low Income","Ritzville School District",2.70%,1.60%,2.60%,-0.10%,11.20%
+"Low-Income","Riverside School District",2.90%,3.40%,13.70%,10.80%,8.90%
+"Non-Low Income","Riverside School District",1.30%,1.30%,4.80%,3.50%,8.90%
+"Low-Income","Riverview School District",8.40%,5.30%,3.40%,-5.00%,1.90%
+"Non-Low Income","Riverview School District",2.00%,1.60%,1.50%,-0.50%,1.90%
+"Low-Income","Rochester School District",12.90%,5.20%,12.50%,-0.40%,5.50%
+"Non-Low Income","Rochester School District",6.30%,3.40%,7.00%,0.70%,5.50%
+"Low-Income","Rosalia School District",2.50%,13.40%,9.70%,7.20%,6.20%
+"Non-Low Income","Rosalia School District", NA,1.60%,3.50%, NA,6.20%
+"Low-Income","Royal School District",7.30%,4.50%,13.40%,6.10%,4.70%
+"Non-Low Income","Royal School District",3.80%,2.20%,8.70%,4.90%,4.70%
+"Low-Income","San Juan Island School District",8.00%,13.00%,18.20%,10.20%,10.90%
+"Non-Low Income","San Juan Island School District",1.80%,4.00%,7.30%,5.50%,10.90%
+"Low-Income","Seattle Public Schools",9.80%,4.60%,3.10%,-6.70%,2.00%
+"Non-Low Income","Seattle Public Schools",2.50%,1.20%,1.10%,-1.40%,2.00%
+"Low-Income","Sedro-Woolley School District",5.50%,3.50%,5.10%,-0.40%,3.30%
+"Non-Low Income","Sedro-Woolley School District",3.00%,1.80%,1.80%,-1.20%,3.30%
+"Low-Income","Selah School District",6.70%,3.70%,1.30%,-5.40%,-0.60%
+"Non-Low Income","Selah School District",3.50%,2.40%,1.90%,-1.60%,-0.60%
+"Low-Income","Sequim School District",10.60%,7.40%,1.60%,-9.00%,0.90%
+"Non-Low Income","Sequim School District",5.10%,2.70%,0.70%,-4.40%,0.90%
+"Low-Income","Snohomish School District",11.40%,6.00%,15.50%,4.10%,11.20%
+"Non-Low Income","Snohomish School District",3.80%,1.80%,4.30%,0.50%,11.20%
+"Low-Income","Snoqualmie Valley School District",8.90%,4.30%,0.30%,-8.60%,-0.10%
+"Non-Low Income","Snoqualmie Valley School District",3.00%,0.80%,0.40%,-2.60%,-0.10%
+"Low-Income","Soap Lake School District",17.00%,12.30%,19.90%,2.90%,-6.90%
+"Non-Low Income","Soap Lake School District",10.10%,7.20%,26.80%,16.70%,-6.90%
+"Low-Income","South Bend School District",4.00%,2.50%,18.00%,14.00%,13.50%
+"Non-Low Income","South Bend School District",4.70%,1.50%,4.50%,-0.20%,13.50%
+"Low-Income","South Kitsap School District",11.80%,6.70%,25.80%,14.00%,13.30%
+"Non-Low Income","South Kitsap School District",5.10%,6.70%,12.50%,7.40%,13.30%
+"Low-Income","South Whidbey School District",8.30%,6.10%,14.90%,6.60%,11.10%
+"Non-Low Income","South Whidbey School District",1.90%,1.10%,3.80%,1.90%,11.10%
+"Low-Income","Spokane Public Schools",11.80%,8.20%,11.90%,0.10%,7.90%
+"Non-Low Income","Spokane Public Schools",3.40%,2.40%,4.00%,0.60%,7.90%
+"Low-Income","Sprague School District",0.90%,1.70%,13.60%,12.70%,9.90%
+"Non-Low Income","Sprague School District",4.70%,1.30%,3.70%,-1.00%,9.90%
+"Low-Income","Stanwood-Camano School District",7.40%,2.30%,19.20%,11.80%,13.30%
+"Non-Low Income","Stanwood-Camano School District",2.70%,1.00%,5.90%,3.20%,13.30%
+"Low-Income","Steilacoom Historical School District",8.20%,4.50%,4.50%,-3.70%,3.30%
+"Non-Low Income","Steilacoom Historical School District",1.80%,1.50%,1.20%,-0.60%,3.30%
+"Low-Income","Stevenson-Carson School District",6.20%,3.00%,21.50%,15.30%,11.50%
+"Non-Low Income","Stevenson-Carson School District",2.90%,1.90%,10.00%,7.10%,11.50%
+"Low-Income","Sultan School District",14.50%,16.00%,37.70%,23.20%,10.60%
+"Non-Low Income","Sultan School District",8.60%,11.80%,27.10%,18.50%,10.60%
+"Low-Income","Sumner School District",10.00%,4.40%,15.70%,5.70%,11.20%
+"Non-Low Income","Sumner School District",2.70%,1.10%,4.50%,1.80%,11.20%
+"Low-Income","Sunnyside School District",12.90%,20.60%,22.40%,9.50%,9.50%
+"Non-Low Income","Sunnyside School District",7.60%,7.60%,12.90%,5.30%,9.50%
+"Low-Income","Suquamish Tribal Education Department",2.50%,1.40%,14.60%,12.10%,-6.00%
+"Non-Low Income","Suquamish Tribal Education Department", NA, NA,20.60%, NA,-6.00%
+"Low-Income","Tacoma Public Schools",13.20%,7.40%,24.30%,11.10%,15.60%
+"Non-Low Income","Tacoma Public Schools",4.80%,2.60%,8.70%,3.90%,15.60%
+"Low-Income","Taholah School District",12.00%,3.30%,13.50%,1.50%,3.90%
+"Non-Low Income","Taholah School District",7.90%,3.00%,9.60%,1.70%,3.90%
+"Low-Income","Tahoma School District",11.80%,6.90%,27.00%,15.20%,18.90%
+"Non-Low Income","Tahoma School District",3.60%,1.70%,8.10%,4.50%,18.90%
+"Low-Income","Tenino School District",13.00%,7.30%,10.40%,-2.60%,4.60%
+"Non-Low Income","Tenino School District",6.30%,2.20%,5.80%,-0.50%,4.60%
+"Low-Income","Toledo School District",5.50%,5.10%,12.70%,7.20%,7.20%
+"Non-Low Income","Toledo School District",1.80%,1.80%,5.50%,3.70%,7.20%
+"Low-Income","Tonasket School District",11.80%,4.70%,10.50%,-1.30%,5.50%
+"Non-Low Income","Tonasket School District",2.00%,0.90%,5.00%,3.00%,5.50%
+"Low-Income","Toppenish School District",15.50%,7.70%,7.80%,-7.70%,4.00%
+"Non-Low Income","Toppenish School District",2.30%,2.30%,3.80%,1.50%,4.00%
+"Low-Income","Touchet School District",2.80%,1.00%,4.30%,1.50%,2.10%
+"Non-Low Income","Touchet School District",4.70%, NA,2.20%,-2.50%,2.10%
+"Low-Income","Toutle Lake School District",9.10%,5.00%,27.50%,18.40%,19.90%
+"Non-Low Income","Toutle Lake School District",4.20%,3.30%,7.60%,3.40%,19.90%
+"Low-Income","Tukwila School District",11.60%,5.70%,9.00%,-2.60%,3.90%
+"Non-Low Income","Tukwila School District",6.60%,4.40%,5.10%,-1.50%,3.90%
+"Low-Income","Tumwater School District",15.80%,7.20%,18.10%,2.30%,12.10%
+"Non-Low Income","Tumwater School District",5.50%,2.30%,6.00%,0.50%,12.10%
+"Low-Income","University Place School District",10.70%,4.80%,18.90%,8.20%,11.50%
+"Non-Low Income","University Place School District",3.30%,1.60%,7.40%,4.10%,11.50%
+"Low-Income","Valley School District", NA,1.30%,4.20%, NA,1.20%
+"Non-Low Income","Valley School District",1.40%, NA,3.00%,1.60%,1.20%
+"Low-Income","Vancouver Public Schools",12.70%,6.30%,22.30%,9.60%,14.10%
+"Non-Low Income","Vancouver Public Schools",4.30%,2.00%,8.20%,3.90%,14.10%
+"Low-Income","Vashon Island School District",6.60%,1.50%,13.70%,7.10%,10.80%
+"Non-Low Income","Vashon Island School District",1.10%,0.60%,2.90%,1.80%,10.80%
+"Low-Income","Wahkiakum School District",4.70%,1.90%,7.10%,2.40%,4.90%
+"Non-Low Income","Wahkiakum School District",1.30%, NA,2.20%,0.90%,4.90%
+"Low-Income","Wahluke School District",9.40%,2.10%,8.70%,-0.70%,-5.20%
+"Non-Low Income","Wahluke School District",12.40%,4.10%,13.90%,1.50%,-5.20%
+"Low-Income","Waitsburg School District",1.20%,4.60%,9.80%,8.60%, NA
+"Non-Low Income","Waitsburg School District",3.40%,2.80%, NA, NA, NA
+"Low-Income","Walla Walla Public Schools",12.50%,13.10%,15.80%,3.30%,9.30%
+"Non-Low Income","Walla Walla Public Schools",3.30%,5.10%,6.50%,3.20%,9.30%
+"Low-Income","Wapato School District",15.50%,8.90%,18.90%,3.40%,7.80%
+"Non-Low Income","Wapato School District",12.70%,4.60%,11.10%,-1.60%,7.80%
+"Low-Income","Warden School District",6.40%,3.20%,17.10%,10.70%,-6.50%
+"Non-Low Income","Warden School District",6.10%,3.50%,23.60%,17.50%,-6.50%
+"Low-Income","Washington State",11.60%,7.70%,17.60%,6.00%,11.80%
+"Non-Low Income","Washington State",4.10%,2.60%,5.80%,1.70%,11.80%
+"Low-Income","Washougal School District",9.60%,8.80%,25.40%,15.80%,17.70%
+"Non-Low Income","Washougal School District",2.80%,2.60%,7.70%,4.90%,17.70%
+"Low-Income","Washtucna School District",8.50%,4.80%,5.30%,-3.20%, NA
+"Non-Low Income","Washtucna School District", NA, NA, NA, NA, NA
+"Low-Income","Waterville School District",8.70%,5.90%,10.80%,2.10%,3.50%
+"Non-Low Income","Waterville School District",1.10%,2.40%,7.30%,6.20%,3.50%
+"Low-Income","Wellpinit School District",16.30%,4.40%,15.90%,-0.40%, NA
+"Non-Low Income","Wellpinit School District",3.70%, NA, NA, NA, NA
+"Low-Income","Wenatchee School District",6.30%,4.80%,15.80%,9.50%,10.50%
+"Non-Low Income","Wenatchee School District",1.70%,1.90%,5.30%,3.60%,10.50%
+"Low-Income","West Valley School District (Spokane)",3.10%,2.50%,5.50%,2.40%,1.00%
+"Non-Low Income","West Valley School District (Spokane)",2.10%,1.50%,4.50%,2.40%,1.00%
+"Low-Income","West Valley School District (Yakima)",11.90%,7.00%,26.10%,14.20%,18.30%
+"Non-Low Income","West Valley School District (Yakima)",4.70%,2.30%,7.80%,3.10%,18.30%
+"Low-Income","White Pass School District",10.00%,4.00%,21.50%,11.50%,9.50%
+"Non-Low Income","White Pass School District",4.00%,2.20%,12.00%,8.00%,9.50%
+"Low-Income","White River School District",8.30%,4.50%,8.40%,0.10%,6.50%
+"Non-Low Income","White River School District",2.10%,1.40%,1.90%,-0.20%,6.50%
+"Low-Income","White Salmon Valley School District",4.40%,3.90%,18.40%,14.00%,13.20%
+"Non-Low Income","White Salmon Valley School District",1.80%,1.40%,5.20%,3.40%,13.20%
+"Low-Income","Wilbur School District",2.40%,2.80%,9.00%,6.60%,4.50%
+"Non-Low Income","Wilbur School District",2.00%, NA,4.50%,2.50%,4.50%
+"Low-Income","Willapa Valley School District",0.70%, NA,1.70%,1.00%,0.50%
+"Non-Low Income","Willapa Valley School District", NA, NA,1.20%, NA,0.50%
+"Low-Income","Wilson Creek School District",10.70%, NA,14.60%,3.90%,9.30%
+"Non-Low Income","Wilson Creek School District",1.70%,1.60%,5.30%,3.60%,9.30%
+"Low-Income","Winlock School District",9.80%,5.20%,6.40%,-3.40%,-0.50%
+"Non-Low Income","Winlock School District",14.50%,8.60%,6.90%,-7.60%,-0.50%
+"Low-Income","Wishkah Valley School District",7.10%,4.00%,18.20%,11.10%,4.20%
+"Non-Low Income","Wishkah Valley School District",2.80%,1.90%,14.00%,11.20%,4.20%
+"Low-Income","Wishram School District", NA,18.40%,8.80%, NA, NA
+"Non-Low Income","Wishram School District", NA, NA, NA, NA, NA
+"Low-Income","Woodland School District",7.70%,7.10%,15.30%,7.60%,8.50%
+"Non-Low Income","Woodland School District",5.40%,3.30%,6.80%,1.40%,8.50%
+"Low-Income","Yakima School District",19.00%,8.90%,35.30%,16.30%,12.70%
+"Non-Low Income","Yakima School District",9.30%,4.40%,22.60%,13.30%,12.70%
+"Low-Income","Yelm Community Schools",9.40%,6.20%,22.40%,13.00%,11.10%
+"Non-Low Income","Yelm Community Schools",3.90%,2.90%,11.30%,7.40%,11.10%
+"Low-Income","Zillah School District",8.10%,6.40%,11.20%,3.10%,5.20%
+"Non-Low Income","Zillah School District",1.60%,0.90%,6.00%,4.40%,5.20%
