@@ -3190,10 +3190,19 @@ long_state_grad_path %>%
 ```
 > Aggregated state total 
 
-Graduation pathways in the df: 
-"ELA and Math Both" "CTE"               "ASVAB"             
-"ELA Assessment"    "ELA Course"        
-"Math Assessment"   "Math Course"       
+ 
+Graduation pathways (plotted) | Notation
+----------------------------- | ----------------------------------
+"ELA and Math Both"           | met both an ELA and Math Pathway
+"CTE"                         | met CTE Pathway
+"ASVAB"                       | met ASVAB Pathway
+"ELA Assessment"              | completed an ELA Assessment/Test
+"ELA Course"                  | completed an ELA Course
+"Math Assessment"             | completed an Math Assessment/Test
+"Math Course"                 | completed a Math Course
+
+Other paythways (not plotted):
+
 "ELA State Test"    "ELA ACT"           "ELA SAT"           "ELA AP Test"      "ELA IB Test"       
 "ELA AP Course"     "ELA IB Course"     "ELA Bridge"        "ELA Cambridge"    "ELA Dual Credit"   
 "Math State Test"   "Math ACT"          "Math SAT"          "Math AP Test"     "Math IB Test"      
@@ -3337,5 +3346,143 @@ long_state_agg_path_inc %>%
 
 #ggsave("/Users/alexliu/Desktop/A.5.2.ii graduation pathway aggregate state total by income.png")
 ```
+
+```{r A.5.2.iii graduation pathway agg state total w nopath by race}
+fed_ethnicities <- c("All Students",
+                     "American Indian/ Alaskan Native",
+                     "Asian",
+                     "Black/ African American", 
+                     "Hispanic/ Latino of any race(s)",
+                     "Native Hawaiian/ Other Pacific Islander",
+                     "Two or More Races",
+                     "White")
+
+#change in selection of pathways
+plotting_pathways <- factor(c("ELA and Math Both",
+                              "CTE",
+                              "ASVAB",
+                              "ELA Assessment",
+                              "ELA Course",        
+                              "Math Assessment",
+                              "Math Course"), 
+                            levels = c("ELA and Math Both",
+                              "CTE",
+                              "ASVAB",
+                              "ELA Assessment",
+                              "ELA Course",        
+                              "Math Assessment",
+                              "Math Course"))
+
+no_pathways <- long_state_grad_path %>%
+  filter(Pathways == "% No Pathway",
+         StudentGroup != "Low-Income ") %>%
+  mutate(Pathways = "No Pathway",
+         StudentGroup = fed_ethnicities)
+colnames(no_pathways)[1] <- "Student Group"
+
+long_state_agg_path_race <- state_agg_path %>%
+  select("Student Group", all_of(plotting_pathways)) %>%
+  filter(`Student Group` %in% fed_ethnicities) %>%
+  melt(., id.vars = "Student Group",
+       measure.vars = plotting_pathways,
+       variable.name = "Pathways",
+       value.name="% Completed") %>%
+  bind_rows(., no_pathways) %>%
+  arrange(`Student Group`, Pathways)
+
+long_state_agg_path_race %>%
+  ggplot(aes(fill= fct_rev(`Pathways`),
+             x= `Student Group`, 
+             y= `% Completed`)) + 
+  geom_col(position="dodge", width = 0.9) +
+  ggtitle("Class of 2020 Graduation Pathways") +
+  labs(x = "Student Groups", 
+       y = "Percentage of Students Completed") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(name ="Pathways", values = uw_reverse(8)) +
+  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
+            hjust = -0.1, vjust = 0.4, colour = "black", size = 1) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.5.2.iii graduation pathway agg state total w nopath by race.png")
+```
+
+```{r A.5.2.iv graduation pathway agg state total w nopath by inc}
+
+#change in selection of pathways
+plotting_pathways <- factor(c("ELA and Math Both",
+                              "CTE",
+                              "ASVAB",
+                              "ELA Assessment",
+                              "ELA Course",        
+                              "Math Assessment",
+                              "Math Course"), 
+                            levels = c("ELA and Math Both",
+                              "CTE",
+                              "ASVAB",
+                              "ELA Assessment",
+                              "ELA Course",        
+                              "Math Assessment",
+                              "Math Course"))
+
+no_pathways <- long_state_grad_path %>%
+  filter(Pathways == "% No Pathway",
+         StudentGroup %in% c("Low-Income ", "All Students ")) %>%
+  mutate(Pathways = "No Pathway",
+         StudentGroup = c("All Students", "Low-Income"))
+colnames(no_pathways)[1] <- "Student Group"
+
+long_state_agg_path_inc <- state_agg_path %>%
+  select("Student Group", all_of(plotting_pathways)) %>%
+  filter(`Student Group` %in% income_group) %>%
+  melt(., id.vars = "Student Group",
+       measure.vars = plotting_pathways,
+       variable.name = "Pathways",
+       value.name="% Completed") %>%
+  bind_rows(., no_pathways) %>%
+  arrange(`Student Group`, Pathways)
+
+long_state_agg_path_inc %>%
+  ggplot(aes(fill= fct_rev(`Pathways`),
+             x= `Student Group`, 
+             y= `% Completed`)) + 
+  geom_col(position="dodge", width = 0.9) +
+  ggtitle("Class of 2020 Graduation Pathways") +
+  labs(x = "Student Groups", 
+       y = "Percentage of Students Completed",
+       caption = "Data is unavailable for percent of non-low income students that did not meet graduation pathways") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  scale_fill_manual(name ="Pathways", values = uw_reverse(8)) +
+  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
+            hjust = -0.1, vjust = 0.4, colour = "black", size = 1) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
+        plot.subtitle = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.title.x  = element_text(size=12),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/A.5.2.iv graduation pathway agg state total w nopath by inc.png")
+```
+
 
 
