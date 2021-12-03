@@ -254,6 +254,9 @@ model_fed_nocwi <- lm(rev_pp_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEdu
 df_f195_fed$rev_adjusted <- predict.lm(model_fed, newdata=df_f195_fed)
 df_f195_fed$rev_adjusted_nocwi <- predict.lm(model_fed_nocwi, newdata=df_f195_fed)
 
+#Have poverty as part of predictor and have marginal estimate as part of the predictor
+#Have poverty as a continuous variable and estimate marginal effect at .1 and .9 percentile (30/70% poverty)
+
 #STATE
 df_f195_state <- df_f195_merge%>%
   filter(rev_source=="State")
