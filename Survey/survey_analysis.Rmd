@@ -1,0 +1,133 @@
+---
+title: 'Section A-D: District and Union Leader Survey Analysis'
+author: "Katherine Chang"
+date: "`r format(Sys.Date(), format = '%B %d, %Y')`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    fig_width: 10
+knit: (function(input, encoding) rmarkdown::render(input, output_file = "survey_analysis.html"))
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      comment = NA, 
+                      cache = TRUE,
+                      warning = FALSE,
+                      message = FALSE, 
+                      cache.lazy = FALSE,
+                      fig.align = "center"
+                      )
+theme_efe <-
+    ggplot2::theme_classic() +
+    ggplot2::theme(
+      )
+```
+
+# Introduction
+
+```{r data_read, include=FALSE}
+
+library(tidyverse)
+library(googledrive)
+library(haven)
+
+
+id_survey_district <- drive_get(as_id("https://drive.google.com/file/d/1XabcDxFGcUSF28KvT1BRGY_79N9Vyog9/view?usp=sharing"))
+
+id_survey_union <- drive_get(as_id("https://drive.google.com/file/d/1TWXuCzc3UA3cGSkphqqZUyN9d1ovblp4/view?usp=sharing")) 
+
+df_survey_district <- id_survey_district %>%
+  drive_read_raw() %>%
+  read_csv()
+
+df_survey_union <- id_survey_union %>%
+  drive_read_raw() %>%
+  read_csv()
+
+survey_district_questions = t(df_survey_district[1,])
+survey_union_questions = t(df_survey_union[1,])
+
+```
+
+Start with summary table of demographics
+
+Frequency 
+Mean
+Standard Deviation
+
+Correlate scatterplot, look at relationship between two variables
+
+# Demographic of Survey Response
+## Response
+Roles
+Years of Experience
+Regional Representation 
+Gender
+Race
+
+## District
+Attendance Size
+Student Racial Demographics
+FRPL
+
+Urbanicity, Regional differences (puget sound), by ESD
+
+Look at the two surveys separately, and then link
+
+# Section B
+
+Q3
+Q3_11_TEXT
+When your district central office planned the 2020-21 school year budget, who were the top three most influential decision-makers? - Selected Choice
+
+Q4
+What information was used by the district central office to develop the 2020-21 school year budget? Select the top three most important sources of information.
+
+Q5
+What factors represented notable challenges when your district central office planned the 2020-21 school year budget?
+
+Q28
+How did your district allocate federal stimulus funds (i.e., CARES, CRRSAA, ARP)?
+
+Q27
+How has your 2020-21 school year budget addressed students' learning disparities by income or race/ethnicity?
+
+# Section C
+
+Q26
+Q26_13_TEXT
+Which of the following roles did you have difficulty filling for the 2020-21 school year? Select all that apply. - Selected Choice
+
+-Q15_1, Q15_10
+To what extent do you agree with the following statements about the union for certificated teachers in your district? 
+
+Q9
+In the past five years, have you been part of the collective bargaining negotiation process for certificated teachers in your district?
+
+Q10
+Q10_11_TEXT
+Since 2018, what were the district’s priorities during the most recent major collective bargaining for certificated teachers (major bargaining period not related to COVID-19 school reopening)?  Select the top three priorities from your district’s perspective. - Selected Choice
+
+## COVID
+Q18
+Has your district engaged in negotiation with the union for school reopening during the Spring 2021 term?
+
+Q12
+What were your district’s priorities during union negotiations for Spring 2021 reopening? Select the top five priorities. - Selected Choice
+
+Q12_14_TEXT
+What were your district’s priorities during union negotiations for Spring 2021 reopening? Select the top five priorities. - Other(s), please specify - Text
+
+Q13
+Has your district engaged in negotiation with the union for school reopening for the Fall 2021 term?
+
+Q14
+What are your district’s priorities during union negotiations for Fall 2021 reopening? Select the top five priorities. - Selected Choice
+
+Q14_14_TEXT
+What are your district’s priorities during union negotiations for Fall 2021 reopening? Select the top five priorities. - 
+
+
+## Section D
