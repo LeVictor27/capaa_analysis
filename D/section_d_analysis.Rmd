@@ -44,7 +44,8 @@ library(gridExtra)
 library(sf)
 library(spData)
 library(leaidr)
-
+library(stringr)
+`%!in%` <- Negate(`%in%`)
 #library(rJava)
 #library(tabulizer) 
 ```
@@ -56,71 +57,246 @@ uw_reverse <- colorRampPalette(c("#e8e3d3", "#4b2e83"))
 black_white <- colorRampPalette(c("white", "black"))
 ```
 
+# D.1 EquityAnalysisToolName
 
-```{r A.5.2.iv graduation pathway agg state total w nopath by inc, eval=FALSE, include=FALSE}
+> Summarize the frequency, bar chart, the categories of EquityAnalysisToolName, by unit of districts
 
-#change in selection of pathways
-plotting_pathways <- factor(c("ELA and Math Both",
-                              "CTE",
-                              "ASVAB",
-                              "ELA Assessment",
-                              "ELA Course",        
-                              "Math Assessment",
-                              "Math Course"), 
-                            levels = c("ELA and Math Both",
-                              "CTE",
-                              "ASVAB",
-                              "ELA Assessment",
-                              "ELA Course",        
-                              "Math Assessment",
-                              "Math Course"))
+* 305 school districts with 271 equity analysis tool names
+  + many names are similar. are they the same?
+  + see equityana.xlsx & equitytoolkeywords.csv
 
-no_pathways <- long_state_grad_path %>%
-  filter(Pathways == "% No Pathway",
-         StudentGroup %in% c("Low-Income ", "All Students ")) %>%
-  mutate(Pathways = "No Pathway",
-         StudentGroup = c("All Students", "Low-Income"))
-colnames(no_pathways)[1] <- "Student Group"
+```{r D.1 EquityAnalysisToolName}
+df_equityana <- df_LEA_plans %>%
+  select(c("LEAName", "EquityAnalysisToolName"))
 
-long_state_agg_path_inc <- state_agg_path %>%
-  select("Student Group", all_of(plotting_pathways)) %>%
-  filter(`Student Group` %in% income_group) %>%
-  melt(., id.vars = "Student Group",
-       measure.vars = plotting_pathways,
-       variable.name = "Pathways",
-       value.name="% Completed") %>%
-  bind_rows(., no_pathways) %>%
-  arrange(`Student Group`, Pathways)
+df_equityana_unique <- unique(df_equityana[c("LEAName", "EquityAnalysisToolName")])
 
-long_state_agg_path_inc %>%
-  ggplot(aes(fill= fct_rev(`Pathways`),
-             x= `Student Group`, 
-             y= `% Completed`)) + 
-  geom_col(position="dodge", width = 0.9) +
-  ggtitle("Class of 2020 Graduation Pathways") +
-  labs(x = "Student Groups", 
-       y = "Percentage of Students Completed",
-       caption = "Data is unavailable for percent of non-low income students that did not meet graduation pathways") +
-  scale_y_continuous(labels = percent, limits = c(0, 1)) +
-  scale_fill_manual(name ="Pathways", values = uw_reverse(8)) +
-  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
-            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+num_district <- nrow(df_equityana_unique)
+
+#df_equityana_unique$LEAName[duplicated(df_equityana_unique$LEAName)]
+
+#df_equityana_sep <- as.data.frame(str_split_fixed(df_equityana_unique$EquityAnalysisToolName, 
+#                                                 ",",
+#                                                 max(unlist(lapply(strsplit(df_equityana_unique$EquityAnalysisToolName, 
+#                                                                            ","), 
+#                                                                   length)))))
+#names(df_equityana_sep) <- paste0("tool_", 1:ncol(df_equityana_sep))
+#df_equityana_sep$LEAName <- df_equityana_unique$LEAName
+#df_equityana_sep$tool_1[duplicated(df_equityana_sep$tool_1)]
+
+df_equityana_count <- df_equityana_unique %>% 
+  group_by(EquityAnalysisToolName) %>%
+  summarise(number = n()) %>%
+  arrange(desc(number)) 
+
+#for (tools in df_equityana_count$EquityAnalysisToolName) {
+#  print(grepl("Insight", tools, fixed = TRUE))
+#}
+
+df_equityana_count %>%
+  filter(number >= 2) %>%
+  ggplot(aes(x= reorder(EquityAnalysisToolName, number), 
+             y= number/num_district)) + 
+  geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
+  ggtitle("LEA Academic and Students Well-being Plans",
+          subtitle = "frequency of Equity Anlysis Tools") +
+  labs(x = "", 
+       y = "",
+       caption = "Note: this figure includes all the tools that are employed by more than one school district") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.025)) +
   theme_light() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
-  theme(plot.title = element_text(face = "bold", size = 14, hjust = 0.45),
-        plot.subtitle = element_text(hjust = 0.5),
-        plot.caption = element_text(hjust = 0.5, size = 9),
+  theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
+        plot.subtitle = element_text(hjust = 0),
+        plot.caption = element_text(hjust = 1, size = 9),
         legend.background = element_rect(fill = "white", size = 1, colour = "white"),
         legend.title=element_text(size = 10),
         legend.text=element_text(size = 7),
         axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
-        axis.title.x  = element_text(size=12),
+        axis.text.y = element_text(vjust =0.5, size=7),
+        axis.title.x  = element_text(size=7),
         axis.title.y  = element_text(size=12),
         strip.text.x = element_text(size = 12, colour = "black"))
 
-#ggsave("/Users/alexliu/Desktop/A.5.2.iv graduation pathway agg state total w nopath by inc.png")
 ```
 
+```{r D.1 EquityAnalysisToolName modify}
+df_equityana_sep <- as.data.frame(str_split_fixed(df_equityana_unique$EquityAnalysisToolName, 
+                                                 " ", max(unlist(lapply(strsplit(df_equityana_unique$EquityAnalysisToolName," "), length)))))
+names(df_equityana_sep) <- paste0("word_", 1:ncol(df_equityana_sep))
+
+df_equitytool_keyword <- df_equityana_sep %>% 
+  gather(word, keyword) %>%
+  replace(. == "", NA) %>%
+  filter(!is.na(keyword)) %>%
+  select(-word) %>%
+  group_by(keyword) %>%
+  summarise(number = n()) %>%
+  arrange(desc(number)) %>%
+  filter(number >= 3) %>%
+  filter(keyword %!in% c("the", "of", "and", "by", "&", 
+                         "to", "-", "in", "is", "this",
+                         "with", "using", "on", "An", "an",
+                         "for", "from", "a", "The", "that",
+                         "School", "Schools", "we", "We",
+                         "our", "Lake", "Equity", "Tool", 
+                         "District", "Tool,", "tool", "Valley",
+                         "SD", "Analysis", "analysis",
+                         "Decision-Making"))
+
+df_equityana_modify_count <- mutate(df_equityana_count, keywords = "")
+
+for (word in df_equitytool_keyword$keyword) {
+  for (i in 1:nrow(df_equityana_modify_count)) {
+    if (grepl(word, df_equityana_modify_count$EquityAnalysisToolName[i], fixed = TRUE)) {
+    df_equityana_modify_count$keywords[i] <- paste(df_equityana_modify_count$keywords[i], word)
+    }
+  }
+}
+
+#write_csv(df_equityana_modify_count, "/Users/alexliu/Desktop/equitytoolkeywords.csv")
+
+
+```
+
+
+# D.2 UniversalSupports
+
+> Summarize the frequency of the categories of “UniversalSupports” (Bar chart), by unit of districts
+
+* delete "Other - Write In (Required)"?
+* "AVID" = "AVID 6-12"? "College in the High School + AVID"? 
+* separate narratives?
+    + "Here in the Kahlotus School District we have been in an in-person traditional schedule since August 31 2020.  Due
+    to our tiny student population we have been able to implement a traditional calendar and schedule with our students.
+    We practice daily interventions through Student and Teacher Access Time (STAT) for our students in grades 8-12. 
+    These inerventions are designed and delivered by our certificated secondary teachers.  We also practice and deliver
+    daily instruction through specific and targeted intervention to individual and small groups of students in grades
+    k-6.  Our instruction in elementary classrooms is a natural environment where teaching is delivered at the targeted
+    individual level. We only have 6 students in our k-1 classroom 7 students in our 2-3 classroom and 8 students in our
+    4-6 classroom."
+* "Summer learning resources for families and credit retrieval for high school students" = "Summer School"?
+* see univsupp.xlsx
+
+```{r D.2 UniversalSupports TOP26}
+num_district <- 305
+
+df_universalsupports <- df_LEA_plans %>%
+  select(c("LEAName", "UniversalSupports")) 
+
+df_univsupp_unique <- unique(df_universalsupports[c("LEAName", "UniversalSupports")])
+
+#check whether one sd different inputs of plans
+#df_universalsupports$LEAName[duplicated(df_universalsupprts$LEAName)]
+
+df_univsupp_sep <- as.data.frame(str_split_fixed(df_univsupp_unique$UniversalSupports, 
+                                                 ",", 
+                                                 max(unlist(lapply(strsplit(df_univsupp_unique$UniversalSupports, ","), 
+                                                                   length)))))
+
+names(df_univsupp_sep) <- paste0("support_", 1:ncol(df_univsupp_sep))
+df_univsupp_sep$LEAName <- df_univsupp_unique$LEAName
+
+df_univsupp_count <- df_univsupp_sep %>% 
+  gather(support, UniversalSupports, -LEAName) %>%
+  replace(. == "", NA) %>%
+  filter(!is.na(UniversalSupports)) %>%
+  select(-support) %>%
+  mutate(UniversalSupports = case_when(UniversalSupports == "CharacterStrong" ~ "Character Strong",
+                                       UniversalSupports =="AVID " ~ "AVID",
+                                       UniversalSupports == "District made Differentiated Interventions in Small Group" ~
+                                         "District Made Differentiated Interventions in Small Groups",
+                                       UniversalSupports =="On line learning" ~ "Online learning",
+                                       UniversalSupports =="Transition Supports ()" ~ "Transition Supports",
+                                       UniversalSupports =="Strategic Staffing ()" ~ "Strategic Staffing",
+                                       TRUE ~ UniversalSupports)) %>%
+#  filter(UniversalSupports != "Other - Write In (Required)") %>%  #delelte Other?
+  group_by(UniversalSupports) %>%
+  summarise(number = n()) %>%
+  arrange(desc(number)) 
+
+df_univsupp_count %>%
+  slice(1:26) %>%
+  ggplot(aes(x= reorder(UniversalSupports, number), 
+             y= number/num_district)) + 
+  geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
+  ggtitle("LEA Academic and Students Well-being Plans",
+          subtitle = "frequency of the most employed Universal Supports") +
+  labs(x = "", 
+       y = "",
+       caption = "Note: this figure includes all the plans that are employed by more than one school district") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
+        plot.subtitle = element_text(hjust = 0),
+        plot.caption = element_text(hjust = 1, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.text.y = element_text(vjust =0.5, size=7),
+        axis.title.x  = element_text(size=7),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+
+```
+
+```{r D.2 UniversalSupports all}
+narrative_plans <- c("Sources of Strength student programming mentor/partnership program for students of color additional special education and LTEL learner support Data engineer to improve data access and usability",
+                     "The District initiated a new remote learning liaison position focused on students and families that choose the remote learning option.  This was a full time certificated staff member who was available to and for parents and students alike.  ",
+                     "This plan is in early stages of development.  As we continue to get feedback from staff parents and community- and as we learn more about student needs- we will modify our approach for all students and for targeted student groups..",
+                     "Social-emotional Learning/College Career Readiness daily meetings Second Step SEL curriculum K-5  structured early release",
+                     "Relationship with local health and human services for direct support around mental health issues and pandemic response/mitigation",
+                     "Here in the Kahlotus School District we have been in an in-person traditional schedule since August 31 2020.  Due to our tiny student population we have been able to implement a traditional calendar and schedule with our students.  We practice daily interventions through Student and Teacher Access Time (STAT) for our students in grades 8-12.  These inerventions are designed and delivered by our certificated secondary teachers.  We also practice and deliver daily instruction through specific and targeted intervention to individual and small groups of students in grades k-6.  Our instruction in elementary classrooms is a natural environment where teaching is delivered at the targeted individual level. We only have 6 students in our k-1 classroom 7 students in our 2-3 classroom and 8 students in our 4-6 classroom.",
+                     "Wa He Lut Indian School is a small district that practices family tailored educational processes that reaches out to students and families utilizing school liasions",
+                     "(1) intention with Technology for Learning (2) Family &amp; Community Partnerships (3) Program Evaluation/Audit of Assessment Systems to inform potential updates and ensure a comprehensive supportive Whole Child approach aligned with our OSD Student Outcomes and (4) updated system supports for continuous improvement practices for School Improvement Planning alongside District Improvement Planning and related monitoring for success ")
+
+df_univsupp_count %>%
+  filter(UniversalSupports %!in% narrative_plans) %>%
+  ggplot(aes(x= reorder(UniversalSupports, number), 
+             y= number/num_district)) + 
+  geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
+  ggtitle("LEA Academic and Students Well-being Plans",
+          subtitle = "frequency of Universal Supports plans") +
+  labs(x = "", 
+       y = "") +
+  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+#  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
+#  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
+#            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
+        plot.subtitle = element_text(hjust = 0),
+        plot.caption = element_text(hjust = 1, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.text.y = element_text(vjust =0.5, size=4.5),
+        axis.title.x  = element_text(size=7),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+```
+
+
+Summarize the frequency of the categories of “StrategicSupport”,  by types of identified  student groups, by unit of district (we may not see a big difference across these types of students)
+
+```{r D.3 StrategicSupport}
+
+```
+
+
+Summarize the frequency of the “strategiesformentoring”, 
+The frequency of the “strategies for support”
+
+```{r D.4 strategiesformentoring}
+
+```
 
 
