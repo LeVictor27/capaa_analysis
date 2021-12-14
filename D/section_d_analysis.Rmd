@@ -57,6 +57,13 @@ uw_reverse <- colorRampPalette(c("#e8e3d3", "#4b2e83"))
 black_white <- colorRampPalette(c("white", "black"))
 ```
 
+* Note 12/13
+  + ~~change percent to count~~
+  + D1 ~~fix labels~~
+  + D2 
+  + D3 explore student groups used by districts
+  + D4 ~~generate figures~~
+
 # D.1 EquityAnalysisToolName
 
 > Summarize the frequency, bar chart, the categories of EquityAnalysisToolName, by unit of districts
@@ -84,7 +91,28 @@ num_district <- nrow(df_equityana_unique)
 #df_equityana_sep$LEAName <- df_equityana_unique$LEAName
 #df_equityana_sep$tool_1[duplicated(df_equityana_sep$tool_1)]
 
-df_equityana_count <- df_equityana_unique %>% 
+df_equityana_insight <- df_equityana_unique %>% 
+  filter(grepl("Insight", EquityAnalysisToolName, fixed = TRUE) |
+         grepl("insight", EquityAnalysisToolName, fixed = TRUE)) %>%
+  mutate(EquityAnalysisToolName = "Equity Rubric: Attending to Needs of the Most Vulnerable Populations Developed by Insight Education Group")
+
+df_equityana_shoreline <- df_equityana_unique %>% 
+  filter(grepl("Shoreline", EquityAnalysisToolName, fixed = TRUE) |
+         grepl("shoreline", EquityAnalysisToolName, fixed = TRUE)) %>%
+  mutate(EquityAnalysisToolName = "Shoreline Race & Equity Impact Decision-Making Tool")
+  
+df_equityana_count <- df_equityana_unique %>%
+  mutate(EquityAnalysisToolName = case_when(grepl("insight", EquityAnalysisToolName, fixed = TRUE) ~ "Equity Rubric: Attending to Needs of the Most Vulnerable Populations Developed by Insight Education Group",
+                                            grepl("Insight", EquityAnalysisToolName, fixed = TRUE) ~ "Equity Rubric: Attending to Needs of the Most Vulnerable Populations Developed by Insight Education Group",
+                                            grepl("Attending to Needs", EquityAnalysisToolName, fixed = TRUE) ~ "Equity Rubric: Attending to Needs of the Most Vulnerable Populations Developed by Insight Education Group",
+                                            grepl("Attending yo Needs", EquityAnalysisToolName, fixed = TRUE) ~ "Equity Rubric: Attending to Needs of the Most Vulnerable Populations Developed by Insight Education Group",
+                                            grepl("Shoreline", EquityAnalysisToolName, fixed = TRUE) ~ "Shoreline Race & Equity Impact Decision-Making Tool",
+                                            grepl("shoreline", EquityAnalysisToolName, fixed = TRUE) ~ "Shoreline Race & Equity Impact Decision-Making Tool",
+                                            grepl("Equity Questions for Consideration", EquityAnalysisToolName, fixed = TRUE) ~ "Equity Questions for Consideration and Race & Equity Impact Decision-Making Tool",
+                                            grepl("please note that we are in the process", EquityAnalysisToolName, fixed = TRUE) ~ "Hanover Research Toolkit (in process)",
+                                            EquityAnalysisToolName == "7 Steps Pathway to Equity" ~ "7-Step Equity Tool",
+                                            TRUE ~ EquityAnalysisToolName)) %>%
+  
   group_by(EquityAnalysisToolName) %>%
   summarise(number = n()) %>%
   arrange(desc(number)) 
@@ -96,14 +124,17 @@ df_equityana_count <- df_equityana_unique %>%
 df_equityana_count %>%
   filter(number >= 2) %>%
   ggplot(aes(x= reorder(EquityAnalysisToolName, number), 
-             y= number/num_district)) + 
+             y= number)) + 
   geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
   ggtitle("LEA Academic and Students Well-being Plans",
           subtitle = "frequency of Equity Anlysis Tools") +
   labs(x = "", 
        y = "",
-       caption = "Note: this figure includes all the tools that are employed by more than one school district") +
-  scale_y_continuous(labels = percent, limits = c(0, 0.025)) +
+       caption = "Note: this figure includes equity analysis tools that are employed by more than one school district;
+       305 school districts are included") +
+  #scale_y_continuous(labels = percent, limits = c(0, 0.025)) +
+  scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
+                                                 width = 70)) +
   theme_light() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
@@ -121,7 +152,7 @@ df_equityana_count %>%
 
 ```
 
-```{r D.1 EquityAnalysisToolName modify}
+```{r D.1 EquityAnalysisToolName modify, eval=FALSE, include=FALSE}
 df_equityana_sep <- as.data.frame(str_split_fixed(df_equityana_unique$EquityAnalysisToolName, 
                                                  " ", max(unlist(lapply(strsplit(df_equityana_unique$EquityAnalysisToolName," "), length)))))
 names(df_equityana_sep) <- paste0("word_", 1:ncol(df_equityana_sep))
@@ -180,7 +211,6 @@ for (word in df_equitytool_keyword$keyword) {
 * see univsupp.xlsx
 
 ```{r D.2 UniversalSupports TOP26}
-num_district <- 305
 
 df_universalsupports <- df_LEA_plans %>%
   select(c("LEAName", "UniversalSupports")) 
@@ -204,12 +234,11 @@ df_univsupp_count <- df_univsupp_sep %>%
   filter(!is.na(UniversalSupports)) %>%
   select(-support) %>%
   mutate(UniversalSupports = case_when(UniversalSupports == "CharacterStrong" ~ "Character Strong",
-                                       UniversalSupports =="AVID " ~ "AVID",
-                                       UniversalSupports == "District made Differentiated Interventions in Small Group" ~
-                                         "District Made Differentiated Interventions in Small Groups",
-                                       UniversalSupports =="On line learning" ~ "Online learning",
-                                       UniversalSupports =="Transition Supports ()" ~ "Transition Supports",
-                                       UniversalSupports =="Strategic Staffing ()" ~ "Strategic Staffing",
+                                       UniversalSupports == "AVID " ~ "AVID",
+                                       UniversalSupports == "District made Differentiated Interventions in Small Group" ~ "District Made Differentiated Interventions in Small Groups",
+                                       UniversalSupports == "On line learning" ~ "Online learning",
+                                       UniversalSupports == "Transition Supports ()" ~ "Transition Supports",
+                                       UniversalSupports == "Strategic Staffing ()" ~ "Strategic Staffing",
                                        TRUE ~ UniversalSupports)) %>%
 #  filter(UniversalSupports != "Other - Write In (Required)") %>%  #delelte Other?
   group_by(UniversalSupports) %>%
@@ -219,14 +248,15 @@ df_univsupp_count <- df_univsupp_sep %>%
 df_univsupp_count %>%
   slice(1:26) %>%
   ggplot(aes(x= reorder(UniversalSupports, number), 
-             y= number/num_district)) + 
+             y= number)) + 
   geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
   ggtitle("LEA Academic and Students Well-being Plans",
           subtitle = "frequency of the most employed Universal Supports") +
   labs(x = "", 
        y = "",
-       caption = "Note: this figure includes all the plans that are employed by more than one school district") +
-  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+       caption = "Note: this figure includes all the plans that are employed by more than one school district;
+       305 school districts are included") +
+  #scale_y_continuous(labels = percent, limits = c(0, 1)) +
   theme_light() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
@@ -258,13 +288,14 @@ narrative_plans <- c("Sources of Strength student programming mentor/partnership
 df_univsupp_count %>%
   filter(UniversalSupports %!in% narrative_plans) %>%
   ggplot(aes(x= reorder(UniversalSupports, number), 
-             y= number/num_district)) + 
+             y= number)) + 
   geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
   ggtitle("LEA Academic and Students Well-being Plans",
-          subtitle = "frequency of Universal Supports plans") +
+          subtitle = "frequency of Universal Supports") +
   labs(x = "", 
-       y = "") +
-  scale_y_continuous(labels = percent, limits = c(0, 1)) +
+       y = "",
+       caption = "Note: 305 school districts are included") +
+#  scale_y_continuous(labels = percent, limits = c(0, 1)) +
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
 #  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
@@ -278,7 +309,7 @@ df_univsupp_count %>%
         legend.title=element_text(size = 10),
         legend.text=element_text(size = 7),
         axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
-        axis.text.y = element_text(vjust =0.5, size=4.5),
+        axis.text.y = element_text(hjust = 1, vjust =0.5, size=4.5),
         axis.title.x  = element_text(size=7),
         axis.title.y  = element_text(size=12),
         strip.text.x = element_text(size = 12, colour = "black"))
@@ -328,10 +359,14 @@ df_ss_sep <- as.data.frame(str_split_fixed(df_ss_race$StrategicSupports,
                                            max(unlist(lapply(strsplit(df_ss_race$StrategicSupports, ","),
                                                              length)))))
 
-
-names(df_ss_sep) <- paste0("support_", 1:ncol(df_ss_sep))
+num_support <- ncol(df_ss_sep)
+names(df_ss_sep) <- paste0("support_", 1:num_support)
 df_ss_sep$LEAName <- df_ss_race$LEAName 
 df_ss_sep$StudentGroup <- df_ss_race$StudentGroup
+
+for (i in 1:num_support){
+  df_ss_sep[[i]] <- str_squish(df_ss_sep[[i]])
+}
 
 output <- vector("list", length(fed_ethnicity))
 district_num <- vector("list", length(fed_ethnicity))
@@ -347,11 +382,15 @@ for (i in 1:length(fed_ethnicity)) {
     replace(. == "", NA) %>%
     filter(!is.na(StrategicSupports)) %>%
     select(-support) %>%
+    mutate(StrategicSupports = case_when(StrategicSupports == "Strategic Staffing (teacher advocates" ~ "Strategic Staffing (teacher advocates, advisory, looping)",
+                                         StrategicSupports == "advisory" ~ "",
+                                         StrategicSupports == "looping)" ~ "",
+                                         TRUE ~ StrategicSupports)) %>%
+    filter(StrategicSupports != "") %>%
     group_by(StrategicSupports) %>%
     summarise(number = n()) %>%
     arrange(desc(number)) %>%
-    mutate(StudentGroup = fed_ethnicity[i],
-           Frequency = number/district_num[[i]]) %>%
+    mutate(StudentGroup = fed_ethnicity[i]) %>%
     filter(StrategicSupports %!in% fed_ethnicity)
   
 }
@@ -361,14 +400,14 @@ df_ss_count <- bind_rows(output)
 df_ss_count %>%
   filter(StudentGroup %in% fed_ethnicity[1:3]) %>%
   ggplot(aes(x= reorder(StrategicSupports, number), 
-             y= Frequency)) + 
+             y= number)) + 
   geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
-  facet_wrap(~StudentGroup, ncol = 3) +
+  facet_wrap(~StudentGroup, ncol = 3, labeller = label_wrap_gen(width=20)) +
   ggtitle("LEA Academic and Students Well-being Plans",
           subtitle = "frequency of Strategic Supports") +
   labs(x = "", 
        y = "") +
-  scale_y_continuous(labels = percent, limits = c(0, 1.03)) +
+#  scale_y_continuous(labels = percent, limits = c(0, 1.03)) +
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
 #  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
@@ -385,19 +424,19 @@ df_ss_count %>%
         axis.text.y = element_text(vjust =0.5, size=5.5),
         axis.title.x  = element_text(size=7),
         axis.title.y  = element_text(size=12),
-        strip.text.x = element_text(size = 6, colour = "black"))
+        strip.text.x = element_text(size = 9, colour = "black"))
 
 df_ss_count %>%
   filter(StudentGroup %in% fed_ethnicity[4:6]) %>%
   ggplot(aes(x= reorder(StrategicSupports, number), 
-             y= Frequency)) + 
+             y= number)) + 
   geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
-  facet_wrap(~StudentGroup, ncol = 3) +
+  facet_wrap(~StudentGroup, ncol = 3, labeller = label_wrap_gen(width=20)) +
   ggtitle("LEA Academic and Students Well-being Plans",
           subtitle = "frequency of Strategic Supports") +
   labs(x = "", 
        y = "") +
-  scale_y_continuous(labels = percent, limits = c(0, 1.03)) +
+#  scale_y_continuous(labels = percent, limits = c(0, 1.03)) +
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
 #  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
@@ -414,19 +453,19 @@ df_ss_count %>%
         axis.text.y = element_text(vjust =0.5, size=5.5),
         axis.title.x  = element_text(size=7),
         axis.title.y  = element_text(size=12),
-        strip.text.x = element_text(size = 6, colour = "black"))
+        strip.text.x = element_text(size = 9, colour = "black"))
 
 df_ss_count %>%
   filter(StudentGroup %in% fed_ethnicity[7:9]) %>%
   ggplot(aes(x= reorder(StrategicSupports, number), 
-             y= Frequency)) + 
+             y= number)) + 
   geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
-  facet_wrap(~StudentGroup, ncol = 3) +
+  facet_wrap(~StudentGroup, ncol = 3, labeller = label_wrap_gen(width=20)) +
   ggtitle("LEA Academic and Students Well-being Plans",
           subtitle = "frequency of Strategic Supports") +
   labs(x = "", 
        y = "") +
-  scale_y_continuous(labels = percent, limits = c(0, 1.03)) +
+#  scale_y_continuous(labels = percent, limits = c(0, 1.03)) +
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
 #  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
@@ -443,16 +482,165 @@ df_ss_count %>%
         axis.text.y = element_text(vjust =0.5, size=5.5),
         axis.title.x  = element_text(size=7),
         axis.title.y  = element_text(size=12),
-        strip.text.x = element_text(size = 6, colour = "black"))
+        strip.text.x = element_text(size = 9, colour = "black"))
 
 ```
 
+```{r D.3 StrategicSupport student groups}
 
-Summarize the frequency of the “strategiesformentoring”, 
-The frequency of the “strategies for support”
+df_ss_stugroups <- df_LEA_plans %>%
+  select("LEAName", "Grade", "StudentGroup", "StrategicSupports") 
 
-```{r D.4 strategiesformentoring}
+df_ss_stugroups <- unique(df_ss_stugroups[c("LEAName", "Grade", "StudentGroup", "StrategicSupports")]) %>%
+  mutate(StudentGroup = case_when(StudentGroup == "Two or more races" ~ "Two or more races students",
+                                  StudentGroup == "Students of two or More Races" ~ "Two or more races students",
+                                  TRUE ~ StudentGroup))
+
 
 ```
 
+# D.4 StrategiesForMentoring & Support
+
+## StrategiesForMentoring
+
+> Summarize the frequency of the “strategiesformentoring”, 
+
+```{r D.4.i strategiesformentoring}
+
+df_strategiesformentoring <- df_LEA_plans %>%
+  select(c("LEAName", "StrategiesForMentoring")) 
+
+df_sfm_unique <- unique(df_strategiesformentoring[c("LEAName", "StrategiesForMentoring")])
+
+#check whether one sd different inputs of plans
+#df_sfm_unique$LEAName[duplicated(df_sfm_unique$LEAName)]
+
+df_sfm_sep <- as.data.frame(str_split_fixed(df_sfm_unique$StrategiesForMentoring, 
+                                            ",", 
+                                            max(unlist(lapply(strsplit(df_sfm_unique$StrategiesForMentoring, ","), 
+                                                              length)))))
+
+names(df_sfm_sep) <- paste0("mentor_", 1:ncol(df_sfm_sep))
+df_sfm_sep$LEAName <- df_sfm_unique$LEAName
+
+df_sfm_count <- df_sfm_sep %>%
+  mutate(mentor_1 = str_squish(mentor_1),
+         mentor_2 = str_squish(mentor_2),
+         mentor_3 = str_squish(mentor_3)) %>%
+  gather(mentor, StrategiesForMentoring, -LEAName) %>%
+  replace(. == "", NA) %>%
+  filter(!is.na(StrategiesForMentoring)) %>%
+  select(-mentor) %>%
+  mutate(StrategiesForMentoring = case_when(StrategiesForMentoring == "Strategic Staffing ()" ~ "Strategic Staffing",
+                                          StrategiesForMentoring == "collaboration with stakeholders to target and combine wrap-around services with academic instruction for most-at risk students" ~ "*",
+                                          TRUE ~ StrategiesForMentoring)) %>%
+  group_by(StrategiesForMentoring) %>%
+  summarise(number = n()) %>%
+  arrange(desc(number)) 
+
+df_sfm_count %>%
+  ggplot(aes(x= reorder(StrategiesForMentoring, number), 
+             y= number)) + 
+  geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
+  ggtitle("LEA Academic and Students Well-being Plans",
+          subtitle = "frequency of strategies for mentoring") +
+  labs(x = "", 
+       y = "",
+       caption = "Note: 305 school districts are included
+       * collaboration with stakeholders to target and combine wrap-around
+       services with academic instruction for most-at risk students") +
+  #scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  #scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
+  #                                               width = 100)) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
+        plot.subtitle = element_text(hjust = 0),
+        plot.caption = element_text(hjust = 1, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.text.y = element_text(hjust=1, vjust =0.5, size=5.5),
+        axis.title.x  = element_text(size=7),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/sfm.png")
+
+```
+
+## StrategiesForSupport
+
+> The frequency of the “strategies for support”
+
+```{r D.4.i strategiesforsupport}
+df_strategiesforsupport <- df_LEA_plans %>%
+  select(c("LEAName", "StrategiesForSupport")) 
+
+df_sfs_unique <- unique(df_strategiesforsupport[c("LEAName", "StrategiesForSupport")]) 
+
+#check whether one sd different inputs of plans
+#df_sfs_unique$LEAName[duplicated(df_sfs_unique$LEAName)]
+
+df_sfs_sep <- as.data.frame(str_split_fixed(df_sfs_unique$StrategiesForSupport, 
+                                            ",", 
+                                            max(unlist(lapply(strsplit(df_sfs_unique$StrategiesForSupport, ","), 
+                                                              length)))))
+
+names(df_sfs_sep) <- paste0("support_", 1:ncol(df_sfs_sep))
+df_sfs_sep$LEAName <- df_sfs_unique$LEAName
+
+df_sfs_count <- df_sfs_sep %>% 
+  mutate(support_1 = str_squish(support_1),
+         support_2 = str_squish(support_2),
+         support_3 = str_squish(support_3)) %>%
+  gather(support, StrategiesForSupport, -LEAName) %>%
+  replace(. == "", NA) %>%
+  filter(!is.na(StrategiesForSupport)) %>%
+  select(-support) %>%
+  mutate(StrategiesForSupport = case_when(StrategiesForSupport == "STAR/IAB's" ~ "Star/IAB's",
+                                          StrategiesForSupport == "flixibility for TBIP to be used in multilingual and dual language programs to facilitate ELD development" ~ "*",
+                                          StrategiesForSupport == "State support to find methods for supporting/retaining/and growing teachers of color through stipends and PD opportunities" ~ "**",
+                                TRUE ~ StrategiesForSupport)) %>%
+  group_by(StrategiesForSupport) %>%
+  summarise(number = n()) %>%
+  arrange(desc(number))
+
+df_sfs_count %>%
+  ggplot(aes(x= reorder(StrategiesForSupport, number), 
+             y= number)) + 
+  geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
+  ggtitle("LEA Academic and Students Well-being Plans",
+          subtitle = "frequency of strategies for support") +
+  labs(x = "", 
+       y = "",
+       caption = "Note: 305 school districts are included
+       * flixibility for TBIP to be used in multilingual and dual
+       language programs to facilitate ELD development
+       ** State support to find methods for supporting/retaining/and
+       growing teachers of color through stipends and PD opportunities") +
+  #scale_y_continuous(labels = percent, limits = c(0, 1)) +
+  #scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
+  #                                               width = 70), 
+  #                 guide = guide_axis(check.overlap = TRUE))+
+   #                guide = guide_axis(n.dodge=2)) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
+        plot.subtitle = element_text(hjust = 0),
+        plot.caption = element_text(hjust = 1, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 10),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.text.y = element_text(hjust=1, vjust =0.5, size=7),
+        axis.title.x  = element_text(size=7),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 12, colour = "black"))
+
+#ggsave("/Users/alexliu/Desktop/sfs.png")
+```
 
