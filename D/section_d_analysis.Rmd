@@ -57,7 +57,7 @@ uw_reverse <- colorRampPalette(c("#e8e3d3", "#4b2e83"))
 black_white <- colorRampPalette(c("white", "black"))
 ```
 
-* Note 12/13
+* Note 12/14
   + ~~change percent to count~~
   + D1 ~~fix labels~~
   + D2 
@@ -623,8 +623,9 @@ ss_stugroups_count %>%
   labs(x = "", 
        y = "",
        caption = "Note: 305 school districts are included;
-       Two school districts identified their student group as (1) With a total enrollment of 9 at the end of the 2020-21 school year all students were considered individually and
-       as a group and (2) Our student group is the 43 students in K-5. We have some students requiring intervention and are providing those services.") +
+       Two school districts identified their student group as (1) With a total enrollment of 9 at the end of the 2020-21 school year 
+       all students were considered individually and as a group and (2) Our student group is the 43 students in K-5.
+       We have some students requiring intervention and are providing those services.") +
  # scale_y_continuous(labels = numeric, limits = c(0, 305)) +
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
   geom_text(aes(label = number ), position = position_dodge(0.9),
