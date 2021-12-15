@@ -187,19 +187,22 @@ df_s275 %>%
   # mutate(avg_dist_salary = mean(staterev_cissal_r19_2019_18d, na.rm = TRUE)) %>% 
   # mutate(avg_dist_salary = mean(staterev_tchsal_r19_2019_18d, na.rm = TRUE)) %>%
   mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE),
-         rfactor = as.numeric(as.character(rfactor_cis_2019))) %>%
+         rfactor = as.numeric(as.character(rfactor_cis_2019)),
+         dist_enroll = mean(dis_enroll.y, na.rm = TRUE)) %>%
   slice_head() %>% 
   ungroup() %>% 
   ggplot(aes(x = rfactor, y = avg_dist_salary)) + 
   geom_text(aes(label = if_else(dis_name %in% outlier_disnames, as.character(dis_name), '')),
             hjust=0, vjust=0, size = 3, position = position_jitter(width = 0.01, height = 0, seed = 99)) +
   geom_point(position = position_jitter(width = 0.01, height = 0, seed = 99)) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   scale_x_continuous("Regionalization Factor", limits = c(.99, 1.28), breaks = c(1.00, 1.06, 1.12, 1.18, 1.24)) +
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
-  labs(title = "Scatterplot of (unadjusted) teacher (final) salary and regionalization factor \nfor school districts during AY 2018-2019")
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(title = "Scatterplot of (unadjusted) teacher (final) salary and regionalization factor \nfor school districts during AY 2018-2019",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 
 df_s275 %>% 
@@ -207,34 +210,38 @@ df_s275 %>%
   left_join(df_cwi_2019, by = c("codist" = "dist_id")) %>% 
   group_by(codist) %>% 
   mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE)/cwi,
-         rfactor = as.numeric(as.character(rfactor_cis_2019))) %>%
+         rfactor = as.numeric(as.character(rfactor_cis_2019)),
+         dist_enroll = mean(dis_enroll.y, na.rm = TRUE)) %>%
   slice_head() %>% 
   ungroup() %>% 
   ggplot(aes(x = rfactor, y = avg_dist_salary)) + 
   geom_text(aes(label = if_else(dis_name %in% outlier_disnames, as.character(dis_name), '')),
             hjust=0, vjust=0, size = 3, position = position_jitter(width = 0.01, height = 0, seed = 99)) +
   geom_point(position = position_jitter(width = 0.01, height = 0, seed = 99)) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   scale_x_continuous("Regionalization Factor", limits = c(.99, 1.28), breaks = c(1.00, 1.06, 1.12, 1.18, 1.24)) +
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   labs(title = "Scatterplot of (adjusted) teacher (final) salary and regionalization factor \nfor school districts during AY 2018-2019",
-       subtitle = "normalized by cost of wage index for each school district")
+       subtitle = "normalized by cost of wage index for each school district",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 
 df_s275 %>% 
   filter(SchoolYear == "2019-2020" & !is.na(leap_rfactor_cis_2020)) %>% 
   group_by(codist) %>% 
   mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE),
-         rfactor = as.character(leap_rfactor_cis_2020)) %>%
+         rfactor = as.character(leap_rfactor_cis_2020),
+         dist_enroll = mean(dis_enroll.y, na.rm = TRUE)) %>%
   slice_head() %>% 
   ungroup() %>% 
   ggplot(aes(x = rfactor, y = avg_dist_salary)) + 
   # geom_text(aes(label = if_else(dis_name %in% outlier_disnames, as.character(dis_name), '')),
   #           hjust=0, vjust=0, size = 3, position = position_jitter(width = 0.01, height = 0, seed = 99)) +
   geom_point(position = position_jitter(width = 0.08, height = 0, seed = 99)) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   # scale_x_continuous("Regionalization Factor", limits = c(.99, 1.28), breaks = c(1.00, 1,04, 1.06, 1,1, 1.12,
   #                                                                                1.16, 1.18, 1.22, 1.24, 1.28)) +
   scale_x_discrete("Regionalization Factor", breaks = c(1.00, 1.04, 1.06, 1.1, 1.12,
@@ -242,7 +249,9 @@ df_s275 %>%
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 120000), labels=scales::dollar_format()) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
-  labs(title = "Scatterplot of (unadjusted) teacher (final) salary and regionalization factor \nfor school districts during AY 2019-2020")
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(title = "Scatterplot of (unadjusted) teacher (final) salary and regionalization factor \nfor school districts during AY 2019-2020",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 df_s275 %>% 
   filter(SchoolYear == "2019-2020" & !is.na(leap_rfactor_cis_2020)) %>%
@@ -278,39 +287,45 @@ df_s275 %>%
   # mutate(avg_dist_salary = mean(staterev_cissal_r19_2019_18d, na.rm = TRUE)) %>% 
   # mutate(avg_dist_salary = mean(staterev_tchsal_r19_2019_18d, na.rm = TRUE)) %>%
   mutate(avg_dist_salary = mean(certbase, na.rm = TRUE),
-         rfactor = as.numeric(as.character(rfactor_cis_2019))) %>%
+         rfactor = as.numeric(as.character(rfactor_cis_2019)),
+         dist_enroll = mean(dis_enroll.y, na.rm = TRUE)) %>%
   slice_head() %>% 
   ungroup() %>% 
   ggplot(aes(x = rfactor, y = avg_dist_salary)) + 
   geom_text(aes(label = if_else(dis_name %in% outlier_disnames, as.character(dis_name), '')),
             hjust=0, vjust=0, size = 3, position = position_jitter(width = 0.01, height = 0, seed = 99)) +
   geom_point(position = position_jitter(width = 0.01, height = 0, seed = 99)) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   scale_x_continuous("Regionalization Factor", limits = c(.99, 1.28), breaks = c(1.00, 1.06, 1.12, 1.18, 1.24)) +
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
-  labs(title = "Scatterplot of (unadjusted) teacher BASE salary and regionalization factor \nfor school districts during AY 2018-2019")
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(title = "Scatterplot of (unadjusted) teacher BASE salary and regionalization factor \nfor school districts during AY 2018-2019",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 df_s275 %>% 
   filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
   left_join(df_cwi_2019, by = c("codist" = "dist_id")) %>% 
   group_by(codist) %>% 
   mutate(avg_dist_salary = mean(certbase, na.rm = TRUE)/cwi,
-         rfactor = as.numeric(as.character(rfactor_cis_2019))) %>%
+         rfactor = as.numeric(as.character(rfactor_cis_2019)),
+         dist_enroll = mean(dis_enroll.y, na.rm = TRUE)) %>%
   slice_head() %>% 
   ungroup() %>% 
   ggplot(aes(x = rfactor, y = avg_dist_salary)) + 
   geom_text(aes(label = if_else(dis_name %in% outlier_disnames, as.character(dis_name), '')),
             hjust=0, vjust=0, size = 3, position = position_jitter(width = 0.01, height = 0, seed = 99)) +
   geom_point(position = position_jitter(width = 0.01, height = 0, seed = 99)) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   scale_x_continuous("Regionalization Factor", limits = c(.99, 1.28), breaks = c(1.00, 1.06, 1.12, 1.18, 1.24)) +
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   labs(title = "Scatterplot of (adjusted) teacher BASE salary and regionalization factor \nfor school districts during AY 2018-2019",
-       subtitle = "normalized by cost of wage index for each school district")
+       subtitle = "normalized by cost of wage index for each school district",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 
 
@@ -318,14 +333,15 @@ df_s275 %>%
   filter(SchoolYear == "2019-2020" & !is.na(leap_rfactor_cis_2020)) %>% 
   group_by(codist) %>% 
   mutate(avg_dist_salary = mean(certbase, na.rm = TRUE),
-         rfactor = as.character(leap_rfactor_cis_2020)) %>%
+         rfactor = as.character(leap_rfactor_cis_2020),
+         dist_enroll = mean(dis_enroll.y, na.rm = TRUE)) %>%
   slice_head() %>% 
   ungroup() %>% 
   ggplot(aes(x = rfactor, y = avg_dist_salary)) + 
   # geom_text(aes(label = if_else(dis_name %in% outlier_disnames, as.character(dis_name), '')),
   #           hjust=0, vjust=0, size = 3, position = position_jitter(width = 0.01, height = 0, seed = 99)) +
   geom_point(position = position_jitter(width = 0.08, height = 0, seed = 99)) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   # scale_x_continuous("Regionalization Factor", limits = c(.99, 1.28), breaks = c(1.00, 1,04, 1.06, 1,1, 1.12,
   #                                                                                1.16, 1.18, 1.22, 1.24, 1.28)) +
   scale_x_discrete("Regionalization Factor", breaks = c(1.00, 1.04, 1.06, 1.1, 1.12,
@@ -333,7 +349,9 @@ df_s275 %>%
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
-  labs(title = "Scatterplot of (unadjusted) teacher BASE salary and regionalization factor \nfor school districts during AY 2019-2020")
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(title = "Scatterplot of (unadjusted) teacher BASE salary and regionalization factor \nfor school districts during AY 2019-2020",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 df_s275 %>% 
   filter(SchoolYear == "2019-2020" & !is.na(leap_rfactor_cis_2020)) %>%
@@ -366,34 +384,40 @@ C.3. Poverty-level correlated with teacher salary adjusted local non-teacher wag
 df_s275 %>% 
   filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
   group_by(codist) %>% 
-  mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE)) %>% 
+  mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE),
+         dist_enroll = mean(dis_enroll.y, na.rm = TRUE)) %>% 
   slice_head() %>%
   ungroup() %>%
   ggplot(aes(x = dis_pctstu_frl, y = avg_dist_salary)) + 
   geom_point() + 
-  geom_smooth(method='lm', se = FALSE) +
+  geom_smooth(method='lm', aes(weight = dist_enroll), se = FALSE) +
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   labs(x = "Share of students receiving FRPL",
-       title = "Scatterplot of (unadjusted) teacher (final) salary and share of FRPL \nfor school districts during AY 2018-2019")
+       title = "Scatterplot of (unadjusted) teacher (final) salary and share of FRPL \nfor school districts during AY 2018-2019",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 df_s275 %>% 
   filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
   left_join(df_cwi_2019, by = c("codist" = "dist_id")) %>% 
   group_by(codist) %>% 
-  mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE)/cwi) %>% 
+  mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE)/cwi,
+         dist_enroll = mean(dis_enroll.y, na.rm = TRUE)) %>% 
   slice_head() %>%
   ungroup() %>%
   ggplot(aes(x = dis_pctstu_frl, y = avg_dist_salary)) + 
   geom_point() + 
-  geom_smooth(method='lm', se = FALSE) +
+  geom_smooth(method='lm', aes(weight = dist_enroll), se = FALSE) +
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   labs(x = "Share of students receiving FRPL",
        title = "Scatterplot of (adjusted) teacher (final) salary and share of FRPL \nfor school districts during AY 2018-2019",
-       subtitle = "normalized by cost of wage index for each school district")
+       subtitle = "normalized by cost of wage index for each school district",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 
 # base salary
@@ -406,14 +430,15 @@ df_s275 %>%
   ungroup() %>%
   ggplot(aes(x = dis_pctstu_frl, y = avg_dist_salary)) + 
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method='lm', se = FALSE) + 
-  geom_smooth(method='lm', aes(weight = dist_enroll), color = "red", se = FALSE) +
+  geom_smooth(method='lm', aes(weight = dist_enroll), se = FALSE) + 
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   labs(x = "Share of students receiving FRPL",
-       title = "Scatterplot of (unadjusted) teacher BASE salary and share of FRPL \nfor school districts during AY 2018-2019")
+       title = "Scatterplot of (unadjusted) teacher BASE salary and share of FRPL \nfor school districts during AY 2018-2019",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 df_s275 %>% 
   filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
@@ -425,15 +450,16 @@ df_s275 %>%
   ungroup() %>%
   ggplot(aes(x = dis_pctstu_frl, y = avg_dist_salary)) + 
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method='lm', se = FALSE) +
-  geom_smooth(method='lm', aes(weight = dist_enroll), color = "red", se = FALSE) +
+  geom_smooth(method='lm', aes(weight = dist_enroll), se = FALSE) +
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   labs(x = "Share of students receiving FRPL",
        title = "Scatterplot of (adjusted) teacher BASE salary and share of FRPL \nfor school districts during AY 2018-2019",
-       subtitle = "normalized by cost of wage index for each school district")
+       subtitle = "normalized by cost of wage index for each school district",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 
 ```
@@ -445,35 +471,41 @@ df_s275 %>%
   filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
   group_by(codist) %>% 
   mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE),
-         pctstu_nonwhite = mean(1 - dis_pctstu_white - dis_pctstu_asian, na.rm = TRUE)) %>% 
+         pctstu_nonwhite = mean(1 - dis_pctstu_white - dis_pctstu_asian, na.rm = TRUE),
+         dist_enroll = mean(dis_enroll.y, na.rm = TRUE)) %>% 
   slice_head() %>%
   ungroup() %>%
   ggplot(aes(x = pctstu_nonwhite, y = avg_dist_salary)) + 
   geom_point() + 
-  geom_smooth(method='lm', se = FALSE) +
+  geom_smooth(method='lm', aes(weight = dist_enroll), se = FALSE) +
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   labs(x = "Share of non-white students (excludes asian)",
-       title = "Scatterplot of (unadjusted) teacher (final) salary and share of students of color \nfor school districts during AY 2018-2019")
+       title = "Scatterplot of (unadjusted) teacher (final) salary and share of students of color \nfor school districts during AY 2018-2019",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 df_s275 %>% 
   filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
   left_join(df_cwi_2019, by = c("codist" = "dist_id")) %>% 
   group_by(codist) %>% 
   mutate(avg_dist_salary = mean(tfinsal, na.rm = TRUE)/cwi,
-         pctstu_nonwhite = mean(1 - dis_pctstu_white - dis_pctstu_asian, na.rm = TRUE)) %>% 
+         pctstu_nonwhite = mean(1 - dis_pctstu_white - dis_pctstu_asian, na.rm = TRUE),
+         dist_enroll = mean(dis_enroll.y, na.rm = TRUE)) %>% 
   slice_head() %>%
   ungroup() %>%
   ggplot(aes(x = pctstu_nonwhite, y = avg_dist_salary)) + 
   geom_point() + 
-  geom_smooth(method='lm', se = FALSE) +
+  geom_smooth(method='lm', aes(weight = dist_enroll), se = FALSE) +
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   labs(x = "Share of non-white students (exclude asian)",
        title = "Scatterplot of (adjusted) teacher (final) salary and share of students of color \nfor school districts during AY 2018-2019",
-       subtitle = "normalized by cost of wage index for each school district")
+       subtitle = "normalized by cost of wage index for each school district",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 
 # Base salary
@@ -487,14 +519,15 @@ df_s275 %>%
   ungroup() %>%
   ggplot(aes(x = pctstu_nonwhite, y = avg_dist_salary)) + 
   geom_point(aes(size = dist_enroll)) +
-  geom_smooth(method='lm', se = FALSE) + 
-  geom_smooth(method='lm', aes(weight = dist_enroll), color = "red", se = FALSE) +
+  geom_smooth(method='lm', aes(weight = dist_enroll), se = FALSE) +
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   labs(x = "Share of non-white students (excludes asian)",
-       title = "Scatterplot of (unadjusted) teacher BASE salary and share of students of color \nfor school districts during AY 2018-2019")
+       title = "Scatterplot of (unadjusted) teacher BASE salary and share of students of color \nfor school districts during AY 2018-2019",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 df_s275 %>% 
   filter(SchoolYear == "2018-2019" & !is.na(rfactor_cis_2019)) %>% 
@@ -507,15 +540,16 @@ df_s275 %>%
   ungroup() %>%
   ggplot(aes(x = pctstu_nonwhite, y = avg_dist_salary)) + 
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method='lm', se = FALSE) + 
-  geom_smooth(method='lm', aes(weight = dist_enroll), color = "red", se = FALSE) +
+  geom_smooth(method='lm', aes(weight = dist_enroll), se = FALSE) +
   scale_y_continuous("Average District Teacher Salary", limits = c(30000, 100000), labels=scales::dollar_format()) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   theme_classic() +
   theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   labs(x = "Share of non-white students (exclude asian)",
        title = "Scatterplot of (adjusted) teacher BASE salary and share of students of color \nfor school districts during AY 2018-2019",
-       subtitle = "normalized by cost of wage index for each school district")
+       subtitle = "normalized by cost of wage index for each school district",
+       caption = "Fitted line is weighted by district's enrollment size.")
 ```
 
 ```{r C5}
@@ -561,22 +595,28 @@ df_s275 %>%
                                               "late-career 1", "late-career 2", "late-career 3"))) %>% 
   group_by(exp_bin) %>% 
   summarize(share_black = mean(race == "B" & hispanic == "N", na.rm = TRUE),
+            num_black = sum(race == "B" & hispanic == "N", na.rm = TRUE),
             share_asian = mean(race == "A" & hispanic == "N", na.rm = TRUE),
+            num_asian = sum(race == "A" & hispanic == "N", na.rm = TRUE),
             share_hisp = mean(hispanic == "Y", na.rm = TRUE),
+            num_hisp = sum(hispanic == "Y", na.rm = TRUE),
             # share_white = mean(race == "W" & hispanic == "N", na.rm = TRUE),
             share_nonwhite = mean((race != "W" & race != "A") | (race == "W" & hispanic == "Y"), na.rm = TRUE),
-            share_nonwhite1 = mean(race != "W" | (race == "W" & hispanic == "Y"), na.rm = TRUE)) %>% 
-  pivot_longer(cols = starts_with("share_"), names_to = "race", values_to = "val") %>% 
-  ggplot(aes(x = exp_bin, y = val, fill = race)) +
+            num_nonwhite = sum((race != "W" & race != "A") | (race == "W" & hispanic == "Y"), na.rm = TRUE),
+            share_nonwhite1 = mean(race != "W" | (race == "W" & hispanic == "Y"), na.rm = TRUE),
+            num_nonwhite1 = sum(race != "W" | (race == "W" & hispanic == "Y"), na.rm = TRUE)) %>% 
+  pivot_longer(cols = c(starts_with("share_"), starts_with("num_")), names_to = c(".value", "race"), names_pattern = "(.*)_(.*)") %>% 
+  ggplot(aes(x = exp_bin, y = share, fill = race)) +
   geom_col(position = 'dodge') +
-  scale_fill_discrete("",breaks = c("share_black", "share_asian", "share_hisp", "share_nonwhite", "share_nonwhite1"),
+  geom_text(aes(label = num), position = position_dodge(width = 0.9), vjust = -0.5) +
+  scale_fill_discrete("",breaks = c("black", "asian", "hisp", "nonwhite", "nonwhite1"),
                       labels = c("Black", "Asian", "Hispanic", "Non-white (excl. asian)", "Non-white")) +
   scale_y_continuous(labels = scales::percent) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   labs(x = "", y = "",
        title = "Share of non-white teachers by experience in WA state during AY 2019-2020",
-       caption = "experience categories: early-career (0−3 years of teaching experience); junior (4−7); mid-career 1 (8−11); mid-career 2 (12−15);late-career 1(16−19); late-career 2(20−22); and late-career 3 (23 and above).")
+       caption = "experience categories: early-career (0−3 years of teaching experience); junior (4−7); mid-career 1 (8−11); mid-career 2 (12−15);late-career 1(16−19); late-career 2(20−22); and late-career 3 (23 and above).\nNumber of teachers in each category are also reported on top of each bar.")
 
 
 
@@ -608,7 +648,7 @@ df_s275_dist <- df_s275 %>%
             dist_pctstu_white = mean(dis_pctstu_white, na.rm = TRUE),
             dist_pctstu_asian = mean(dis_pctstu_asian, na.rm = TRUE),
             dist_pctstu_nonwhite = 1 - dist_pctstu_white - dist_pctstu_asian,
-            dist_pctstu_nonwhite1 = 1 - dist_pctstu_white - dist_pctstu_asian,
+            dist_pctstu_nonwhite1 = 1 - dist_pctstu_white,
 
             dist_pctstu_frpl = mean(replace_na(dis_pctstu_frl, 0)),
 
@@ -639,58 +679,62 @@ df_s275_dist <- df_s275 %>%
 df_s275_dist %>% 
   ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_nonwhite)) +
   geom_point(aes(size = dist_enroll)) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x = "Share of students of color",
        y = "Share of non-white teachers",
        title = "Scatterplot of share of nonwhite teachers and students of color by district enrollment size\nacross WA school districtsin AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>% 
   ggplot(aes(x = dist_pctstu_black, y = mean_dist_tch_black)) +
   geom_point(aes(size = dist_enroll)) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
-  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  theme(plot.caption = element_text(hjust = 0, face = "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x = "Share of black students",
        y = "Share of black teachers",
-       title = "Scatterplot of share of black teachers and black students by district enrollment size\nacross WA school districtsin AY 2018-2019")
+       title = "Scatterplot of share of black teachers and black students by district enrollment size\nacross WA school districtsin AY 2018-2019",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>% 
   ggplot(aes(x = dist_pctstu_hisp, y = mean_dist_tch_hisp)) +
   geom_point(aes(size = dist_enroll)) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x = "Share of hispanic students",
        y = "Share of hispanic teachers",
-       title = "Scatterplot of share of hispanic teachers and hispanic students by district enrollment size\nacross WA school districtsin AY 2018-2019")
+       title = "Scatterplot of share of hispanic teachers and hispanic students by district enrollment size\nacross WA school districtsin AY 2018-2019",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>% 
   ggplot(aes(x = dist_pctstu_asian, y = mean_dist_tch_asian)) +
   geom_point(aes(size = dist_enroll)) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x = "Share of asian students",
        y = "Share of asian teachers",
-       title = "Scatterplot of share of asian teachers and asian students by district enrollment size\nacross WA school districtsin AY 2018-2019")
+       title = "Scatterplot of share of asian teachers and asian students by district enrollment size\nacross WA school districtsin AY 2018-2019",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>% 
   ggplot(aes(x = dist_pctstu_white, y = mean_dist_tch_white)) +
   geom_point(aes(size = dist_enroll)) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x = "Share of white students",
        y = "Share of white teachers",
-       title = "Scatterplot of share of white teachers and white students by district enrollment size\nacross WA school districtsin AY 2018-2019")
+       title = "Scatterplot of share of white teachers and white students by district enrollment size\nacross WA school districtsin AY 2018-2019",
+       caption = "Fitted line is weighted by district's enrollment size.")
 
 
 df_s275_dist %>%
@@ -724,14 +768,14 @@ df_s275_dist %>%
 df_s275_dist %>% 
   ggplot(aes(x = dist_pctstu_nonwhite1, y = mean_dist_tch_nonwhite1)) +
   geom_point(aes(size = dist_enroll)) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x = "Share of students of color",
        y = "Share of non-white teachers",
        title = "Scatterplot of share of nonwhite teachers and students of color by district enrollment size\nacross WA school districtsin AY 2018-2019",
-       caption = "In all estimates, asians are included in non-white and people of color categories.")
+       caption = "In all estimates, asians are included in non-white and people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>% 
   filter(dist_nonwhite_cat1 %in% c("0 to 25%", "76 to 100%")) %>% 
@@ -755,14 +799,14 @@ df_s275_dist %>%
 df_s275_dist %>% 
   ggplot(aes(x = dist_pctstu_frpl, y = mean_dist_tch_nonwhite)) +
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +  
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x = "Share of students receiving FRPL",
        y = "Share of non-white teachers",
        title = "Scatterplot of share of nonwhite teachers and students poverty (measured by FRPL) across WA school districts\nin AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>%
   ggplot(aes(x = mean_dist_tch_nonwhite, color = dist_poverty_cat)) +
@@ -795,14 +839,14 @@ df_s275_dist %>%
 df_s275_dist %>%
   ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_bachelor)) +
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x =  "Share of students of color in a district",
        y = "Share of teachers with bachelor's",
        title = "Scatterplot of share of teachers with highest degree as bachelor's and share of students of color\nacross WA school districts in AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>%
   ggplot(aes(x = mean_dist_tch_bachelor, color = dist_nonwhite_cat)) +
@@ -833,14 +877,14 @@ df_s275_dist %>%
 df_s275_dist %>%
   ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_master)) +
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x =  "Share of students of color in a district",
        y = "Share of teachers with master's",
        title = "Scatterplot of share of teachers with highest degree as master's and share of students of color across WA school districts\nin AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>%
   ggplot(aes(x = mean_dist_tch_master, color = dist_nonwhite_cat)) +
@@ -871,14 +915,14 @@ df_s275_dist %>%
 df_s275_dist %>%
   ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_doctorate)) +
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x =  "Share of students of color in a district",
        y = "Share of teachers with doctorate's",
        title = "Scatterplot of share of teachers with highest degree as doctorate's and share of students of color across WA school districts\nin AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>%
   ggplot(aes(x = mean_dist_tch_doctorate, color = dist_nonwhite_cat)) +
@@ -909,14 +953,14 @@ df_s275_dist %>%
 df_s275_dist %>%
   ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_master_plus)) +
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x =  "Share of students of color in a district",
        y = "Share of teachers with master's/doctorate",
        title = "Scatterplot of share of teachers with highest degree as master's or doctorate and share of students of color across WA school districts\nin AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>%
   ggplot(aes(x = mean_dist_tch_master_plus, color = dist_nonwhite_cat)) +
@@ -948,14 +992,14 @@ df_s275_dist %>%
 df_s275_dist %>%
   ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_nobachelor)) +
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x =  "Share of students of color in a district",
        y = "Share of teachers with no bachelor's",
        title = "Scatterplot of share of teachers with no bachelor's and share of students of color across WA school districts\nin AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>%
   ggplot(aes(x = mean_dist_tch_nobachelor, color = dist_nonwhite_cat)) +
@@ -989,14 +1033,14 @@ df_s275_dist %>%
 df_s275_dist %>%
   ggplot(aes(x = dist_pctstu_frpl, y = mean_dist_tch_bachelor)) +
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x =  "Share of students receiving FRPL",
        y = "Share of teachers with bachelor's",
        title = "Scatterplot of share of teachers with highest degree as bachelor's and share of students poverty (measured by FRPL) across WA school districts\nin AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>%
   ggplot(aes(x = mean_dist_tch_bachelor, color = dist_nonwhite_cat)) +
@@ -1027,14 +1071,14 @@ df_s275_dist %>%
 df_s275_dist %>%
   ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_master)) +
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x =  "Share of students receiving FRPL",
        y = "Share of teachers with master's",
        title = "Scatterplot of share of teachers with highest degree as master's and share of students poverty (measured by FRPL)  across WA school districts\nin AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>%
   ggplot(aes(x = mean_dist_tch_master, color = dist_nonwhite_cat)) +
@@ -1066,14 +1110,14 @@ df_s275_dist %>%
 df_s275_dist %>%
   ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_master_plus)) +
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x =  "Share of students receiving FRPL",
        y = "Share of teachers with master's/doctorate",
        title = "Scatterplot of share of teachers with highest degree as master's or doctorate and share of students poverty (measured by FRPL)  across WA school districts\nin AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>%
   ggplot(aes(x = mean_dist_tch_master_plus, color = dist_nonwhite_cat)) +
@@ -1105,14 +1149,14 @@ df_s275_dist %>%
 df_s275_dist %>%
   ggplot(aes(x = dist_pctstu_frpl, y = mean_dist_tch_nobachelor)) +
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x =  "Share of students receiving FRPL",
        y = "Share of teachers with no bachelor's",
        title = "Scatterplot of share of teachers with no bachelor's and share of students poverty (measured by FRPL) across WA school districts\nin AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>%
   ggplot(aes(x = mean_dist_tch_nobachelor, color = dist_poverty_cat)) +
@@ -1146,14 +1190,14 @@ df_s275_dist %>%
 df_s275_dist %>%
   ggplot(aes(x = dist_pctstu_nonwhite, y = mean_dist_tch_exp)) +
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x =  "Share of students of color",
        y = "Average teacher experience (in years)",
        title = "Scatterplot of average teachers experience and share of students of color across WA school districts\nin AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>% 
   ggplot(aes(x = mean_dist_tch_exp, color = dist_nonwhite_cat)) +
@@ -1186,14 +1230,14 @@ df_s275_dist %>%
 df_s275_dist %>%
   ggplot(aes(x = dist_pctstu_frpl, y = mean_dist_tch_exp)) +
   geom_point(aes(size = dist_enroll)) + 
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x =  "Share of students receiving FRPL",
        y = "Average teacher experience (in years)",
        title = "Scatterplot of average teachers experience and share of students poverty (measured by FRPL) across WA school districts\nin AY 2018-2019",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.")
+       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nFitted line is weighted by district's enrollment size.")
 
 df_s275_dist %>% 
   ggplot(aes(x = mean_dist_tch_exp, color = dist_poverty_cat)) +
@@ -1226,8 +1270,19 @@ df_s275_dist %>%
 C7. Line charts: 
 Teacher turnover (/ teacher newcomers to the district per 1000 students; average experiences of teachers)= districts’ poverty rates
 ```{r C7}
+id_dis_stu_2020_2021 <- drive_get(as_id("https://drive.google.com/file/d/1eLno4-z6GuoQMSBKzBk019tGaq3KSk3q/view?usp=sharing"))
+
+df_dist_stu_2020_2021 <- id_dis_stu_2020_2021 %>%
+  drive_read_raw() %>%
+  read_csv()
 
 df_s275_turnover <- df_s275 %>% 
+  left_join(df_dist_stu_2020_2021, by = c("codist", "schyear"), suffix = c("", "_new")) %>% 
+  mutate(dis_pctstu_white = if_else(schyear <= 2019, dis_pctstu_white, dis_pctstu_white_new),
+         dis_pctstu_black = if_else(schyear <= 2019, dis_pctstu_black, dis_pctstu_black_new),
+         dis_pctstu_asian = if_else(schyear <= 2019, dis_pctstu_asian, dis_pctstu_asian_new),
+         dis_pctstu_hispanic = if_else(schyear <= 2019, dis_pctstu_hispanic, dis_pctstu_hispanic_new),
+         dis_pctstu_frl = if_else(schyear <= 2019, dis_pctstu_frl, dis_pctstu_frl_new)) %>% 
   filter(cert != "") %>% 
   group_by(cert) %>% 
   mutate(next_yr_coudis = dplyr::lead(coudis_s, order_by = schyear),
@@ -1255,7 +1310,7 @@ df_s275_turnover <- df_s275 %>%
 
 # teacher turnover by students of color and poverty
 df_s275_turnover %>% 
-  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%") & schyear < 2020) %>%
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%") & schyear < 2021) %>%
   group_by(schyear, dist_nonwhite_cat) %>% 
   summarize(tch_leavers = mean(tch_turnover == "leave"),
             tch_movers = mean(tch_turnover == "diff_dist_tch")) %>% 
@@ -1271,13 +1326,13 @@ df_s275_turnover %>%
   labs(x = "",
        y = "Turnover rate",
        color = "Share of students\nof color",
-       title = "Average teacher turnover rate by high vs. low students of color in WA state\nbetween AY 2015-2016 to 2018-2019",
+       title = "Average teacher turnover rate by high vs. low students of color in WA state\nbetween AY 2015-2016 to 2019-2020",
        caption = "In all estimates, asians are excluded from non-white or people of color categories.\nleavers are teachers who left the teaching profession or the system and movers are those who move to another district.")
 
 
 
 df_s275_turnover %>% 
-  filter(dist_poverty_cat %in% c("0 to 25%", "76 to 100%") & schyear < 2020) %>%
+  filter(dist_poverty_cat %in% c("0 to 25%", "76 to 100%") & schyear < 2021) %>%
   group_by(schyear, dist_poverty_cat) %>% 
   summarize(tch_leavers = mean(tch_turnover == "leave"),
             tch_movers = mean(tch_turnover == "diff_dist_tch")) %>% 
@@ -1293,18 +1348,19 @@ df_s275_turnover %>%
   labs(x = "",
        y = "Turnover rate",
        color = "Share of students\nreceiving FRPL",
-       title = "Average teacher turnover rate by high vs. low poverty in WA state\nbetween AY 2015-2016 to 2018-2019",
+       title = "Average teacher turnover rate by high vs. low poverty in WA state\nbetween AY 2015-2016 to 2019-2020",
        caption = "In all estimates, asians are excluded from non-white or people of color categories.\nleavers are teachers who left the teaching profession or the system and movers are those who move to another district.")
 
 
 # teacher turnover rates by teacher of color
 df_s275_turnover %>% 
-  filter(schyear < 2020) %>%
+  filter(schyear < 2021) %>%
   mutate(race_new = if_else(race == "B" & hispanic == "N", "Black",
                             if_else(hispanic == "Y", "Hispanic",
                                     if_else(race == "A" & hispanic == "N", "Asian",
                                             if_else(race == "W" & hispanic == "N", "White", "Other"))))
          ) %>% 
+  filter(race_new != "Other") %>% 
   group_by(schyear, race_new) %>% 
   summarize(tch_leavers = mean(tch_turnover == "leave"),
             tch_movers = mean(tch_turnover == "diff_dist_tch")) %>% 
@@ -1329,7 +1385,7 @@ df_s275_turnover %>%
 
 # teacher newcomers
 df_s275_turnover %>% 
-  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%") & schyear > 2016 & schyear <= 2020) %>%
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%") & schyear > 2016 & schyear <= 2021) %>%
   group_by(schyear, dist_nonwhite_cat) %>% 
   summarize(tch_newcomer = mean(tch_newcomer1 == 1)) %>% 
   ggplot(aes(x = schyear, y = tch_newcomer, color = dist_nonwhite_cat)) +
@@ -1343,12 +1399,12 @@ df_s275_turnover %>%
 labs(x = "",
      y = "newcomers rate",
      color = "Share of students\nof color",
-     title = "Average teacher newcomers rate by high vs. low students of color in WA state\nbetween AY 2015-2016 to 2018-2019",
+     title = "Average teacher newcomers rate by high vs. low students of color in WA state\nbetween AY 2016-2017 to 2020-2021",
      caption = "In all estimates, asians are excluded from non-white or people of color categories.\nnewcomer is defined as a teacher who was not present in the system in the prior year.")
 
 
 df_s275_turnover %>% 
-  filter(dist_poverty_cat %in% c("0 to 25%", "76 to 100%") & schyear > 2016 & schyear <= 2020) %>%
+  filter(dist_poverty_cat %in% c("0 to 25%", "76 to 100%") & schyear > 2016 & schyear <= 2021) %>%
   group_by(schyear, dist_poverty_cat) %>% 
   summarize(tch_newcomer = mean(tch_newcomer1 == 1)) %>% 
   ggplot(aes(x = schyear, y = tch_newcomer, color = dist_poverty_cat)) +
@@ -1362,7 +1418,7 @@ df_s275_turnover %>%
   labs(x = "",
        y = "newcomers rate",
        color = "Share of students\nreceiving FRPL",
-       title = "Average teacher newcomers rate by high vs. low poverty in WA state\nbetween AY 2015-2016 to 2018-2019",
+       title = "Average teacher newcomers rate by high vs. low poverty in WA state\nbetween AY 2016-2017 to 2020-2021",
        caption = "In all estimates, asians are excluded from non-white or people of color categories.\nnewcomer is defined as a teacher who was not present in the system in the prior year.")
 
 
@@ -1371,7 +1427,7 @@ df_s275_turnover %>%
 
 # teacher newcomers (to districts)
 df_s275_turnover %>% 
-  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%") & schyear > 2016 & schyear <= 2020) %>%
+  filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%") & schyear > 2016 & schyear <= 2021) %>%
   group_by(schyear, dist_nonwhite_cat) %>% 
   summarize(tch_newcomer = mean(tch_newcomer2 == 1)) %>% 
   ggplot(aes(x = schyear, y = tch_newcomer, color = dist_nonwhite_cat)) +
@@ -1380,11 +1436,11 @@ df_s275_turnover %>%
   ylim(0, .2) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
-  scale_x_continuous(breaks = c(2017, 2018, 2019)) +
+  scale_x_continuous(breaks = c(2017, 2018, 2019, 2020, 2021)) +
   labs(x = "",
        y = "newcomers rate",
        color = "Share of students\nof color",
-       title = "Average teacher newcomers rate by high vs. low students of color in WA state\nbetween AY 2016-2017 to 2018-2019",
+       title = "Average teacher newcomers rate by high vs. low students of color in WA state\nbetween AY 2016-2017 to 2020-2021",
        caption = "In all estimates, asians are excluded from non-white or people of color categories.\nnewcomer is defined as a teacher who was not present in his/her current school district in the prior year.")
 
 
@@ -1398,11 +1454,11 @@ df_s275_turnover %>%
   ylim(0, .2) +
   theme_bw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
-  scale_x_continuous(breaks = c(2017, 2018, 2019)) +
+  scale_x_continuous(breaks = c(2017, 2018, 2019, 2020, 2021)) +
   labs(x = "",
        y = "newcomers rate",
        color = "Share of students\nreceiving FRPL",
-       title = "Average teacher newcomers rate by high vs. low poverty in WA state\nbetween AY 2016-2017 to 2018-2019",
+       title = "Average teacher newcomers rate by high vs. low poverty in WA state\nbetween AY 2016-2017 to 2020-2021",
        caption = "In all estimates, asians are excluded from non-white or people of color categories.\nnewcomer is defined as a teacher who was not present in his/her current school district in the prior year.")
 
 
