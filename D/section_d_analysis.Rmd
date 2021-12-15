@@ -124,7 +124,7 @@ df_equityana_count <- df_equityana_unique %>%
 df_equityana_count_other <- df_equityana_count %>%
   filter(number == 1) %>%
   summarise(number = n()) %>%
-  mutate(EquityAnalysisToolName = "Others (employed by single school district)") 
+  mutate(EquityAnalysisToolName = "Other (employed by single school district)") 
 
 df_equityana_count %>%
   bind_rows(df_equityana_count_other) %>%
@@ -302,7 +302,7 @@ df_univsupp_count <- df_univsupp_sep %>%
 df_univsupp_count_other <- df_univsupp_count %>%
   filter(number == 1) %>%
   summarise(number = n()) %>%
-  mutate(UniversalSupports = "Others (employed by single school district)") 
+  mutate(UniversalSupports = "Other (employed by single school district)") 
 
 df_univsupp_count %>%
   bind_rows(df_univsupp_count_other) %>%
