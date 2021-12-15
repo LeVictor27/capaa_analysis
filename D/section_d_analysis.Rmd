@@ -121,7 +121,13 @@ df_equityana_count <- df_equityana_unique %>%
 #  print(grepl("Insight", tools, fixed = TRUE))
 #}
 
+df_equityana_count_other <- df_equityana_count %>%
+  filter(number == 1) %>%
+  summarise(number = n()) %>%
+  mutate(EquityAnalysisToolName = "Others (employed by single school district)") 
+
 df_equityana_count %>%
+  bind_rows(df_equityana_count_other) %>%
   filter(number >= 2) %>%
   ggplot(aes(x= reorder(EquityAnalysisToolName, number), 
              y= number)) + 
@@ -293,8 +299,14 @@ df_univsupp_count <- df_univsupp_sep %>%
   summarise(number = n()) %>%
   arrange(desc(number)) 
 
+df_univsupp_count_other <- df_univsupp_count %>%
+  filter(number == 1) %>%
+  summarise(number = n()) %>%
+  mutate(UniversalSupports = "Others (employed by single school district)") 
+
 df_univsupp_count %>%
-  slice(1:26) %>%
+  bind_rows(df_univsupp_count_other) %>%
+  filter(number > 1) %>%
   ggplot(aes(x= reorder(UniversalSupports, number), 
              y= number)) + 
   geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
