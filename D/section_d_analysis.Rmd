@@ -399,7 +399,10 @@ fed_ethnicity <- c("American Indian/ Alaska Native students",
                    "White students",
                    "Two or more races students",
                    "Low-income students",
-                   "Students with Disabilities")
+                   "Students with Disabilities",
+                   "Students Experiencing Homelessness",
+                   "Students in Foster Care",
+                   "English Language Learners")
 
 df_ss_race <- filter(df_ss_unique, StudentGroup %in% fed_ethnicity)
 df_ss_sep <- as.data.frame(str_split_fixed(df_ss_race$StrategicSupports,
@@ -535,22 +538,39 @@ df_ss_count %>%
         axis.title.y  = element_text(size=12),
         strip.text.x = element_text(size = 9, colour = "black"))
 
+df_ss_count %>%
+  filter(StudentGroup %in% fed_ethnicity[10:12]) %>%
+  ggplot(aes(x= reorder(StrategicSupports, number), 
+             y= number)) + 
+  geom_col(position="dodge", width = 0.7, fill="#4b2e83") +
+  facet_wrap(~StudentGroup, ncol = 3, labeller = label_wrap_gen(width=20)) +
+  ggtitle("LEA Academic and Students Well-being Plans",
+          subtitle = "frequency of Strategic Supports") +
+  labs(x = "", 
+       y = "",
+       caption = "Note: 305 school districts are included") +
+#  scale_y_continuous(labels = percent, limits = c(0, 1.03)) +
+#  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
+#  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
+#            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_light() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
+        plot.subtitle = element_text(hjust = 0),
+        plot.caption = element_text(hjust = 1, size = 9),
+        legend.background = element_rect(fill = "white", size = 1, colour = "white"),
+        legend.title=element_text(size = 5),
+        legend.text=element_text(size = 7),
+        axis.text.x  = element_text(angle=45, vjust=0.5, size=7),
+        axis.text.y = element_text(vjust =0.5, size=5.5),
+        axis.title.x  = element_text(size=7),
+        axis.title.y  = element_text(size=12),
+        strip.text.x = element_text(size = 9, colour = "black"))
+
 ```
 
-> Student groups identified by school districts
-
-School Districts use special student group |* marks schools that do not use derailed race/ethnicity groups
--------------------------------------------|------------------------------------------------------------------------
-"Damman School District"*                  | Our student group is the 43 students in K-5.  We have some students requiring intervention and are providing those services. 
-"Index Elementary School District 63"*     | All our students need some social-emotional support
-"Seattle School District No. 1"            | African American Male Students; Highly Capable; Students Furthest from Educational Justice
-"Shaw Island School District"*             | With a total enrollment of 9 at the end of the 2020-21 school year all students were considered individually and as a group
-"Sultan School District"                   | All students have been impacted.
-"Sumner School District"                   | Students who are credit deficient
-"Tahoma School District"                   | Chronic or Extreme Chronic Absence
-"Tukwila School District"                  | Gifted Students; High School AP & Running Start Students; Students referred by teacher
-"University Place School District"         | Students below grade level performance targets; Students new to UPSD
-
+> Common student groups identified by school districts
 
 ```{r D.3 StrategicSupport student groups, message=FALSE, warning=FALSE}
 
@@ -610,6 +630,23 @@ ss_stugroups_count %>%
         axis.title.x  = element_text(size=7),
         axis.title.y  = element_text(size=12),
         strip.text.x = element_text(size = 9, colour = "black"))
+```
+
+> Special student groups only used by single school district
+
+School Districts use special student group |* marks schools that do not use derailed race/ethnicity groups
+-------------------------------------------|------------------------------------------------------------------------
+"Damman School District"*                  | Our student group is the 43 students in K-5.  We have some students requiring intervention and are providing those services. 
+"Index Elementary School District 63"*     | All our students need some social-emotional support
+"Seattle School District No. 1"            | African American Male Students; Highly Capable; Students Furthest from Educational Justice
+"Shaw Island School District"*             | With a total enrollment of 9 at the end of the 2020-21 school year all students were considered individually and as a group
+"Sultan School District"                   | All students have been impacted.
+"Sumner School District"                   | Students who are credit deficient
+"Tahoma School District"                   | Chronic or Extreme Chronic Absence
+"Tukwila School District"                  | Gifted Students; High School AP & Running Start Students; Students referred by teacher
+"University Place School District"         | Students below grade level performance targets; Students new to UPSD
+
+```{r D.3 StrategicSupport special student groups, message=FALSE, warning=FALSE}
 
 ss_stugroups_count %>%
   filter(StudentGroup %!in% long_group_name) %>%
@@ -650,7 +687,6 @@ spec_group <- ss_stugroups_count %>%
 
 spec_group_dist <- df_ss_stugroups %>%
   filter(StudentGroup %in% spec_group$StudentGroup)
-
 
 ```
 
