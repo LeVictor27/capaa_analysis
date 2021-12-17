@@ -1,7 +1,7 @@
 
-#uw_palette <- colorRampPalette(c("#4b2e83", "#e8e3d3"))
-#uw_reverse <- colorRampPalette(c("#e8e3d3", "#4b2e83"))
-#black_white <- colorRampPalette(c("white", "black"))
+#palette_uw <- colorRampPalette(c("#4B2E83", "#E8E3D3"))
+#palette_uw_reverse<- colorRampPalette(c("#E8E3D3", "#4B2E83"))
+#palette_black_white <- colorRampPalette(c("#FFFFFF", "#000000"))
 
 theme_uw <- function(){ 
   #Adapted from Maddie Picken's RPubs/RStudio Tutorial
