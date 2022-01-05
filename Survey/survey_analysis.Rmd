@@ -19,10 +19,12 @@ knitr::opts_chunk$set(echo = FALSE,
                       cache.lazy = FALSE,
                       fig.align = "center"
                       )
-theme_efe <-
-    ggplot2::theme_classic() +
-    ggplot2::theme(
-      )
+
+library(here)
+source(here("theme_uw.R"))
+palette_uw <- colorRampPalette(c("#4B2E83", "#E8E3D3"))
+palette_uw_reverse<- colorRampPalette(c("#E8E3D3", "#4B2E83"))
+palette_black_white <- colorRampPalette(c("#FFFFFF", "#000000"))
 ```
 
 # Introduction
@@ -32,9 +34,11 @@ theme_efe <-
 library(tidyverse)
 library(googledrive)
 library(haven)
+library(reshape2)
+library(readxl)
 
 
-id_survey_district <- drive_get(as_id("https://drive.google.com/file/d/1XabcDxFGcUSF28KvT1BRGY_79N9Vyog9/view?usp=sharing"))
+id_survey_district <- drive_get(as_id("https://drive.google.com/file/d/1iYMdwSU1TlVbtXCJu83DweK4rl65R6sc/view?usp=sharing"))
 
 id_survey_union <- drive_get(as_id("https://drive.google.com/file/d/1TWXuCzc3UA3cGSkphqqZUyN9d1ovblp4/view?usp=sharing")) 
 
@@ -48,6 +52,105 @@ df_survey_union <- id_survey_union %>%
 
 survey_district_questions = t(df_survey_district[1,])
 survey_union_questions = t(df_survey_union[1,])
+
+```
+
+```{r demographics, include=FALSE}
+
+district <- df_survey_district%>%
+  slice(3:n())%>%
+  select(-c("StartDate", "EndDate", "Status", "IPAddress", "Progress",
+            "Duration (in seconds)", "Finished", "RecordedDate", "ResponseId",
+            "RecipientLastName", "RecipientFirstName", "RecipientEmail", "LocationLatitude",
+            "LocationLongitude", "DistributionChannel", "UserLanguage"))
+
+district_melt <- melt(district, id.vars = "ExternalReference")
+
+district_melt%>%
+  filter(variable=="Q1")%>%
+  group_by(value)%>%
+  mutate(value_count=n())%>%
+  ggplot(aes(x=reorder(value,-value_count))) +
+  geom_bar(stat="count") +
+  labs(title="District Survey Respondents", subtitle="Current and Primary Role", x="") +
+  scale_x_discrete(labels = c("Superintendent", "Finance-related Admin", "Other", "NA"))+
+  theme_uw()
+
+district_melt%>%
+  filter(variable=="Q2")%>%
+  group_by(value)%>%
+  mutate(value_count=n())%>%
+  ggplot(aes(x=reorder(value,-value_count))) +
+  geom_bar(stat="count") +
+  labs(title="District Survey Respondents", subtitle="Years of Experience", x="") +
+  theme_uw()
+
+```
+
+```{r finance, include=FALSE}
+
+district_melt%>%
+  filter(grepl("^Q3_[0-9]{1,2}$", variable))%>%
+  na.omit(variable)%>%
+  group_by(value)%>%
+  mutate(value_count=n())%>%
+  ggplot(aes(x=reorder(value,-value_count))) +
+  geom_bar(stat="count") +
+  labs(title="Top three most influential decision-makers at the district central office\nduring planned the 2020-21 school year budget planning",
+       x="") +
+  scale_x_discrete(labels = c("Superintendent", 
+                              "Asst Superintendent/Chief of Staff", 
+                              "School Board Members", 
+                              "Superintendent's Cabinet Members", 
+                              "School Principals",
+                              "Budget Advisory Committee",
+                              "Other",
+                              "Union Leadership",
+                              "Teachers",
+                              "External Consultants",
+                              "Community Members"))+
+  theme_uw() +
+  theme(axis.text.x=element_text(angle=15))
+
+district_melt%>%
+  filter(grepl("^Q4_[0-9]{1,2}$", variable))%>%
+  na.omit(variable)%>%
+  group_by(value)%>%
+  mutate(value_count=n())%>%
+  ggplot(aes(x=reorder(value,-value_count))) +
+  geom_bar(stat="count") +
+  labs(title="Top 3 sources of information  used by the district central office\n to develop the 2020-21 school year budget?", x="") +
+  theme_uw() +
+  theme(axis.text.x=element_text(angle=5))
+
+district_melt%>%
+  filter(grepl("^Q5_[0-9]{1,2}$", variable))%>%
+  na.omit(variable)%>%
+  group_by(value)%>%
+  mutate(value_count=n())%>%
+  ggplot(aes(x=reorder(value,-value_count))) +
+  geom_bar(stat="count") +
+  #labs(title="Top 3 sources of information  used by the district central office\n to develop the 2020-21 school year budget?", x="") +
+  theme_uw() +
+  theme(axis.text.x=element_text(angle=15))
+
+
+district_melt%>%
+  filter(grepl("^Q26_[0-9]{1,2}$", variable))%>%
+  na.omit(variable)%>%
+  group_by(value)%>%
+  mutate(value_count=n())%>%
+  ggplot(aes(x=reorder(value,-value_count))) +
+  geom_bar(stat="count") +
+  labs(title="Role districts had difficulty filling for the 2020-21 school year", x="") +
+  theme_uw() +
+  theme(axis.text.x=element_text(angle=15))
+
+
+```
+
+```{r union, include=FALSE}
+
 
 ```
 
@@ -75,59 +178,3 @@ FRPL
 Urbanicity, Regional differences (puget sound), by ESD
 
 Look at the two surveys separately, and then link
-
-# Section B
-
-Q3
-Q3_11_TEXT
-When your district central office planned the 2020-21 school year budget, who were the top three most influential decision-makers? - Selected Choice
-
-Q4
-What information was used by the district central office to develop the 2020-21 school year budget? Select the top three most important sources of information.
-
-Q5
-What factors represented notable challenges when your district central office planned the 2020-21 school year budget?
-
-Q28
-How did your district allocate federal stimulus funds (i.e., CARES, CRRSAA, ARP)?
-
-Q27
-How has your 2020-21 school year budget addressed students' learning disparities by income or race/ethnicity?
-
-# Section C
-
-Q26
-Q26_13_TEXT
-Which of the following roles did you have difficulty filling for the 2020-21 school year? Select all that apply. - Selected Choice
-
--Q15_1, Q15_10
-To what extent do you agree with the following statements about the union for certificated teachers in your district? 
-
-Q9
-In the past five years, have you been part of the collective bargaining negotiation process for certificated teachers in your district?
-
-Q10
-Q10_11_TEXT
-Since 2018, what were the district’s priorities during the most recent major collective bargaining for certificated teachers (major bargaining period not related to COVID-19 school reopening)?  Select the top three priorities from your district’s perspective. - Selected Choice
-
-## COVID
-Q18
-Has your district engaged in negotiation with the union for school reopening during the Spring 2021 term?
-
-Q12
-What were your district’s priorities during union negotiations for Spring 2021 reopening? Select the top five priorities. - Selected Choice
-
-Q12_14_TEXT
-What were your district’s priorities during union negotiations for Spring 2021 reopening? Select the top five priorities. - Other(s), please specify - Text
-
-Q13
-Has your district engaged in negotiation with the union for school reopening for the Fall 2021 term?
-
-Q14
-What are your district’s priorities during union negotiations for Fall 2021 reopening? Select the top five priorities. - Selected Choice
-
-Q14_14_TEXT
-What are your district’s priorities during union negotiations for Fall 2021 reopening? Select the top five priorities. - 
-
-
-## Section D

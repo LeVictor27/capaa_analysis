@@ -26,7 +26,7 @@ theme_uw <- function(){
       
       plot.subtitle = element_text(          #subtitle
         family = font,            
-        size = 14
+        size = 14,
         margin=margin(5, b = 10),  #Margins around title
         ),               
       
