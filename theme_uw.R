@@ -1,11 +1,14 @@
+palette_uw <- colorRampPalette(c("#4B2E83", "#E8E3D3"))
+palette_uw_reverse<- colorRampPalette(c("#E8E3D3", "#4B2E83"))
+palette_black_white <- colorRampPalette(c("#FFFFFF", "#000000"))
+
 theme_uw <- function(){ 
-  #Adapted from Maddie Picken's RPubs/RStudio Tutorial
+  #Built off of Maddie Picken's RPubs/RStudio Tutorial
   #https://rpubs.com/mclaire19/ggplot2-custom-themes
   
   font <- "Arial"   #assign font family up front
   theme_bw() %+replace%    #replace elements we want to change
     theme(
-      #grid elements
       panel.border = element_blank(),
       panel.background = element_blank(),
       strip.background=element_blank(),
@@ -14,7 +17,7 @@ theme_uw <- function(){
       panel.grid.major.x = element_line(color = "#D3D3D3"), 
       legend.title = element_blank(), 
       #Removing legend title since it usually defaults to variable name,
-      #manually define it
+      #manually define it if you need it
       
       plot.title = element_text(           
         family = font,           
@@ -50,13 +53,12 @@ theme_uw <- function(){
 }
 
 theme_uw_map <- function(){ 
-  #Adapted from Maddie Picken's RPubs/RStudio Tutorial
+  #Built off of Maddie Picken's RPubs/RStudio Tutorial
   #https://rpubs.com/mclaire19/ggplot2-custom-themes
   
-  font <- "Arial"   #assign font family up front
+  font <- "Arial" 
   theme_void() %+replace%    #replace elements we want to change
     theme(
-      
       panel.border = element_blank(),
       panel.background = element_blank(),
       strip.background=element_blank(),
@@ -66,11 +68,9 @@ theme_uw_map <- function(){
       axis.text.x = element_blank(),
       axis.text.y = element_blank(),
       rect = element_blank(),
-      
-      panel.grid.major.x = element_line(color = "#D3D3D3"), #add back x gridlines
       legend.title = element_blank(), 
       #Removing legend title since it usually defaults to variable name,
-      #manually define it
+      #manually define it if you need it
       
       plot.title = element_text(         
         family = font,           
