@@ -51,18 +51,17 @@ library(stringr)
 ```
 
 ```{r uw_palette, include=FALSE}
+library(here)
+source(here("theme_uw.R"))
 # from purple to gold (low=gold, high=purple)
-uw_palette <- colorRampPalette(c("#4b2e83", "#e8e3d3"))
-uw_reverse <- colorRampPalette(c("#e8e3d3", "#4b2e83"))
-black_white <- colorRampPalette(c("white", "black"))
+palette_uw <- colorRampPalette(c("#4B2E83", "#E8E3D3"))
+palette_uw_reverse<- colorRampPalette(c("#E8E3D3", "#4B2E83"))
+palette_black_white <- colorRampPalette(c("#FFFFFF", "#000000"))
 ```
 
-* Note 12/14
-  + ~~change percent to count~~
-  + D1 ~~fix labels~~
-  + D2 
-  + D3 ~~explore student groups used by districts~~
-  + D4 ~~generate figures~~
+* Note 01/06
+  + ~~change theme to theme_uw()~~
+  + put together slides
 
 # D.1 EquityAnalysisToolName
 
@@ -141,7 +140,7 @@ df_equityana_count %>%
   #scale_y_continuous(labels = percent, limits = c(0, 0.025)) +
   scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
                                                  width = 70)) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -228,7 +227,7 @@ df_equityana_count %>%
   #scale_y_continuous(labels = percent, limits = c(0, 0.025)) +
   scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
                                                  width = 70)) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -317,7 +316,7 @@ df_univsupp_count %>%
        caption = "Note: this figure includes all the plans that are employed by more than one school district;
        305 school districts are included") +
   #scale_y_continuous(labels = percent, limits = c(0, 1)) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -359,7 +358,7 @@ df_univsupp_count %>%
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
 #  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -475,7 +474,7 @@ df_ss_count %>%
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
 #  geom_text(aes(label = numeric), position = position_dodge(0.9),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -505,7 +504,7 @@ df_ss_count %>%
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
 #  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -535,7 +534,7 @@ df_ss_count %>%
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
 #  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -565,7 +564,7 @@ df_ss_count %>%
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
 #  geom_text(aes(label = `% Completed` ), position = position_dodge(0.9),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -628,7 +627,7 @@ ss_stugroups_count %>%
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
   geom_text(aes(label = number ), position = position_dodge(0.9),
             hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -666,7 +665,7 @@ ss_stugroup_district_count %>%
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
   geom_text(aes(label = number), position = position_dodge(0.9),
             hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -718,7 +717,7 @@ ss_stugroups_count %>%
 #  scale_fill_manual(name ="Universal Support", values = uw_reverse(26)) +
   geom_text(aes(label = number ), position = position_dodge(0.9),
             hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -794,7 +793,7 @@ df_sfm_count %>%
   #scale_y_continuous(labels = percent, limits = c(0, 1)) +
   #scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
   #                                               width = 100)) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -868,7 +867,7 @@ df_sfs_count %>%
   #                                               width = 70), 
   #                 guide = guide_axis(check.overlap = TRUE))+
    #                guide = guide_axis(n.dodge=2)) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -976,7 +975,7 @@ df_voice_stu_count %>%
        y = "",
        caption = "Note: 305 school districts are included") +
   #scale_y_continuous(labels = percent, limits = c(0, 1)) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -1001,7 +1000,7 @@ df_voice_fam_count %>%
        y = "",
        caption = "Note: 305 school districts are included") +
   #scale_y_continuous(labels = percent, limits = c(0, 1)) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
@@ -1026,7 +1025,7 @@ df_voice_com_count %>%
        y = "",
        caption = "Note: 305 school districts are included") +
   #scale_y_continuous(labels = percent, limits = c(0, 1)) +
-  theme_light() +
+  theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) +
   theme(plot.title = element_text(face = "bold", size = 12, hjust = 0),
