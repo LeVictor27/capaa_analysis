@@ -20,8 +20,10 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.align = "center"
                       )
 
+#Session -> Set Working Directory -> To Source File Location
+setwd('..')
 library(here)
-source(here("theme_uw.R"))
+source("theme_uw.R")
 palette_uw <- colorRampPalette(c("#4B2E83", "#E8E3D3"))
 palette_uw_reverse<- colorRampPalette(c("#E8E3D3", "#4B2E83"))
 palette_black_white <- colorRampPalette(c("#FFFFFF", "#000000"))
@@ -35,8 +37,6 @@ library(tidyverse)
 library(googledrive)
 library(haven)
 library(reshape2)
-library(readxl)
-
 
 id_survey_district <- drive_get(as_id("https://drive.google.com/file/d/1iYMdwSU1TlVbtXCJu83DweK4rl65R6sc/view?usp=sharing"))
 
