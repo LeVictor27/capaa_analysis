@@ -60,9 +60,9 @@ source(here("theme_uw.R"))
 #palette_black_white <- colorRampPalette(c("#FFFFFF", "#000000"))
 ```
 
-* Note 01/06
+* Note 01/07
   + ~~change theme to theme_uw()~~
-  + put together slides
+  + ~~put together slides~~
 
 # D.1 EquityAnalysisToolName
 
