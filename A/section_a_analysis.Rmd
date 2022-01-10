@@ -1594,6 +1594,8 @@ course_by_race %>%
           subtitle = "2021") +
   labs(x = "Student Groups", y = "All Non-Passing Grades") +
   scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
+  scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
+                                                 width = 23)) +
   scale_fill_manual(values = palette_uw_reverse(5)) +
  # geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.7),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
@@ -1613,6 +1615,8 @@ course_by_race %>%
           subtitle = "2020") +
   labs(x = "Student Groups", y = "All Non-Passing Grades") +
   scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
+  scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
+                                                 width = 23)) +
   scale_fill_manual(values = palette_uw_reverse(5)) +
  # geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.7),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
@@ -1632,6 +1636,8 @@ course_by_race %>%
           subtitle = "2019") +
   labs(x = "Student Groups", y = "All Non-Passing Grades") +
   scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
+  scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
+                                                 width = 23)) +
   scale_fill_manual(values = palette_uw_reverse(5)) +
 #  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.7),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
