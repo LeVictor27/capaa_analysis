@@ -1752,7 +1752,7 @@ course_by_income %>%
 
 ```
 
-```{r *A.3.1.iii Statewide breakdown by groups all passing grade, message=FALSE, warning=FALSE}
+```{r A.3.1.iii Statewide breakdown by groups all passing grade, message=FALSE, warning=FALSE, include=FALSE}
 
 course_by_race_pass <- df_course_outcomes_by_outcome %>%
   filter(`Organization Name` == "Washington State" & 
@@ -1833,10 +1833,127 @@ course_by_race_pass %>%
   theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) 
+```
 
+```{r *A.3.1.iv Statewide breakdown by groups all passing grade}
+
+course_by_race_pass_2021 <- course_by_race_pass %>%
+  filter(`School Year` == "2020-21") 
+
+for (i in 1:length(course_by_race_pass_2021$`All Passing Grades`)) {
+  if (course_by_race_pass_2021$`Student Group`[i] %in% c("Asian", "White")) {
+     course_by_race_pass_2021$`All Passing Grades`[i] <- 1
+  }
+}
+
+
+course_by_race_pass_2021 %>%  
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Passing Grades`)) + 
+  geom_col(position="dodge", stat="identity", width = 0.7) + 
+#  geom_hline(yintercept = 0.11, linetype = "dashed") +
+#  geom_text(aes(0, 0.11, label = "state average = 11%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Passing Grade", 
+          subtitle = "2021") +
+  labs(x = "Student Groups", 
+       y = "% All Passing Grades",
+       caption = "Note: missing values are suppressed") +
+#  scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
+  scale_y_continuous(labels = percent) +
+  scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
+                                                 width = 23)) +
+  scale_fill_manual(values = palette_uw_reverse(5)) +
+ # geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.7),
+#            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_uw() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) 
 
 ```
 
+```{r *A.3.1.v Statewide breakdown by groups num non-passing grade}
+
+course_by_race_pass <- df_course_outcomes_by_outcome %>%
+  filter(`Organization Name` == "Washington State" & 
+           !is.na(`All Passing Grades`)) %>%
+  select_if(~!all(is.na(.))) %>%
+  mutate(`All Passing Grades` =  percent(`All Passing Grades`))
+
+#state_ave_20_21 <- percent('11.0%')
+  
+course_by_race_pass$`Grade Level` <- 
+  factor(course_by_race_pass$`Grade Level`, levels = c("All Grades", "12", "11", "10", "9"))
+course_by_race_pass$`School Year` <- 
+  factor(course_by_race_pass$`School Year`, levels = c("2020-21", "2019-20", "2018-19"))
+
+course_by_race_pass %>%
+  filter(`School Year` == "2020-21") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Passing Grades`)) + 
+  geom_col(position="dodge", stat="identity", width = 0.7) + 
+#  geom_hline(yintercept = 0.11, linetype = "dashed") +
+#  geom_text(aes(0, 0.11, label = "state average = 11%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Passing Grade", 
+          subtitle = "2021") +
+  labs(x = "Student Groups", y = "% All Passing Grades") +
+#  scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
+  scale_y_continuous(labels = percent) +
+  scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
+                                                 width = 23)) +
+  scale_fill_manual(values = palette_uw_reverse(5)) +
+ # geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.7),
+#            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_uw() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) 
+
+course_by_race_pass %>%
+  filter(`School Year` == "2019-20") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+#  geom_hline(yintercept = 0.048, linetype = "dashed") +
+#  geom_text(aes(0, 0.048, label = "state average = 4.8%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Passing Grade", 
+          subtitle = "2020") +
+  labs(x = "Student Groups", y = "All Passing Grades") +
+#  scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
+  scale_y_continuous(labels = percent) +
+  scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
+                                                 width = 23)) +
+  scale_fill_manual(values = palette_uw_reverse(5)) +
+ # geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.7),
+#            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_uw() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) 
+
+course_by_race_pass %>%
+  filter(`School Year` == "2018-19") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+#  geom_hline(yintercept = 0.074, linetype = "dashed") +
+#  geom_text(aes(0, 0.074, label = "state average = 7.4%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Passing Grade", 
+          subtitle = "2019") +
+  labs(x = "Student Groups", y = "All Passing Grades") +
+#  scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
+  scale_y_continuous(labels = percent) +
+  scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
+                                                 width = 23)) +
+
+  scale_fill_manual(values = palette_uw_reverse(5)) +
+#  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.7),
+#            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_uw() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) 
+```
 **% Change is calculated by `All Non-Passing Grades`[`School Year` == "2020-21"] - `All Non-Passing Grades`[`School Year` == "2018-19"]/`All Non-Passing Grades`[`School Year` == "2018-19"]**
 
 ## A.3.1. Statewide change (SY 2020-21 - SY 2018-19)/SY 2018-19
