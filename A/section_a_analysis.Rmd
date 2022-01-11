@@ -1872,32 +1872,42 @@ course_by_race_pass_2021 %>%
 
 ```
 
-```{r *A.3.1.v Statewide breakdown by groups num non-passing grade}
+```{r **A.3.1.v Statewide breakdown by race num pass}
 
-course_by_race_pass <- df_course_outcomes_by_outcome %>%
+course_by_race_num_pass <- df_course_outcomes_by_outcome %>%
   filter(`Organization Name` == "Washington State" & 
-           !is.na(`All Passing Grades`)) %>%
+           !is.na(`Numerical Passing Grades`))
+
+## treat suppressed>99% as 100%
+for (i in 1:length(course_by_race_num_pass$`Numerical Passing Grades`)) {
+  if (course_by_race_num_pass$`Numerical Passing Grades`[i] == "Suppressed: >99%") {
+     course_by_race_num_pass$`Numerical Passing Grades`[i] <- 1
+  }
+}
+
+course_by_race_num_pass <- course_by_race_num_pass %>%
   select_if(~!all(is.na(.))) %>%
-  mutate(`All Passing Grades` =  percent(`All Passing Grades`))
+  mutate(`Numerical Passing Grades` =  percent(`Numerical Passing Grades`)) 
 
 #state_ave_20_21 <- percent('11.0%')
   
-course_by_race_pass$`Grade Level` <- 
-  factor(course_by_race_pass$`Grade Level`, levels = c("All Grades", "12", "11", "10", "9"))
-course_by_race_pass$`School Year` <- 
-  factor(course_by_race_pass$`School Year`, levels = c("2020-21", "2019-20", "2018-19"))
+course_by_race_num_pass$`Grade Level` <- 
+  factor(course_by_race_num_pass$`Grade Level`, levels = c("All Grades", "12", "11", "10", "9"))
+course_by_race_num_pass$`School Year` <- 
+  factor(course_by_race_num_pass$`School Year`, levels = c("2020-21", "2019-20", "2018-19"))
 
-course_by_race_pass %>%
+course_by_race_num_pass %>%
   filter(`School Year` == "2020-21") %>%
   ggplot(aes(fill= `Grade Level`,
              x= `Student Group`, 
-             y=`All Passing Grades`)) + 
+             y=`Numerical Passing Grades`)) + 
   geom_col(position="dodge", stat="identity", width = 0.7) + 
 #  geom_hline(yintercept = 0.11, linetype = "dashed") +
 #  geom_text(aes(0, 0.11, label = "state average = 11%"), size = 3, vjust = -0.5) +
-  ggtitle("Percentage of All Courses Taken Resulted in Passing Grade", 
+  ggtitle("Percentage of Courses Taken Resulted in Numerical Passing Grades", 
           subtitle = "2021") +
-  labs(x = "Student Groups", y = "% All Passing Grades") +
+  labs(x = "Student Groups", 
+       y = "% Numerical Passing Grades") +
 #  scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
   scale_y_continuous(labels = percent) +
   scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
@@ -1909,17 +1919,18 @@ course_by_race_pass %>%
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) 
 
-course_by_race_pass %>%
+course_by_race_num_pass %>%
   filter(`School Year` == "2019-20") %>%
   ggplot(aes(fill= `Grade Level`,
              x= `Student Group`, 
-             y=`All Passing Grades`)) + 
-  geom_col(position="dodge", width = 0.7) +
-#  geom_hline(yintercept = 0.048, linetype = "dashed") +
-#  geom_text(aes(0, 0.048, label = "state average = 4.8%"), size = 3, vjust = -0.5) +
-  ggtitle("Percentage of All Courses Taken Resulted in Passing Grade", 
+             y=`Numerical Passing Grades`)) + 
+  geom_col(position="dodge", stat="identity", width = 0.7) + 
+#  geom_hline(yintercept = 0.11, linetype = "dashed") +
+#  geom_text(aes(0, 0.11, label = "state average = 11%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of Courses Taken Resulted in Numerical Passing Grades", 
           subtitle = "2020") +
-  labs(x = "Student Groups", y = "All Passing Grades") +
+  labs(x = "Student Groups", 
+       y = "% Numerical Passing Grades") +
 #  scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
   scale_y_continuous(labels = percent) +
   scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
@@ -1929,31 +1940,117 @@ course_by_race_pass %>%
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
   theme_uw() +
   coord_flip() +
-  guides(fill = guide_legend(reverse = TRUE)) 
+  guides(fill = guide_legend(reverse = TRUE))
 
-course_by_race_pass %>%
+course_by_race_num_pass %>%
   filter(`School Year` == "2018-19") %>%
   ggplot(aes(fill= `Grade Level`,
              x= `Student Group`, 
-             y=`All Passing Grades`)) + 
-  geom_col(position="dodge", width = 0.7) +
-#  geom_hline(yintercept = 0.074, linetype = "dashed") +
-#  geom_text(aes(0, 0.074, label = "state average = 7.4%"), size = 3, vjust = -0.5) +
-  ggtitle("Percentage of All Courses Taken Resulted in Passing Grade", 
+             y=`Numerical Passing Grades`)) + 
+  geom_col(position="dodge", stat="identity", width = 0.7) + 
+#  geom_hline(yintercept = 0.11, linetype = "dashed") +
+#  geom_text(aes(0, 0.11, label = "state average = 11%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of Courses Taken Resulted in Numerical Passing Grades", 
           subtitle = "2019") +
-  labs(x = "Student Groups", y = "All Passing Grades") +
+  labs(x = "Student Groups", 
+       y = "% Numerical Passing Grades") +
 #  scale_y_continuous(labels = percent, limits = c(0, 0.3)) +
   scale_y_continuous(labels = percent) +
   scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
                                                  width = 23)) +
+  scale_fill_manual(values = palette_uw_reverse(5)) +
+ # geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.7),
+#            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_uw() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE))
+```
 
+```{r check suppression}
+test <- df_course_outcomes_by_outcome %>%
+  filter(`Organization Name` == "Washington State") %>%
+  select(c("Numerical Passing Grades", "Student Group", 
+           "Grade Level", "School Year")) %>%
+  drop_na()
+```
+
+```{r **A.3.1.iv Statewide breakdown by income num nonpass, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+
+course_by_income <- read_csv("/Users/alexliu/Documents/GitHub/evidenceforequity/A/enrollment_absence_dataset/nonpass_state_byinc.csv") %>%
+  mutate(`All Non-Passing Grades` = percent(`All Non-Passing Grades`/100))
+
+state_ave_20_21 <- percent('11.0%')
+  
+course_by_income$`Grade Level` <- 
+  factor(course_by_income$`Grade Level`, levels = c("All Grades", "12", "11", "10", "9"))
+course_by_income$`School Year` <- 
+  factor(course_by_income$`School Year`, levels = c("2020-21", "2019-20", "2018-19"))
+
+course_by_income %>%
+  filter(`School Year` == "2020-21") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Non-Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0.11, linetype = "dashed") +
+  geom_text(aes(0, 0.11, label = "state average = 11%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "2021") +
+  labs(x = "Student Groups", y = "All Non-Passing Grades") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.2)) +
   scale_fill_manual(values = palette_uw_reverse(5)) +
 #  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.7),
 #            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
   theme_uw() +
   coord_flip() +
   guides(fill = guide_legend(reverse = TRUE)) 
+
+#ggsave("/Users/alexliu/Desktop/A.3.1.ii Statewide breakdown by income SY2021.png")
+
+course_by_income %>%
+  filter(`School Year` == "2019-20") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Non-Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0.048, linetype = "dashed") +
+  geom_text(aes(0, 0.048, label = "state average = 4.8%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "2020") +
+  labs(x = "Student Groups", y = "All Non-Passing Grades") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.2)) +
+  scale_fill_manual(values = palette_uw_reverse(5)) +
+#  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.7),
+#            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_uw() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) 
+
+#ggsave("/Users/alexliu/Desktop/A.3.1.ii Statewide breakdown by income SY1920.png")
+
+course_by_income %>%
+  filter(`School Year` == "2018-19") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y=`All Non-Passing Grades`)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0.074, linetype = "dashed") +
+  geom_text(aes(0, 0.074, label = "state average = 7.4%"), size = 3, vjust = -0.5) +
+  ggtitle("Percentage of All Courses Taken Resulted in Non-Passing Grade", 
+          subtitle = "2019") +
+  labs(x = "Student Groups", y = "All Non-Passing Grades") +
+  scale_y_continuous(labels = percent, limits = c(0, 0.2)) +
+  scale_fill_manual(values = palette_uw_reverse(5)) +
+#  geom_text(aes(label = `All Non-Passing Grades`), position = position_dodge(0.7),
+#            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_uw() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) 
+
+#ggsave("/Users/alexliu/Desktop/A.3.1.ii Statewide breakdown by income SY1819.png")
+
 ```
+
 **% Change is calculated by `All Non-Passing Grades`[`School Year` == "2020-21"] - `All Non-Passing Grades`[`School Year` == "2018-19"]/`All Non-Passing Grades`[`School Year` == "2018-19"]**
 
 ## A.3.1. Statewide change (SY 2020-21 - SY 2018-19)/SY 2018-19
@@ -2043,6 +2140,40 @@ course_by_race_pass %>%
   labs(x = "Student Groups", 
        y = "% Change",
        caption = "A positive value means that the percentage of all courses taken resulted in passing grade \nhas increased between 2019 and 2021 for the given student group") +
+  scale_y_continuous(labels = percent) +
+  scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
+                                                 width = 23)) +
+  scale_fill_manual(values = palette_uw_reverse(5)) +
+ # geom_text(aes(label = `Change`), position = position_dodge(0.7),
+#            hjust = -0.1, vjust = 0.4, colour = "black", size = 1.5) +
+  theme_uw() +
+  coord_flip() +
+  guides(fill = guide_legend(reverse = TRUE)) 
+#ggsave("/Users/alexliu/Desktop/A.3.1.2.i Statewide breakdown by race change.png")
+
+```
+
+```{r **A.3.1.2.iv Statewide breakdown by race num pass CHANGE, message=FALSE, warning=FALSE}
+
+course_by_race_num_pass <- course_by_race_num_pass %>%
+  group_by(`Student Group`, `Grade Level`) %>%
+  mutate(Change = (`Numerical Passing Grades`[`School Year` == "2020-21"] - `Numerical Passing Grades`[`School Year` == "2018-19"])/`Numerical Passing Grades`[`School Year` == "2018-19"])
+
+course_by_race_num_pass$`Grade Level` <- factor(course_by_race_num_pass$`Grade Level`,
+                                       levels = c("All Grades", "12", "11", "10", "9"))
+
+course_by_race_num_pass %>%
+  filter(`School Year` == "2020-21") %>%
+  ggplot(aes(fill= `Grade Level`,
+             x= `Student Group`, 
+             y= Change)) + 
+  geom_col(position="dodge", width = 0.7) +
+  geom_hline(yintercept = 0) +
+  ggtitle("Percent Change in Courses Taken Resulted in Numerical Passing Grades", 
+          subtitle = "2019 vs. 2021") +
+  labs(x = "Student Groups", 
+       y = "% Change",
+       caption = "Note: missing values are suppressed \nA negative value means that the percentage of all courses taken resulted in numerical passing \ngrades has decreased in 2021 compared to 2019 for the given student group") +
   scale_y_continuous(labels = percent) +
   scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
                                                  width = 23)) +
@@ -2520,7 +2651,100 @@ test <- df_course_outcomes_by_outcome %>%
   
 ```
 
+```{r **A.3.2.1.vi The Difference in num pass from 2018-19 to 2020-21 white, message=FALSE, warning=FALSE}
+
+df_num_pass_race_raw <- df_course_outcomes_by_outcome %>%
+  mutate(`Numerical Passing Grades` =  percent(`Numerical Passing Grades`)) %>%
+  select(c(`Organization Name`, `School Year`, 
+           `Student Group`, `Grade Level`, 
+           `Numerical Passing Grades`)) %>%
+  filter(!is.na(`Numerical Passing Grades`) &
+           `School Year` != "2019-20") 
+
+#cannot use dcast due to uneven length for each year:
+#split the df by school year; rename `All Non-Passing Grades` column by SY; 
+df_num_pass_race_1819 <- filter(df_num_pass_race_raw, `School Year` != "2020-21") 
+colnames(df_num_pass_race_1819)[5] <- "SY2018-19"
+  
+df_num_pass_race_2021 <- filter(df_num_pass_race_raw, `School Year` == "2020-21")
+colnames(df_num_pass_race_2021)[5] <- "SY2020-21"
+
+#merge yearly dfs and calculate the change
+df_num_pass_race <- merge(x = df_num_pass_race_2021, y = df_num_pass_race_1819, 
+                         by = c("Organization Name", "Student Group", "Grade Level"), 
+                         all = TRUE) %>%
+  select(!c("School Year.x", "School Year.y")) %>%
+  mutate(Change = (`SY2020-21` - `SY2018-19`)/`SY2018-19`) %>%
+  filter(!is.na(Change)) %>%
+  #filter(Change >= -1) %>%
+  mutate(Race = NA) 
+
+for (i in 1:nrow(df_num_pass_race)) {
+  if (df_num_pass_race[i, "Student Group"] == "White") {
+    df_num_pass_race[i, "Race"] <- "White"
+  } else if (df_num_pass_race[i, "Student Group"] == "Asian") {
+    df_num_pass_race[i, "Race"] <- "Asian"
+  } else {
+    df_num_pass_race[i, "Race"] <- "Non-white"
+  }
+}
+
+df_num_pass_race_grouped <- aggregate(df_num_pass_race$Change, 
+                           list(df_num_pass_race$`Organization Name`, 
+                                df_num_pass_race$`Grade Level`,
+                                df_num_pass_race$Race), 
+                           FUN=mean)
+
+names(df_num_pass_race_grouped) <- c("Districts", "Grade Level", "Race", "Change")
+df_num_pass_race_grouped <- df_num_pass_race_grouped %>%
+  arrange(`Grade Level`, Districts, Race) %>%
+  filter(`Grade Level` == "All Grades")
+
+# Shape file
+wa <- lea_get("wa")%>% 
+  sf::st_as_sf() 
+
+df_num_pass_white <- filter(df_num_pass_race_grouped, Race == "White") 
+wa_num_pass_white <- full_join(wa, df_num_pass_white, by = c("NAME" = "Districts"), copy=TRUE)
+
+df_num_pass_nonwhite <- filter(df_num_pass_race_grouped, Race == "Non-white") 
+wa_num_pass_nonwhite <- full_join(wa, df_num_pass_nonwhite, by = c("NAME" = "Districts"), copy=TRUE)
+
+wa_num_pass_white %>% 
+  sf::st_as_sf() %>% 
+  ggplot() +
+  geom_sf(aes(fill = Change), size = .25) +
+  scale_fill_gradient2(low="#e8e3d3", high="#4b2e83", name="") +
+  theme_uw_map() +
+  labs(title="Percent Change in Courses Taken Resulted in Numerical Passing Grades",
+       subtitle = "for white students (2019 vs. 2021)",
+       caption = "Note: grey areas indicate districts with unavaible or suppressed data \nA positive value means that the percent of all courses taken resulted in numerical passing grades \nhas increased in 2021 compared to 2019 for the given student group")
+
+#ggsave("/Users/alexliu/Desktop/A.3.2.1.i nonpass diff year white.png")
+
+wa_num_pass_nonwhite %>% 
+  sf::st_as_sf() %>% 
+  ggplot() +
+  geom_sf(aes(fill = Change), size = .25) +
+  scale_fill_gradient2(low="#e8e3d3", high="#4b2e83", name="") +
+  theme_uw_map() +
+  labs(title="Percent Change in Courses Taken Resulted in Numerical Passing Grades",
+       subtitle = "for students of color (2019 vs. 2021)",
+       caption = "Note: grey areas indicate districts with unavaible or suppressed data \nA positive value means that the percent of all courses taken resulted in numerical passing grades \nhas increased in 2021 compared to 2019 for the given student group")
+
+#ggsave("/Users/alexliu/Desktop/A.3.2.1.i nonpass diff year nonwhite.png")
+
+```
+
+
+
 > A.3.2.2 The gap in all non-passing and numerical failing in SY2020-21 between students of color and white for each district
+
+```{r}
+test <- df_course_outcomes_by_outcome %>%
+ filter(`Organization Name` == "Washington State") %>%
+ select(c("School Year", "Student Group", "Grade Level", "Numerical Failing Grades", "Numerical Passing Grades"))
+```
 
 * Gap calculated by %nonpass among low-income minus %nonpass among non-low income in SY2020-21
   + darker purple color indicates more nonpass/num failing grades among students of color
