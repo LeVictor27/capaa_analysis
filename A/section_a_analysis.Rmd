@@ -20,9 +20,13 @@ knitr::opts_chunk$set(echo = FALSE,
                       )
 ```
 
-* Note 01/06
-  + ~~change theme to theme_uw()~~
-  + put together slides
+* Note 01/11
+  + ~~add num pass by income figure to slides~~
+  + ~~check graduation data date~~
+    + COVID-19 Modified School Year SQSS Data is used for A4
+  + ~~chack 9th grade on track suppression~~
+    + Suppressed: Cross Group
+
   
 **Without specific demonstration, all differences/changes are calculated by values in SY2020-21 minus values in SY2018-19. Hence, positive differences/changes indicate increase in SY2020-21 and negative differences/changes indicate decrease in SY2020-21 for all the plots in this markdown file.**
 
@@ -2184,7 +2188,7 @@ course_by_race_num_pass %>%
           subtitle = "2019 vs. 2021") +
   labs(x = "Student Groups", 
        y = "% Change",
-       caption = "Note: missing values are suppressed \nA negative value means that the percentage of all courses taken resulted in numerical passing \ngrades has decreased in 2021 compared to 2019 for the given student group") +
+       caption = "Note: A negative value means that the percentage of all courses taken resulted in numerical passing \ngrades has decreased in 2021 compared to 2019 for the given student group") +
   scale_y_continuous(labels = percent) +
   scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
                                                  width = 23)) +
@@ -2218,7 +2222,7 @@ course_by_inc_num_pass %>%
           subtitle = "2019 vs. 2021") +
   labs(x = "Student Groups", 
        y = "% Change",
-       caption = "Note: missing values are suppressed \nA negative value means that the percentage of all courses taken resulted in numerical passing \ngrades has decreased in 2021 compared to 2019 for the given student group") +
+       caption = "Note: A negative value means that the percentage of all courses taken resulted in numerical passing \ngrades has decreased in 2021 compared to 2019 for the given student group") +
   scale_y_continuous(labels = percent) +
   scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
                                                  width = 23)) +
@@ -3189,6 +3193,7 @@ state_ontrack_race_change <- df_state_ontrack_race %>%
     mutate(Change = (`% On Track`[SchoolYear == 2020] - `% On Track`[SchoolYear == 2018])/`% On Track`[SchoolYear == 2018])
 
 state_ontrack_race_change %>%
+  filter(SchoolYear == 2020) %>%
   ggplot(aes(x= `StudentGroup`, 
              y= `Change`)) + 
   geom_col(position="dodge", width = 0.7, fill = "#4b2e83") +
@@ -3197,7 +3202,7 @@ state_ontrack_race_change %>%
   labs(x = "Student Groups",
        y = "% Change",
        caption = "Note: missing values are suppressed \nA negative value means that the percentage of 9th grade students on track has decreased \nbetween 2018 and 2020 for the given student group") +
-  scale_y_continuous(labels = percent, limits = c(-0.04, 0)) +
+  scale_y_continuous(labels = percent) +
   scale_x_discrete(labels = function(x) str_wrap(str_replace_all(x, "foo" , " "),
                                                  width = 23)) +
 #  geom_text(aes(label = `Change` ), position = position_dodge(0.75),
