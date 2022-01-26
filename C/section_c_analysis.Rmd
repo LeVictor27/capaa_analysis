@@ -114,6 +114,7 @@ df_s275 %>%
                     labels = c("% non-white \n(excludes asian)", "% receiving FRPL")) + 
   scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0, 0.7)) +
   theme_uw() +
+  theme(axis.line = element_line()) +
   labs(x = "Regionalization Factor",
        y = "",
        title = "Regionalization factor by share of non-white students and FRPL for AY 2018-2019")
@@ -130,7 +131,7 @@ df_s275 %>%
   pivot_longer(c(pctstu_nonwhite, pctstu_hispanic, pctstu_black, pctstu_asian, pctstu_white), names_to = "var", values_to = "val") %>% 
   ggplot(aes(x = var, y = val, fill = rfactor)) +
   geom_col(position = "dodge", width = 0.8) + 
-  geom_text(aes(label = round(val*100, digits = 1)), position = position_dodge(width = 0.8), vjust = -0.25, size = 2) +
+  geom_text(aes(label = round(val*100, digits = 1)), position = position_dodge(width = 0.8), vjust = -0.25, size = 3) +
   scale_x_discrete(name = "",
                    limits = c("pctstu_nonwhite", "pctstu_hispanic", "pctstu_black", "pctstu_asian", "pctstu_white"),
                    labels = c("% non-white \n(excludes asian)", "% hispanic", "% black", "% asian", "% white")) +
@@ -138,6 +139,7 @@ df_s275 %>%
   scale_fill_manual(values = c("#4b2e83", "#8F7CB2", "#E9E5F0", "#85754d", "#B3A990"),
                     limits = c("1", "1.06", "1.12", "1.18", "1.24")) +
   theme_uw() +
+  theme(axis.line = element_line()) +
   labs(fill = "Regionalization Factor",
        x = "",
        y = "",
@@ -668,7 +670,6 @@ df_s275 %>%
             num_asian = sum(race == "A" & hispanic == "N", na.rm = TRUE),
             share_hisp = mean(hispanic == "Y", na.rm = TRUE),
             num_hisp = sum(hispanic == "Y", na.rm = TRUE),
-            # share_white = mean(race == "W" & hispanic == "N", na.rm = TRUE),
             share_nonwhite = mean(race != "W" | (race == "W" & hispanic == "Y"), na.rm = TRUE),
             num_nonwhite = sum(race != "W" | (race == "W" & hispanic == "Y"), na.rm = TRUE)) %>% 
   pivot_longer(cols = c(starts_with("share_"), starts_with("num_")), names_to = c(".value", "race"), names_pattern = "(.*)_(.*)") %>% 
@@ -710,6 +711,59 @@ df_s275 %>%
          dist_poverty_cat = if_else(dist_pctstu_frl < 0.26, "0 to 25%",
                                     if_else(dist_pctstu_frl >= 0.26 & dist_pctstu_frl < 0.51, "26 to 50%",
                                             if_else(dist_pctstu_frl >= 0.51 & dist_pctstu_frl < 0.76, "51 to 75%",
+                                                    if_else(dist_pctstu_frl >= 0.76, "76 to 100%", "FLAG"))))) %>% 
+  filter(!is.na(dist_nonwhite_cat) & !is.na(dist_poverty_cat)) %>% 
+  group_by(exp_bin) %>% 
+  summarize(share_black = mean(race == "B" & hispanic == "N", na.rm = TRUE),
+            num_black = sum(race == "B" & hispanic == "N", na.rm = TRUE),
+            share_asian = mean(race == "A" & hispanic == "N", na.rm = TRUE),
+            num_asian = sum(race == "A" & hispanic == "N", na.rm = TRUE),
+            share_hisp = mean(hispanic == "Y", na.rm = TRUE),
+            num_hisp = sum(hispanic == "Y", na.rm = TRUE),
+            share_white = mean(race == "W" & hispanic == "N", na.rm = TRUE),
+            num_white = sum(race == "W" & hispanic == "N", na.rm = TRUE),
+            share_nonwhite = mean(race != "W" | (race == "W" & hispanic == "Y"), na.rm = TRUE),
+            num_nonwhite = sum(race != "W" | (race == "W" & hispanic == "Y"), na.rm = TRUE)) %>% 
+  pivot_longer(cols = c(starts_with("share_"), starts_with("num_")), names_to = c(".value", "race"), names_pattern = "(.*)_(.*)") %>% 
+  ggplot(aes(x = exp_bin, y = share, fill = race)) +
+  geom_col(position = 'dodge') +
+  geom_text(aes(label = num), position = position_dodge(width = 0.9), vjust = -0.5) +
+  scale_fill_manual("",
+                    values = c("#4B2E83", "#8F7CB2", "#85754D", "#B3A990", "#E9E5F0"),
+                    breaks = c("black", "asian", "hisp", "nonwhite", "white"),
+                    labels = c("Black", "Asian", "Hispanic", "Non-white", "White")) +
+  scale_y_continuous(limits = c(0, 1.05), labels = scales::percent) +
+  theme_uw() +
+  theme(axis.line = element_line(), panel.grid.major.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic")) +
+  labs(x = "", y = "",
+       title = "Share of teachers by experience and race in WA state during AY 2018-2019",
+       caption = "experience categories: early-career (0−3 years of teaching experience); junior (4−7); mid-career 1 (8−11); mid-career 2 (12−15);\n  late-career 1 (16−19); late-career 2 (20−22); and late-career 3 (23 and up) above).\nNumber of teachers in each category are also reported on top of each bar.")
+
+
+
+df_s275 %>% 
+  filter(schyear == 2019) %>% 
+  group_by(coudis_s) %>% 
+  mutate(dist_pctstu_nonwhite = 1 - mean(dis_pctstu_white, na.rm = TRUE) - mean(dis_pctstu_asian, na.rm = TRUE),
+         dist_pctstu_frl = 1 - mean(dis_pctstu_frl, na.rm = TRUE) - mean(dis_pctstu_frl, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(exp_bin = if_else(exp <= 3, "early-career",
+                           if_else(exp > 3 & exp <= 7, "junior",
+                                   if_else(exp > 7 & exp <= 11, "mid-career 1",
+                                           if_else(exp > 11 & exp <= 15, "mid-career 2",
+                                                   if_else(exp > 15 & exp <= 19, "late-career 1",
+                                                           if_else(exp > 19 & exp <= 22, "late-career 2",
+                                                                   if_else(exp > 22, "late-career 3", "FLAG"))))))),
+         exp_bin = factor(exp_bin, levels = c("early-career", "junior", "mid-career 1", "mid-career 2",
+                                              "late-career 1", "late-career 2", "late-career 3")),
+         dist_nonwhite_cat = if_else(dist_pctstu_nonwhite < 0.26, "0 to 25%",
+                                        if_else(dist_pctstu_nonwhite >= 0.26 & dist_pctstu_nonwhite < 0.51, "26 to 50%",
+                                                if_else(dist_pctstu_nonwhite >= 0.51 & dist_pctstu_nonwhite < 0.76, "51 to 75%",
+                                                        if_else(dist_pctstu_nonwhite >= 0.76, "76 to 100%", "FLAG")))),
+         dist_poverty_cat = if_else(dist_pctstu_frl < 0.26, "0 to 25%",
+                                    if_else(dist_pctstu_frl >= 0.26 & dist_pctstu_frl < 0.51, "26 to 50%",
+                                            if_else(dist_pctstu_frl >= 0.51 & dist_pctstu_frl < 0.76, "51 to 75%",
                                                     if_else(dist_pctstu_frl >= 0.76, "76 to 100%", "FLAG"))))
          ) %>% 
   filter(!is.na(dist_nonwhite_cat) & !is.na(dist_poverty_cat)) %>% 
@@ -725,7 +779,7 @@ df_s275 %>%
   pivot_longer(cols = c(starts_with("share_"), starts_with("num_")), names_to = c(".value", "race"), names_pattern = "(.*)_(.*)") %>% 
   ggplot(aes(x = exp_bin, y = share, fill = race)) +
   geom_col(position = 'dodge') +
-  geom_text(aes(label = num), position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  geom_text(aes(label = num), position = position_dodge(width = 0.9), vjust = -0.5, size = 2.5) +
   scale_fill_manual("",
                     values = c("#4B2E83", "#8F7CB2", "#85754D", "#B3A990"),
                     breaks = c("black", "asian", "hisp", "nonwhite"),
@@ -738,6 +792,62 @@ df_s275 %>%
   labs(x = "", y = "",
        title = "Share of non-white teachers by experience and share of students of color\nin WA state during AY 2018-2019",
        caption = "experience categories: early-career (0−3 years of teaching experience); junior (4−7); mid-career 1 (8−11); mid-career 2 (12−15);\n  late-career 1 (16−19); late-career 2 (20−22); and late-career 3 (23 and up) above).\nNumber of teachers in each category are also reported on top of each bar.\nTop left panel shows share of non-white teachers for school districts with 0-25% students of color.")
+
+
+
+df_s275 %>% 
+  filter(schyear == 2019) %>% 
+  group_by(coudis_s) %>% 
+  mutate(dist_pctstu_nonwhite = 1 - mean(dis_pctstu_white, na.rm = TRUE) - mean(dis_pctstu_asian, na.rm = TRUE),
+         dist_pctstu_frl = 1 - mean(dis_pctstu_frl, na.rm = TRUE) - mean(dis_pctstu_frl, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(exp_bin = if_else(exp <= 3, "early-career",
+                           if_else(exp > 3 & exp <= 7, "junior",
+                                   if_else(exp > 7 & exp <= 11, "mid-career 1",
+                                           if_else(exp > 11 & exp <= 15, "mid-career 2",
+                                                   if_else(exp > 15 & exp <= 19, "late-career 1",
+                                                           if_else(exp > 19 & exp <= 22, "late-career 2",
+                                                                   if_else(exp > 22, "late-career 3", "FLAG"))))))),
+         exp_bin = factor(exp_bin, levels = c("early-career", "junior", "mid-career 1", "mid-career 2",
+                                              "late-career 1", "late-career 2", "late-career 3")),
+         dist_nonwhite_cat = if_else(dist_pctstu_nonwhite < 0.26, "0 to 25%",
+                                        if_else(dist_pctstu_nonwhite >= 0.26 & dist_pctstu_nonwhite < 0.51, "26 to 50%",
+                                                if_else(dist_pctstu_nonwhite >= 0.51 & dist_pctstu_nonwhite < 0.76, "51 to 75%",
+                                                        if_else(dist_pctstu_nonwhite >= 0.76, "76 to 100%", "FLAG")))),
+         dist_poverty_cat = if_else(dist_pctstu_frl < 0.26, "0 to 25%",
+                                    if_else(dist_pctstu_frl >= 0.26 & dist_pctstu_frl < 0.51, "26 to 50%",
+                                            if_else(dist_pctstu_frl >= 0.51 & dist_pctstu_frl < 0.76, "51 to 75%",
+                                                    if_else(dist_pctstu_frl >= 0.76, "76 to 100%", "FLAG"))))
+         ) %>% 
+  filter(!is.na(dist_nonwhite_cat) & !is.na(dist_poverty_cat)) %>% 
+  group_by(exp_bin, dist_nonwhite_cat) %>% 
+  summarize(share_black = mean(race == "B" & hispanic == "N", na.rm = TRUE),
+            num_black = sum(race == "B" & hispanic == "N", na.rm = TRUE),
+            share_asian = mean(race == "A" & hispanic == "N", na.rm = TRUE),
+            num_asian = sum(race == "A" & hispanic == "N", na.rm = TRUE),
+            share_hisp = mean(hispanic == "Y", na.rm = TRUE),
+            num_hisp = sum(hispanic == "Y", na.rm = TRUE),
+            share_white = mean(race == "W" & hispanic == "N", na.rm = TRUE),
+            num_white = sum(race == "W" & hispanic == "N", na.rm = TRUE),
+            share_nonwhite = mean(race != "W" | (race == "W" & hispanic == "Y"), na.rm = TRUE),
+            num_nonwhite = sum(race != "W" | (race == "W" & hispanic == "Y"), na.rm = TRUE)) %>% 
+  pivot_longer(cols = c(starts_with("share_"), starts_with("num_")), names_to = c(".value", "race"), names_pattern = "(.*)_(.*)") %>% 
+  ggplot(aes(x = exp_bin, y = share, fill = race)) +
+  geom_col(position = 'dodge') +
+  geom_text(aes(label = num), position = position_dodge(width = 0.9), vjust = -0.5, size = 2.5) +
+  scale_fill_manual("",
+                    values = c("#4B2E83", "#8F7CB2", "#85754D", "#B3A990", "#E9E5F0"),
+                    breaks = c("black", "asian", "hisp", "nonwhite", "white"),
+                    labels = c("Black", "Asian", "Hispanic", "Non-white", "White")) +
+  scale_y_continuous(limits = c(0, 1.05), labels = scales::percent) +
+  theme_uw() +
+  theme(axis.line = element_line(), panel.grid.major.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic"), axis.text.x = element_text(angle = 45)) +
+  facet_wrap(~ dist_nonwhite_cat) +
+  labs(x = "", y = "",
+       title = "Share of teachers by race, experience and share of students of color\nin WA state during AY 2018-2019",
+       caption = "experience categories: early-career (0−3 years of teaching experience); junior (4−7); mid-career 1 (8−11); mid-career 2 (12−15);\n  late-career 1 (16−19); late-career 2 (20−22); and late-career 3 (23 and up) above).\nNumber of teachers in each category are also reported on top of each bar.\nTop left panel shows share of teachers for school districts with 0-25% students of color.")
+
 
 
 df_s275 %>% 
@@ -777,7 +887,7 @@ df_s275 %>%
   pivot_longer(cols = c(starts_with("share_"), starts_with("num_")), names_to = c(".value", "race"), names_pattern = "(.*)_(.*)") %>% 
   ggplot(aes(x = exp_bin, y = share, fill = race)) +
   geom_col(position = 'dodge') +
-  geom_text(aes(label = num), position = position_dodge(width = 0.9), vjust = -0.5, size = 3) +
+  geom_text(aes(label = num), position = position_dodge(width = 0.9), vjust = -0.5, size = 2.5) +
   facet_wrap(~ dist_poverty_cat) +
   scale_fill_manual("",
                     values = c("#4B2E83", "#8F7CB2", "#85754D", "#B3A990"),
@@ -790,6 +900,60 @@ df_s275 %>%
   labs(x = "", y = "",
        title = "Share of non-white teachers by experience and share of students poverty (measured by FRPL)\nin WA state during AY 2018-2019",
        caption = "experience categories: early-career (0−3 years of teaching experience); junior (4−7); mid-career 1 (8−11); mid-career 2 (12−15);\n  late-career 1 (16−19); late-career 2 (20−22); and late-career 3 (23 and up) above).\nNumber of teachers in each category are also reported on top of each bar.\nTop left panel shows share of non-white teachers for school districts with 0-25% students poverty (measured by FRPL)")
+
+
+df_s275 %>% 
+  filter(schyear == 2019) %>% 
+  group_by(coudis_s) %>% 
+  mutate(dist_pctstu_nonwhite = 1 - mean(dis_pctstu_white, na.rm = TRUE) - mean(dis_pctstu_asian, na.rm = TRUE),
+         dist_pctstu_frl = 1 - mean(dis_pctstu_frl, na.rm = TRUE) - mean(dis_pctstu_frl, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(exp_bin = if_else(exp <= 3, "early-career",
+                           if_else(exp > 3 & exp <= 7, "junior",
+                                   if_else(exp > 7 & exp <= 11, "mid-career 1",
+                                           if_else(exp > 11 & exp <= 15, "mid-career 2",
+                                                   if_else(exp > 15 & exp <= 19, "late-career 1",
+                                                           if_else(exp > 19 & exp <= 22, "late-career 2",
+                                                                   if_else(exp > 22, "late-career 3", "FLAG"))))))),
+         exp_bin = factor(exp_bin, levels = c("early-career", "junior", "mid-career 1", "mid-career 2",
+                                              "late-career 1", "late-career 2", "late-career 3")),
+         dist_nonwhite_cat = if_else(dist_pctstu_nonwhite < 0.26, "0 to 25%",
+                                        if_else(dist_pctstu_nonwhite >= 0.26 & dist_pctstu_nonwhite < 0.51, "26 to 50%",
+                                                if_else(dist_pctstu_nonwhite >= 0.51 & dist_pctstu_nonwhite < 0.76, "51 to 75%",
+                                                        if_else(dist_pctstu_nonwhite >= 0.76, "76 to 100%", "FLAG")))),
+         dist_poverty_cat = if_else(dist_pctstu_frl < 0.26, "0 to 25%",
+                                    if_else(dist_pctstu_frl >= 0.26 & dist_pctstu_frl < 0.51, "26 to 50%",
+                                            if_else(dist_pctstu_frl >= 0.51 & dist_pctstu_frl < 0.76, "51 to 75%",
+                                                    if_else(dist_pctstu_frl >= 0.76, "76 to 100%", "FLAG"))))
+         ) %>% 
+  filter(!is.na(dist_nonwhite_cat) & !is.na(dist_poverty_cat)) %>% 
+  group_by(exp_bin, dist_poverty_cat) %>% 
+  summarize(share_black = mean(race == "B" & hispanic == "N", na.rm = TRUE),
+            num_black = sum(race == "B" & hispanic == "N", na.rm = TRUE),
+            share_asian = mean(race == "A" & hispanic == "N", na.rm = TRUE),
+            num_asian = sum(race == "A" & hispanic == "N", na.rm = TRUE),
+            share_hisp = mean(hispanic == "Y", na.rm = TRUE),
+            num_hisp = sum(hispanic == "Y", na.rm = TRUE),
+            share_white = mean(race == "W" & hispanic == "N", na.rm = TRUE),
+            num_white = sum(race == "W" & hispanic == "N", na.rm = TRUE),
+            share_nonwhite = mean(race != "W" | (race == "W" & hispanic == "Y"), na.rm = TRUE),
+            num_nonwhite = sum(race != "W" | (race == "W" & hispanic == "Y"), na.rm = TRUE)) %>% 
+  pivot_longer(cols = c(starts_with("share_"), starts_with("num_")), names_to = c(".value", "race"), names_pattern = "(.*)_(.*)") %>% 
+  ggplot(aes(x = exp_bin, y = share, fill = race)) +
+  geom_col(position = 'dodge') +
+  geom_text(aes(label = num), position = position_dodge(width = 0.9), vjust = -0.5, size = 2.5) +
+  facet_wrap(~ dist_poverty_cat) +
+  scale_fill_manual("",
+                    values = c("#4B2E83", "#8F7CB2", "#85754D", "#B3A990", "#E9E5F0"),
+                    breaks = c("black", "asian", "hisp", "nonwhite", "white"),
+                    labels = c("Black", "Asian", "Hispanic", "Non-white", "White")) +
+  scale_y_continuous(limits = c(0, 1.05), labels = scales::percent) +
+  theme_uw() +
+  theme(axis.line = element_line(), panel.grid.major.x = element_blank()) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic"), axis.text.x = element_text(angle = 45)) +
+  labs(x = "", y = "",
+       title = "Share of teachers by race, experience and share of students poverty (measured by FRPL)\nin WA state during AY 2018-2019",
+       caption = "experience categories: early-career (0−3 years of teaching experience); junior (4−7); mid-career 1 (8−11); mid-career 2 (12−15);\n  late-career 1 (16−19); late-career 2 (20−22); and late-career 3 (23 and up) above).\nNumber of teachers in each category are also reported on top of each bar.\nTop left panel shows share of teachers for school districts with 0-25% students poverty (measured by FRPL)")
 
 
 
@@ -984,17 +1148,28 @@ df_s275_dist %>%
 
 
 # including asians as non-white
+temp <- df_s275_dist %>% 
+  filter(mean_dist_tch_nonwhite1 > 0.33 | (dist_pctstu_nonwhite1 > 0.75 & dist_pctstu_nonwhite1 < 0.9 & mean_dist_tch_nonwhite1 < 0.05) | 
+           (dist_pctstu_nonwhite1 > 0.9 & mean_dist_tch_nonwhite1 > 0.1 & mean_dist_tch_nonwhite1 < 0.25) | (dist_pctstu_nonwhite1 > 0.9 & mean_dist_tch_nonwhite1 > 0.35))
+outlier_disnames <- c(as.vector(as.matrix(temp[, c("dis_name", "dis_name")])),
+                      "Seattle Public Schools", "Lake Washington School District",
+                      "Spokane School District", "Tacoma School District")
+
 df_s275_dist %>% 
   ggplot(aes(x = dist_pctstu_nonwhite1, y = mean_dist_tch_nonwhite1)) +
-  geom_point(aes(size = dist_enroll)) +
+  geom_point(aes(size = dist_enroll), alpha = 0.5) +
+    geom_text(aes(label = if_else(dis_name %in% outlier_disnames, as.character(dis_name), '')),
+            hjust=0, vjust=0, size = 3) +
   geom_smooth(method = "lm", aes(weight = dist_enroll), se = FALSE) +
   theme_uw() +
+  theme(axis.line = element_line(), panel.grid.major.x = element_blank()) +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_size(name = "Dist. enroll size", breaks = c(1000, 10000, 25000, 50000), labels=scales::comma) +
   labs(x = "Share of students of color",
        y = "Share of non-white teachers",
        title = "Scatterplot of share of nonwhite teachers and students of color by district enrollment size\nacross WA school districtsin AY 2018-2019",
        caption = "In all estimates, asians are included in non-white and people of color categories.\nFitted line is weighted by district's enrollment size. The size of each dot represents the dirtrict's enrollment size.")
+
 
 df_s275_dist %>% 
   filter(dist_nonwhite_cat1 %in% c("0 to 25%", "76 to 100%")) %>% 
@@ -1618,6 +1793,13 @@ df_s275_turnover <- df_s275 %>%
 
 
 # teacher turnover by students of color and poverty
+df_state_level <- df_s275_turnover %>% 
+  group_by(schyear) %>% 
+  summarize(tch_leavers = mean(tch_turnover == "leave"),
+            tch_movers = mean(tch_turnover == "diff_dist_tch"),
+            tch_newcomer1 = mean(tch_newcomer1 == 1),
+            tch_newcomer2 = mean(tch_newcomer2 == 1))
+
 df_s275_turnover %>% 
   filter(dist_nonwhite_cat %in% c("0 to 25%", "76 to 100%") & schyear < 2021) %>%
   group_by(schyear, dist_nonwhite_cat) %>% 
@@ -1626,19 +1808,23 @@ df_s275_turnover %>%
   ggplot(aes(x = schyear, color = dist_nonwhite_cat)) +
   geom_line(aes(y = tch_leavers, linetype = "Leavers")) +
   geom_point(aes(y = tch_leavers, color = dist_nonwhite_cat)) +
-  ylim(0, 0.15) +
+  geom_line(data = subset(df_state_level, schyear < 2021), aes(x = schyear, y = tch_leavers, color = "State Average", linetype = "Leavers")) +
+  geom_point(data = subset(df_state_level, schyear < 2021), aes(x = schyear, y = tch_leavers, color = "State Average")) +
   geom_line(aes(y = tch_movers, linetype = "Movers")) + 
   geom_point(aes(y = tch_movers, color = dist_nonwhite_cat)) +
+  geom_line(data = subset(df_state_level, schyear < 2021), aes(x = schyear, y = tch_movers, color = "State Average", linetype = "Movers")) +
+  geom_point(data = subset(df_state_level, schyear < 2021), aes(x = schyear, y = tch_movers, color = "State Average")) +
+  ylim(0, 0.15) +
   theme_uw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_color_manual("",
-                     values = c("#4B2E83", "#85754D")) +
+                     values = c("#4B2E83", "#85754D", "#C2BAA6")) +
   scale_linetype_manual(values = c('Leavers' = 'solid', 'Movers' = 'dashed'), labs(color = 'Turnover type')) +
   labs(x = "",
        y = "Turnover rate",
        color = "Share of students\nof color",
        title = "Average teacher turnover rate by high vs. low students of color in WA state\nbetween AY 2015-2016 to 2019-2020",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nleavers are teachers who left the teaching profession or the system and movers are those who move to another district.")
+       caption = "leavers are teachers who left the teaching profession or the system and movers are those who move to another district.\nIn all estimates, asians are excluded from non-white or people of color categories.")
 
 
 
@@ -1650,19 +1836,23 @@ df_s275_turnover %>%
   ggplot(aes(x = schyear, color = dist_poverty_cat)) +
   geom_line(aes(y = tch_leavers, linetype = "Leavers")) +
   geom_point(aes(y = tch_leavers, color = dist_poverty_cat)) +
-  ylim(0, 0.15) +
+  geom_line(data = subset(df_state_level, schyear < 2021), aes(x = schyear, y = tch_leavers, color = "State Average", linetype = "Leavers")) +
+  geom_point(data = subset(df_state_level, schyear < 2021), aes(x = schyear, y = tch_leavers, color = "State Average")) +
   geom_line(aes(y = tch_movers, linetype = "Movers")) + 
   geom_point(aes(y = tch_movers, color = dist_poverty_cat)) +
+  geom_line(data = subset(df_state_level, schyear < 2021), aes(x = schyear, y = tch_movers, color = "State Average", linetype = "Movers")) +
+  geom_point(data = subset(df_state_level, schyear < 2021), aes(x = schyear, y = tch_movers, color = "State Average")) +
+  ylim(0, 0.15) +
   theme_uw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_color_manual("",
-                     values = c("#4B2E83", "#85754D")) +
+                     values = c("#4B2E83", "#85754D", "#C2BAA6")) +
   scale_linetype_manual(values = c('Leavers' = 'solid', 'Movers' = 'dashed'), labs(color = 'Turnover type')) +
   labs(x = "",
        y = "Turnover rate",
        color = "Share of students\nreceiving FRPL",
        title = "Average teacher turnover rate by high vs. low poverty in WA state\nbetween AY 2015-2016 to 2019-2020",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nleavers are teachers who left the teaching profession or the system and movers are those who move to another district.")
+       caption = "leavers are teachers who left the teaching profession or the system and movers are those who move to another district.")
 
 
 # teacher turnover rates by teacher of color
@@ -1706,18 +1896,18 @@ df_s275_turnover %>%
   ggplot(aes(x = schyear, y = tch_newcomer, color = dist_nonwhite_cat)) +
   geom_line() +
   geom_point() +
+  geom_line(data = subset(df_state_level,schyear > 2016 & schyear <= 2021), aes(x = schyear, y = tch_newcomer1, color = "State Average")) +
+  geom_point(data = subset(df_state_level,schyear > 2016 & schyear <= 2021), aes(x = schyear, y = tch_newcomer1, color = "State Average")) +
   ylim(0, .2) +
   theme_uw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_color_manual("",
-                     values = c("#4B2E83", "#85754D")) +
-  scale_linetype_manual(values = c('Leavers' = 'solid', 'Movers' = 'dashed'), labs(color = 'Turnover type')) +
-  # scale_x_continuous(breaks = c(2017, 2018, 2019)) +
+                     values = c("#4B2E83", "#85754D", "#C2BAA6")) +
 labs(x = "",
      y = "newcomers rate",
      color = "Share of students\nof color",
-     title = "Average teacher newcomers rate by high vs. low students of color in WA state\nbetween AY 2016-2017 to 2020-2021",
-     caption = "In all estimates, asians are excluded from non-white or people of color categories.\nnewcomer is defined as a teacher who was not present in the system in the prior year.")
+     title = "Average teacher newcomers* rate by high vs. low students of color in WA state\nbetween AY 2016-2017 to 2020-2021",
+     caption = "*newcomer is defined as a teacher who was not present in the system in the prior year.\nIn all estimates, asians are excluded from non-white or people of color categories.\n")
 
 
 df_s275_turnover %>% 
@@ -1727,18 +1917,19 @@ df_s275_turnover %>%
   ggplot(aes(x = schyear, y = tch_newcomer, color = dist_poverty_cat)) +
   geom_line() +
   geom_point() +
+  geom_line(data = subset(df_state_level,schyear > 2016 & schyear <= 2021), aes(x = schyear, y = tch_newcomer1, color = "State Average")) +
+  geom_point(data = subset(df_state_level,schyear > 2016 & schyear <= 2021), aes(x = schyear, y = tch_newcomer1, color = "State Average")) +
+  ylim(0, .2) +
   ylim(0, .15) +
   theme_uw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_color_manual("",
-                     values = c("#4B2E83", "#85754D")) +
-  scale_linetype_manual(values = c('Leavers' = 'solid', 'Movers' = 'dashed'), labs(color = 'Turnover type')) +
-  # scale_x_continuous(breaks = c(2017, 2018, 2019)) +
+                     values = c("#4B2E83", "#85754D", "#C2BAA6")) +
   labs(x = "",
        y = "newcomers rate",
        color = "Share of students\nreceiving FRPL",
-       title = "Average teacher newcomers rate by high vs. low poverty in WA state\nbetween AY 2016-2017 to 2020-2021",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nnewcomer is defined as a teacher who was not present in the system in the prior year.")
+       title = "Average teacher newcomers* rate by high vs. low poverty in WA state\nbetween AY 2016-2017 to 2020-2021",
+       caption = "*newcomer is defined as a teacher who was not present in the system in the prior year.")
 
 
 
@@ -1752,17 +1943,19 @@ df_s275_turnover %>%
   ggplot(aes(x = schyear, y = tch_newcomer, color = dist_nonwhite_cat)) +
   geom_line() +
   geom_point() +
+  geom_line(data = subset(df_state_level,schyear > 2016 & schyear <= 2021), aes(x = schyear, y = tch_newcomer2, color = "State Average")) +
+  geom_point(data = subset(df_state_level,schyear > 2016 & schyear <= 2021), aes(x = schyear, y = tch_newcomer2, color = "State Average")) +
   ylim(0, .2) +
   theme_uw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_color_manual("",
-                     values = c("#4B2E83", "#85754D")) +
+                     values = c("#4B2E83", "#85754D", "#C2BAA6")) +
   scale_x_continuous(breaks = c(2017, 2018, 2019, 2020, 2021)) +
   labs(x = "",
        y = "newcomers rate",
        color = "Share of students\nof color",
-       title = "Average teacher newcomers rate by high vs. low students of color in WA state\nbetween AY 2016-2017 to 2020-2021",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nnewcomer is defined as a teacher who was not present in his/her current school district in the prior year.")
+       title = "Average teacher newcomers* rate by high vs. low students of color in WA state\nbetween AY 2016-2017 to 2020-2021",
+       caption = "*newcomer is defined as a teacher who was not present in his/her current school district in the prior year.\nIn all estimates, asians are excluded from non-white or people of color categories.")
 
 
 df_s275_turnover %>% 
@@ -1772,17 +1965,19 @@ df_s275_turnover %>%
   ggplot(aes(x = schyear, y = tch_newcomer, color = dist_poverty_cat)) +
   geom_line() +
   geom_point() +
+  geom_line(data = subset(df_state_level,schyear > 2016 & schyear <= 2021), aes(x = schyear, y = tch_newcomer2, color = "State Average")) +
+  geom_point(data = subset(df_state_level,schyear > 2016 & schyear <= 2021), aes(x = schyear, y = tch_newcomer2, color = "State Average")) +
   ylim(0, .2) +
   theme_uw() +
   theme(plot.caption = element_text(hjust = 0, face= "italic")) +
   scale_color_manual("",
-                     values = c("#4B2E83", "#85754D")) +
+                     values = c("#4B2E83", "#85754D", "#C2BAA6")) +
   scale_x_continuous(breaks = c(2017, 2018, 2019, 2020, 2021)) +
   labs(x = "",
        y = "newcomers rate",
        color = "Share of students\nreceiving FRPL",
-       title = "Average teacher newcomers rate by high vs. low poverty in WA state\nbetween AY 2016-2017 to 2020-2021",
-       caption = "In all estimates, asians are excluded from non-white or people of color categories.\nnewcomer is defined as a teacher who was not present in his/her current school district in the prior year.")
+       title = "Average teacher newcomers* rate by high vs. low poverty in WA state\nbetween AY 2016-2017 to 2020-2021",
+       caption = "*newcomer is defined as a teacher who was not present in his/her current school district in the prior year.")
 
 
 
