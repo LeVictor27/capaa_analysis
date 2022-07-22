@@ -153,10 +153,16 @@ df_demos_dist <- df_demos_dist%>%
          dist_group_soc = case_when(dist_pctstu_soc >= 0  & dist_pctstu_soc < 0.25 ~ '1',
                                     dist_pctstu_soc >= 0.25  & dist_pctstu_soc < 0.50 ~ '2',
                                     dist_pctstu_soc >= 0.50  & dist_pctstu_soc < 0.75 ~ '3',
-                                    dist_pctstu_soc >= 0.75  & dist_pctstu_soc <= 1 ~ '4')
+                                    dist_pctstu_soc >= 0.75  & dist_pctstu_soc <= 1 ~ '4'),
+         dist_group_frpl = case_when(PctFreeorReducedPricedMeals >= 0  & PctFreeorReducedPricedMeals < 0.25 ~ '1',
+                                     PctFreeorReducedPricedMeals >= 0.25  & PctFreeorReducedPricedMeals < 0.50 ~ '2',
+                                     PctFreeorReducedPricedMeals >= 0.50  & PctFreeorReducedPricedMeals < 0.75 ~ '3',
+                                     PctFreeorReducedPricedMeals >= 0.75  & PctFreeorReducedPricedMeals <= 1 ~ '4'),
+         
   )
 
 df_demos_dist$deciles_frpl <- ntile(df_demos_dist$PctFreeorReducedPricedMeals, 10)
+df_demos_dist$quartile_frpl <- ntile(df_demos_dist$PctFreeorReducedPricedMeals, 4)
 
 df_f196_expenditures <- df_f196_expenditures%>%
   mutate(coudis_s=as.character(coudis_s),
@@ -229,6 +235,10 @@ df_rev_merge<- full_join(df_rev_leaid_cpi, df_demos_dist, by=c("coudis"="coudis_
 
 df_rev_merge<- full_join(df_rev_merge, df_locale_wa, by=c("leaid"="LEAID"))
 
+```
+
+```{r marginal_effects}
+
 #Adjust dollars by CWI
 df_rev_merge <- df_rev_merge%>%
   mutate(
@@ -236,42 +246,413 @@ df_rev_merge <- df_rev_merge%>%
     #rev_pp_cwi=rev_pp/cwi_2020_extrapolated,
     rev_pp_18d=rev_pp*cpi18, 
     #rev_pp_cwi_18d=rev_pp_cwi*cpi18, 
-    LOCALE = as.factor(LOCALE),
-    dist_group_soc = as.factor(dist_group_soc),
+    LOCALE = factor(LOCALE),
+    dist_group_soc = factor(dist_group_soc),
     TotalEnrollment_log = log(TotalEnrollment))%>%
     drop_na(dist_group_soc)
+
+#https://nces.ed.gov/programs/edge/docs/locale_classifications.pdf
 
 levels(df_rev_merge$dist_group_soc) <- c("0-24%","25-49%","50-74%", "75-100%")
 
 #Inlcude the main effect and the year fixed effect in the model
 
-##FEDERAL (CWI_18D)
+## FEDERAL (CWI_18D)
+############################################
 df_rev_fed <- df_rev_merge%>%
   filter(rev_source=="Federal")
 
-model_fed <- lm(rev_pp_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual  + PctFreeorReducedPricedMeals + schyear, data=df_rev_fed) 
+model_fed <- lm(rev_pp_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual  + PctFreeorReducedPricedMeals + (PctFreeorReducedPricedMeals*schyear), data=df_rev_fed) 
 #Brief model has main effect of school year and indicator of perctile FRL (.1, 0.9) and add interaction term between the 0.1 and 0.9
 #Coefficient is the difference between the 90th from state average and the 10th from the state average
 
+#DIRECTIONS
+#Do interaction pctfreereductedpricemeals 
+#Pull out the year and run the model for each year
+#Get the coefficient for FRPL and model the coefficient afterward
+#Get a marginal effect for 25%, 50% and 75% for FRPL 
+
+library(margins)
+
+margins(model_fed, 
+        data = df_rev_fed[df_rev_fed$dist_group_frpl == 1, ],
+        variables="schyear")
+
+margins(model_fed, 
+        data = df_rev_fed[df_rev_fed$dist_group_frpl == 2, ],
+        variables="schyear")
+
+margins(model_fed, 
+        data = df_rev_fed[df_rev_fed$dist_group_frpl == 3, ],
+        variables="schyear")
+
+margins(model_fed, 
+        data = df_rev_fed[df_rev_fed$dist_group_frpl == 4, ],
+        variables="schyear")
+
+
+#marginal effect, one percentage change yields x amount of change, 25% and 75% level. After accounting for 25% percentile, this is how the predicted dollar amount
+
+
 df_rev_fed$rev_adjusted <- predict.lm(model_fed, newdata=df_rev_fed)
+#Worry that the Error term leaves a lot, lots of noise left in the error term, it'll be hard to interpret the predict effect/reg adjusted way
 
 #Have poverty as part of predictor and have marginal estimate as part of the predictor
 #Have poverty as a continuous variable and estimate marginal effect at .1 and .9 percentile (30/70% poverty)
 
-#STATE
+############################################
+# STATE
+############################################
 df_rev_state <- df_rev_merge%>%
   filter(rev_source=="State")
 
-model_state <- lm(rev_pp_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual + PctFreeorReducedPricedMeals + schyear, data=df_rev_state)
+model_state <- lm(rev_pp_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual + PctFreeorReducedPricedMeals + schyear + (PctFreeorReducedPricedMeals*schyear), data=df_rev_state)
 
-df_rev_state$rev_adjusted <- predict.lm(model_state, newdata=df_rev_state)
 
-#LOCAL
-df_rev_loc <- df_rev_merge%>%
+state_margins_frpl_25 <- margins(model_state, 
+                                data = df_rev_state[df_rev_state$dist_group_frpl == 1, ],
+                                variables="schyear")
+
+state_margins_frpl_50 <- margins(model_state, 
+                                data = df_rev_state[df_rev_state$dist_group_frpl == 2, ],
+                                variables="schyear")
+
+state_margins_frpl_75 <- margins(model_state, 
+                                data = df_rev_state[df_rev_state$dist_group_frpl == 3, ],
+                                variables="schyear")
+
+state_margins_frpl_100 <- margins(model_state, 
+                                  data = df_rev_state[df_rev_state$dist_group_frpl == 4, ],
+                                  variables="schyear")
+
+state_margins_plot <- data.frame(frpl_group=NA,
+                                 ame_2015 = 0,
+                                 ame_2016=NA,
+                                 ame_2017=NA,
+                                 ame_2018=NA,
+                                 ame_2019=NA,
+                                 ame_2020=NA,
+                                 ame_2021=NA)
+
+state_margins_plot <- state_margins_plot%>%
+  tibble::add_row(frpl_group=1,
+                  ame_2015 = 0,
+                  ame_2016=mean(state_margins_frpl_25$dydx_schyear2016, na.rm = TRUE),
+                  ame_2017=mean(state_margins_frpl_25$dydx_schyear2017, na.rm = TRUE),
+                  ame_2018=mean(state_margins_frpl_25$dydx_schyear2018, na.rm = TRUE),
+                  ame_2019=mean(state_margins_frpl_25$dydx_schyear2019, na.rm = TRUE),
+                  ame_2020=mean(state_margins_frpl_25$dydx_schyear2020, na.rm = TRUE),
+                  ame_2021=mean(state_margins_frpl_25$dydx_schyear2021, na.rm = TRUE))%>%
+  tibble::add_row(frpl_group=2,
+                  ame_2015 = 0,
+                  ame_2016=mean(state_margins_frpl_50$dydx_schyear2016, na.rm = TRUE),
+                  ame_2017=mean(state_margins_frpl_50$dydx_schyear2017, na.rm = TRUE),
+                  ame_2018=mean(state_margins_frpl_50$dydx_schyear2018, na.rm = TRUE),
+                  ame_2019=mean(state_margins_frpl_50$dydx_schyear2019, na.rm = TRUE),
+                  ame_2020=mean(state_margins_frpl_50$dydx_schyear2020, na.rm = TRUE),
+                  ame_2021=mean(state_margins_frpl_50$dydx_schyear2021, na.rm = TRUE))%>%
+  tibble::add_row(frpl_group=3,
+                  ame_2015 = 0,
+                  ame_2016=mean(state_margins_frpl_75$dydx_schyear2016, na.rm = TRUE),
+                  ame_2017=mean(state_margins_frpl_75$dydx_schyear2017, na.rm = TRUE),
+                  ame_2018=mean(state_margins_frpl_75$dydx_schyear2018, na.rm = TRUE),
+                  ame_2019=mean(state_margins_frpl_75$dydx_schyear2019, na.rm = TRUE),
+                  ame_2020=mean(state_margins_frpl_75$dydx_schyear2020, na.rm = TRUE),
+                  ame_2021=mean(state_margins_frpl_75$dydx_schyear2021, na.rm = TRUE))%>%
+  tibble::add_row(frpl_group=4,
+                  ame_2015 = 0,
+                  ame_2016=mean(state_margins_frpl_100$dydx_schyear2016, na.rm = TRUE),
+                  ame_2017=mean(state_margins_frpl_100$dydx_schyear2017, na.rm = TRUE),
+                  ame_2018=mean(state_margins_frpl_100$dydx_schyear2018, na.rm = TRUE),
+                  ame_2019=mean(state_margins_frpl_100$dydx_schyear2019, na.rm = TRUE),
+                  ame_2020=mean(state_margins_frpl_100$dydx_schyear2020, na.rm = TRUE),
+                  ame_2021=mean(state_margins_frpl_100$dydx_schyear2021, na.rm = TRUE))%>%
+  drop_na()
+
+state_margins_plot_long <- state_margins_plot %>%
+  pivot_longer(cols = starts_with("ame_"),
+               names_to = "schyear")%>%
+  mutate(frpl_group=factor(frpl_group))
+    
+ggplot(state_margins_plot_long, 
+       aes(x=schyear, y=value, group=frpl_group, color=frpl_group)) +
+  geom_point()+
+  geom_line()+
+  labs(title="State Revenue AME")
+
+####
+
+state_adj_plot <- data.frame(frpl_group=NA,
+                             adj_2015 = NA,
+                             adj_2016 = NA,
+                             adj_2017 = NA,
+                             adj_2018 = NA,
+                             adj_2019 = NA,
+                             adj_2020 = NA,
+                             adj_2021 = NA)
+
+state_adj_plot <- state_adj_plot%>%
+  tibble::add_row(frpl_group=1,
+                  adj_2015 = mean(state_margins_frpl_25$rev_pp_18d[state_margins_frpl_25$schyear==2015]),
+                  adj_2016=mean(state_margins_frpl_25$rev_pp_18d[state_margins_frpl_25$schyear==2016], na.rm=TRUE) +
+                    mean(state_margins_frpl_25$dydx_schyear2016, na.rm = TRUE),
+                  adj_2017=mean(state_margins_frpl_25$rev_pp_18d[state_margins_frpl_25$schyear==2017], na.rm=TRUE) +
+                    mean(state_margins_frpl_25$dydx_schyear2017, na.rm = TRUE),
+                  adj_2018=mean(state_margins_frpl_25$rev_pp_18d[state_margins_frpl_25$schyear==2018], na.rm=TRUE) +
+                    mean(state_margins_frpl_25$dydx_schyear2018, na.rm = TRUE),
+                  adj_2019=mean(state_margins_frpl_25$rev_pp_18d[state_margins_frpl_25$schyear==2019], na.rm=TRUE) +
+                    mean(state_margins_frpl_25$dydx_schyear2019, na.rm = TRUE),
+                  adj_2020=mean(state_margins_frpl_25$rev_pp_18d[state_margins_frpl_25$schyear==2020], na.rm=TRUE) +
+                    mean(state_margins_frpl_25$dydx_schyear2020, na.rm = TRUE),
+                  adj_2021=mean(state_margins_frpl_25$rev_pp_18d[state_margins_frpl_25$schyear==2021], na.rm=TRUE) +
+                    mean(state_margins_frpl_25$dydx_schyear2021, na.rm = TRUE)
+  )%>%
+  tibble::add_row(frpl_group=2,
+                  adj_2015 = mean(state_margins_frpl_50$rev_pp_18d[state_margins_frpl_50$schyear==2015]),
+                  adj_2016=mean(state_margins_frpl_50$rev_pp_18d[state_margins_frpl_50$schyear==2016], na.rm=TRUE) +
+                    mean(state_margins_frpl_50$dydx_schyear2016, na.rm = TRUE),
+                  adj_2017=mean(state_margins_frpl_50$rev_pp_18d[state_margins_frpl_50$schyear==2017], na.rm=TRUE) +
+                    mean(state_margins_frpl_50$dydx_schyear2017, na.rm = TRUE),
+                  adj_2018=mean(state_margins_frpl_50$rev_pp_18d[state_margins_frpl_50$schyear==2018], na.rm=TRUE) +
+                    mean(state_margins_frpl_50$dydx_schyear2018, na.rm = TRUE),
+                  adj_2019=mean(state_margins_frpl_50$rev_pp_18d[state_margins_frpl_50$schyear==2019], na.rm=TRUE) +
+                    mean(state_margins_frpl_50$dydx_schyear2019, na.rm = TRUE),
+                  adj_2020=mean(state_margins_frpl_50$rev_pp_18d[state_margins_frpl_50$schyear==2020], na.rm=TRUE) +
+                    mean(state_margins_frpl_50$dydx_schyear2020, na.rm = TRUE),
+                  adj_2021=mean(state_margins_frpl_50$rev_pp_18d[state_margins_frpl_50$schyear==2021], na.rm=TRUE) +
+                    mean(state_margins_frpl_50$dydx_schyear2021, na.rm = TRUE)
+  )%>%
+  tibble::add_row(frpl_group=3,
+                  adj_2015 = mean(state_margins_frpl_75$rev_pp_18d[state_margins_frpl_75$schyear==2015]),
+                  adj_2016=mean(state_margins_frpl_75$rev_pp_18d[state_margins_frpl_75$schyear==2016], na.rm=TRUE) +
+                    mean(state_margins_frpl_75$dydx_schyear2016, na.rm = TRUE),
+                  adj_2017=mean(state_margins_frpl_75$rev_pp_18d[state_margins_frpl_75$schyear==2017], na.rm=TRUE) +
+                    mean(state_margins_frpl_75$dydx_schyear2017, na.rm = TRUE),
+                  adj_2018=mean(state_margins_frpl_75$rev_pp_18d[state_margins_frpl_75$schyear==2018], na.rm=TRUE) +
+                    mean(state_margins_frpl_75$dydx_schyear2018, na.rm = TRUE),
+                  adj_2019=mean(state_margins_frpl_75$rev_pp_18d[state_margins_frpl_75$schyear==2019], na.rm=TRUE) +
+                    mean(state_margins_frpl_75$dydx_schyear2019, na.rm = TRUE),
+                  adj_2020=mean(state_margins_frpl_75$rev_pp_18d[state_margins_frpl_75$schyear==2020], na.rm=TRUE) +
+                    mean(state_margins_frpl_75$dydx_schyear2020, na.rm = TRUE),
+                  adj_2021=mean(state_margins_frpl_75$rev_pp_18d[state_margins_frpl_75$schyear==2021], na.rm=TRUE) +
+                    mean(state_margins_frpl_75$dydx_schyear2021, na.rm = TRUE)
+  )%>%
+  tibble::add_row(frpl_group=4,
+                  adj_2015 = mean(state_margins_frpl_100$rev_pp_18d[state_margins_frpl_100$schyear==2015]),
+                  adj_2016=mean(state_margins_frpl_100$rev_pp_18d[state_margins_frpl_100$schyear==2016], na.rm=TRUE) +
+                    mean(state_margins_frpl_100$dydx_schyear2016, na.rm = TRUE),
+                  adj_2017=mean(state_margins_frpl_100$rev_pp_18d[state_margins_frpl_100$schyear==2017], na.rm=TRUE) +
+                    mean(state_margins_frpl_100$dydx_schyear2017, na.rm = TRUE),
+                  adj_2018=mean(state_margins_frpl_100$rev_pp_18d[state_margins_frpl_100$schyear==2018], na.rm=TRUE) +
+                    mean(state_margins_frpl_100$dydx_schyear2018, na.rm = TRUE),
+                  adj_2019=mean(state_margins_frpl_100$rev_pp_18d[state_margins_frpl_100$schyear==2019], na.rm=TRUE) +
+                    mean(state_margins_frpl_100$dydx_schyear2019, na.rm = TRUE),
+                  adj_2020=mean(state_margins_frpl_100$rev_pp_18d[state_margins_frpl_100$schyear==2020], na.rm=TRUE) +
+                    mean(state_margins_frpl_100$dydx_schyear2020, na.rm = TRUE),
+                  adj_2021=mean(state_margins_frpl_100$rev_pp_18d[state_margins_frpl_100$schyear==2021], na.rm=TRUE) +
+                    mean(state_margins_frpl_100$dydx_schyear2021, na.rm = TRUE)
+  )%>%
+  drop_na()
+
+state_adj_plot_long <- state_adj_plot %>%
+  pivot_longer(cols = starts_with("adj_"),
+               names_to = "schyear")%>%
+  mutate(frpl_group=factor(frpl_group))
+    
+ggplot(state_adj_plot_long, 
+       aes(x=schyear, y=value, group=frpl_group, color=frpl_group)) +
+  geom_point()+
+  geom_line()+
+  labs(title="State Adjusted Revenue (PP 2018 + AME)")
+
+#df_rev_state$rev_adjusted <- predict.lm(model_state, newdata=df_rev_state)
+
+
+##### LOCAL
+df_rev_local <- df_rev_merge%>%
   filter(rev_source=="Local")
 
-model_loc <- lm(rev_pp_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + PctTransitionalBilingual + PctFreeorReducedPricedMeals + schyear, data=df_rev_loc)
+model_local <- lm(rev_pp_18d ~ log(TotalEnrollment) + LOCALE + PctSpecialEducation + 
+                    PctTransitionalBilingual + PctFreeorReducedPricedMeals + schyear + 
+                    (PctFreeorReducedPricedMeals*schyear), data=df_rev_local)
 
+
+local_margins_frpl_25 <- margins(model_local, 
+                                 data = df_rev_local[df_rev_local$dist_group_frpl == 1, ],
+                                 variables="schyear")
+
+local_margins_frpl_50 <- margins(model_local, 
+                                 data = df_rev_local[df_rev_local$dist_group_frpl == 2, ],
+                                 variables="schyear")
+
+local_margins_frpl_75 <- margins(model_local, 
+                                 data = df_rev_local[df_rev_local$dist_group_frpl == 3, ],
+                                 variables="schyear")
+
+local_margins_frpl_100 <- margins(model_local, 
+                                  data = df_rev_local[df_rev_local$dist_group_frpl == 4, ],
+                                  variables="schyear")
+
+local_margins_plot <- data.frame(frpl_group=NA,
+                                 ame_2015 = 0,
+                                 ame_2016=NA,
+                                 ame_2017=NA,
+                                 ame_2018=NA,
+                                 ame_2019=NA,
+                                 ame_2020=NA,
+                                 ame_2021=NA)
+
+local_margins_plot <- local_margins_plot%>%
+  tibble::add_row(frpl_group=1,
+                  ame_2015 = 0,
+                  ame_2016=mean(local_margins_frpl_25$dydx_schyear2016, na.rm = TRUE),
+                  ame_2017=mean(local_margins_frpl_25$dydx_schyear2017, na.rm = TRUE),
+                  ame_2018=mean(local_margins_frpl_25$dydx_schyear2018, na.rm = TRUE),
+                  ame_2019=mean(local_margins_frpl_25$dydx_schyear2019, na.rm = TRUE),
+                  ame_2020=mean(local_margins_frpl_25$dydx_schyear2020, na.rm = TRUE),
+                  ame_2021=mean(local_margins_frpl_25$dydx_schyear2021, na.rm = TRUE))%>%
+  tibble::add_row(frpl_group=2,
+                  ame_2015 = 0,
+                  ame_2016=mean(local_margins_frpl_50$dydx_schyear2016, na.rm = TRUE),
+                  ame_2017=mean(local_margins_frpl_50$dydx_schyear2017, na.rm = TRUE),
+                  ame_2018=mean(local_margins_frpl_50$dydx_schyear2018, na.rm = TRUE),
+                  ame_2019=mean(local_margins_frpl_50$dydx_schyear2019, na.rm = TRUE),
+                  ame_2020=mean(local_margins_frpl_50$dydx_schyear2020, na.rm = TRUE),
+                  ame_2021=mean(local_margins_frpl_50$dydx_schyear2021, na.rm = TRUE))%>%
+  tibble::add_row(frpl_group=3,
+                  ame_2015 = 0,
+                  ame_2016=mean(local_margins_frpl_75$dydx_schyear2016, na.rm = TRUE),
+                  ame_2017=mean(local_margins_frpl_75$dydx_schyear2017, na.rm = TRUE),
+                  ame_2018=mean(local_margins_frpl_75$dydx_schyear2018, na.rm = TRUE),
+                  ame_2019=mean(local_margins_frpl_75$dydx_schyear2019, na.rm = TRUE),
+                  ame_2020=mean(local_margins_frpl_75$dydx_schyear2020, na.rm = TRUE),
+                  ame_2021=mean(local_margins_frpl_75$dydx_schyear2021, na.rm = TRUE))%>%
+  tibble::add_row(frpl_group=4,
+                  ame_2015 = 0,
+                  ame_2016=mean(local_margins_frpl_100$dydx_schyear2016, na.rm = TRUE),
+                  ame_2017=mean(local_margins_frpl_100$dydx_schyear2017, na.rm = TRUE),
+                  ame_2018=mean(local_margins_frpl_100$dydx_schyear2018, na.rm = TRUE),
+                  ame_2019=mean(local_margins_frpl_100$dydx_schyear2019, na.rm = TRUE),
+                  ame_2020=mean(local_margins_frpl_100$dydx_schyear2020, na.rm = TRUE),
+                  ame_2021=mean(local_margins_frpl_100$dydx_schyear2021, na.rm = TRUE))%>%
+  drop_na()
+
+local_margins_plot_long <- local_margins_plot %>%
+  pivot_longer(cols = starts_with("ame_"),
+               names_to = "schyear")%>%
+  mutate(frpl_group=factor(frpl_group))
+
+ggplot(local_margins_plot_long, 
+       aes(x=schyear, y=value, group=frpl_group, color=frpl_group)) +
+  geom_point()+
+  geom_line()+
+  labs(title="Local Revenue AME")
+
+####
+
+local_adj_plot <- data.frame(frpl_group=NA,
+                             adj_2015 = NA,
+                             adj_2016 = NA,
+                             adj_2017 = NA,
+                             adj_2018 = NA,
+                             adj_2019 = NA,
+                             adj_2020 = NA,
+                             adj_2021 = NA)
+
+local_adj_plot <- local_adj_plot%>%
+  tibble::add_row(frpl_group=1,
+                  adj_2015 = mean(local_margins_frpl_25$rev_pp_18d[local_margins_frpl_25$schyear==2015]),
+                  adj_2016=mean(local_margins_frpl_25$rev_pp_18d[local_margins_frpl_25$schyear==2016], na.rm=TRUE) +
+                    mean(local_margins_frpl_25$dydx_schyear2016, na.rm = TRUE),
+                  adj_2017=mean(local_margins_frpl_25$rev_pp_18d[local_margins_frpl_25$schyear==2017], na.rm=TRUE) +
+                    mean(local_margins_frpl_25$dydx_schyear2017, na.rm = TRUE),
+                  adj_2018=mean(local_margins_frpl_25$rev_pp_18d[local_margins_frpl_25$schyear==2018], na.rm=TRUE) +
+                    mean(local_margins_frpl_25$dydx_schyear2018, na.rm = TRUE),
+                  adj_2019=mean(local_margins_frpl_25$rev_pp_18d[local_margins_frpl_25$schyear==2019], na.rm=TRUE) +
+                    mean(local_margins_frpl_25$dydx_schyear2019, na.rm = TRUE),
+                  adj_2020=mean(local_margins_frpl_25$rev_pp_18d[local_margins_frpl_25$schyear==2020], na.rm=TRUE) +
+                    mean(local_margins_frpl_25$dydx_schyear2020, na.rm = TRUE),
+                  adj_2021=mean(local_margins_frpl_25$rev_pp_18d[local_margins_frpl_25$schyear==2021], na.rm=TRUE) +
+                    mean(local_margins_frpl_25$dydx_schyear2021, na.rm = TRUE)
+  )%>%
+  tibble::add_row(frpl_group=2,
+                  adj_2015 = mean(local_margins_frpl_50$rev_pp_18d[local_margins_frpl_50$schyear==2015]),
+                  adj_2016=mean(local_margins_frpl_50$rev_pp_18d[local_margins_frpl_50$schyear==2016], na.rm=TRUE) +
+                    mean(local_margins_frpl_50$dydx_schyear2016, na.rm = TRUE),
+                  adj_2017=mean(local_margins_frpl_50$rev_pp_18d[local_margins_frpl_50$schyear==2017], na.rm=TRUE) +
+                    mean(local_margins_frpl_50$dydx_schyear2017, na.rm = TRUE),
+                  adj_2018=mean(local_margins_frpl_50$rev_pp_18d[local_margins_frpl_50$schyear==2018], na.rm=TRUE) +
+                    mean(local_margins_frpl_50$dydx_schyear2018, na.rm = TRUE),
+                  adj_2019=mean(local_margins_frpl_50$rev_pp_18d[local_margins_frpl_50$schyear==2019], na.rm=TRUE) +
+                    mean(local_margins_frpl_50$dydx_schyear2019, na.rm = TRUE),
+                  adj_2020=mean(local_margins_frpl_50$rev_pp_18d[local_margins_frpl_50$schyear==2020], na.rm=TRUE) +
+                    mean(local_margins_frpl_50$dydx_schyear2020, na.rm = TRUE),
+                  adj_2021=mean(local_margins_frpl_50$rev_pp_18d[local_margins_frpl_50$schyear==2021], na.rm=TRUE) +
+                    mean(local_margins_frpl_50$dydx_schyear2021, na.rm = TRUE)
+  )%>%
+  tibble::add_row(frpl_group=3,
+                  adj_2015 = mean(local_margins_frpl_75$rev_pp_18d[local_margins_frpl_75$schyear==2015]),
+                  adj_2016=mean(local_margins_frpl_75$rev_pp_18d[local_margins_frpl_75$schyear==2016], na.rm=TRUE) +
+                    mean(local_margins_frpl_75$dydx_schyear2016, na.rm = TRUE),
+                  adj_2017=mean(local_margins_frpl_75$rev_pp_18d[local_margins_frpl_75$schyear==2017], na.rm=TRUE) +
+                    mean(local_margins_frpl_75$dydx_schyear2017, na.rm = TRUE),
+                  adj_2018=mean(local_margins_frpl_75$rev_pp_18d[local_margins_frpl_75$schyear==2018], na.rm=TRUE) +
+                    mean(local_margins_frpl_75$dydx_schyear2018, na.rm = TRUE),
+                  adj_2019=mean(local_margins_frpl_75$rev_pp_18d[local_margins_frpl_75$schyear==2019], na.rm=TRUE) +
+                    mean(local_margins_frpl_75$dydx_schyear2019, na.rm = TRUE),
+                  adj_2020=mean(local_margins_frpl_75$rev_pp_18d[local_margins_frpl_75$schyear==2020], na.rm=TRUE) +
+                    mean(local_margins_frpl_75$dydx_schyear2020, na.rm = TRUE),
+                  adj_2021=mean(local_margins_frpl_75$rev_pp_18d[local_margins_frpl_75$schyear==2021], na.rm=TRUE) +
+                    mean(local_margins_frpl_75$dydx_schyear2021, na.rm = TRUE)
+  )%>%
+  tibble::add_row(frpl_group=4,
+                  adj_2015 = mean(local_margins_frpl_100$rev_pp_18d[local_margins_frpl_100$schyear==2015]),
+                  adj_2016=mean(local_margins_frpl_100$rev_pp_18d[local_margins_frpl_100$schyear==2016], na.rm=TRUE) +
+                    mean(local_margins_frpl_100$dydx_schyear2016, na.rm = TRUE),
+                  adj_2017=mean(local_margins_frpl_100$rev_pp_18d[local_margins_frpl_100$schyear==2017], na.rm=TRUE) +
+                    mean(local_margins_frpl_100$dydx_schyear2017, na.rm = TRUE),
+                  adj_2018=mean(local_margins_frpl_100$rev_pp_18d[local_margins_frpl_100$schyear==2018], na.rm=TRUE) +
+                    mean(local_margins_frpl_100$dydx_schyear2018, na.rm = TRUE),
+                  adj_2019=mean(local_margins_frpl_100$rev_pp_18d[local_margins_frpl_100$schyear==2019], na.rm=TRUE) +
+                    mean(local_margins_frpl_100$dydx_schyear2019, na.rm = TRUE),
+                  adj_2020=mean(local_margins_frpl_100$rev_pp_18d[local_margins_frpl_100$schyear==2020], na.rm=TRUE) +
+                    mean(local_margins_frpl_100$dydx_schyear2020, na.rm = TRUE),
+                  adj_2021=mean(local_margins_frpl_100$rev_pp_18d[local_margins_frpl_100$schyear==2021], na.rm=TRUE) +
+                    mean(local_margins_frpl_100$dydx_schyear2021, na.rm = TRUE)
+  )%>%
+  drop_na()
+
+local_adj_plot_long <- local_adj_plot %>%
+  pivot_longer(cols = starts_with("adj_"),
+               names_to = "schyear")%>%
+  mutate(frpl_group=factor(frpl_group))
+
+ggplot(local_adj_plot_long, 
+       aes(x=schyear, y=value, group=frpl_group, color=frpl_group)) +
+  geom_point()+
+  geom_line()+
+  labs(title="Local Adjusted Revenue (PP 2018 + AME)")
+
+##### STATE AND LOCAL
+
+statelocal_adj_long <- bind_rows(state_adj_plot_long, 
+                                 local_adj_plot_long)%>%
+  mutate(frpl_group = factor(frpl_group))%>%
+  group_by(frpl_group, schyear) %>%
+  summarise_all(funs(sum))
+
+ggplot(statelocal_adj_long, 
+       aes(x=schyear, y=value, group=frpl_group, color=frpl_group)) +
+  geom_point()+
+  geom_line()+
+  labs(title="State + Local Adjusted Revenue (PP 2018 + AME)")
+
+
+```
+
+```{r}
+
+##################
 df_rev_loc$rev_adjusted <- predict.lm(model_loc, newdata=df_rev_loc)
 
 df_rev_total <- data.frame(
@@ -284,7 +665,7 @@ df_rev_total <- data.frame(
 
 df_rev_total <- df_rev_total%>%
   mutate(rev_adjusted = df_rev_fed.rev_adjusted + df_rev_state.rev_adjusted + df_rev_loc.rev_adjusted)%>%
-  select(-c(df_rev_fed.rev_adjusted, df_rev_state.rev_adjusted, df_rev_loc.rev_adjusted))%>%
+  #select(-c(df_rev_fed.rev_adjusted, df_rev_state.rev_adjusted, df_rev_loc.rev_adjusted))%>%
   rename(coudis=df_rev_fed.coudis,
          schyear=df_rev_fed.schyear,
          leaid=df_rev_fed.leaid)
@@ -302,30 +683,40 @@ Federal, state, and local revenue source for high- and low-poverty districts
 
 #FED FRPL
 
+### LOW AND HIGH POVERTY
+
 df_rev_fed_figure_pov_frpl <- df_rev_fed%>%
   filter(deciles_frpl==1 | deciles_frpl == 9)%>%
   mutate(deciles_frpl = as.factor(deciles_frpl))
 
 levels(df_rev_fed_figure_pov_frpl$deciles_frpl) <- c("Low-Poverty", "High-Poverty")
 
+
+######
+
+df_rev_fed_figure_pov_frpl <- df_rev_fed%>%
+  mutate(dist_group_frpl = as.factor(dist_group_frpl))
+
+levels(df_rev_fed_figure_pov_frpl$dist_group_frpl) <- c("0-24%","25-49%","50-74%", "75-100%")
+
+
 ggplot(df_rev_fed_figure_pov_frpl, 
-       aes(x=schyear, y=rev_adjusted, group=deciles_frpl)) + 
+       aes(x=schyear, y=rev_adjusted, group=dist_group_frpl)) + 
   stat_summary(geom="line", fun="mean", alpha=0.5) +
   stat_summary(geom="ribbon", 
                fun.data = mean_se, #mean_cl_normal
-               aes(fill=deciles_frpl), alpha=0.25) +
+               aes(fill=dist_group_frpl), alpha=0.25) +
   labs(title="Federal Revenue Amount Per Student",
        subtitle = "Regression adjusted for difference of cost factors including district size, 
-       urbanicity/locale, and percent of students enrolled in free and reduced lunch, 
+       urbanicity/locale, and percent of students enrolled in free and reduced price lunch,
        special education and classified as limited English proficient",
-       caption="Note: High and low-poverty districts estimated at the 10th and 90th percentile 
-       of district percentage of students qualifying for free and reduced price lunch, 
-       with an equal number of districts in each quantile\n\n Data Source: F-196")+
+       caption="Note: Student poverty levels calculated by free and reduced price lunch percentages
+       \n\nData Source: F-196")+
   xlab("School Year (Spring)") + 
   ylab("2018 Dollars") + 
   geom_vline(xintercept = "2018", colour='#FFFFFF', linetype="dashed")+
   theme_uw() +
-  scale_fill_manual(values=c("#4b2e83", "#85754d"), 
+  scale_fill_manual(values=c("#9ebcda", "#8c96c6", "#8c6bb1", "#6e016b"), 
                     name="fill")
 
 #STATE FRPL
@@ -336,24 +727,31 @@ df_rev_state_figure_pov_frpl <- df_rev_state%>%
 
 levels(df_rev_state_figure_pov_frpl$deciles_frpl) <- c("Low-Poverty", "High-Poverty")
 
+######
+
+df_rev_state_figure_pov_frpl <- df_rev_state%>%
+  mutate(dist_group_frpl = as.factor(dist_group_frpl))
+
+levels(df_rev_state_figure_pov_frpl$dist_group_frpl) <- c("0-24%","25-49%","50-74%", "75-100%")
+
+
 ggplot(df_rev_state_figure_pov_frpl, 
-       aes(x=schyear, y=rev_adjusted, group=deciles_frpl)) + 
+       aes(x=schyear, y=rev_adjusted, group=dist_group_frpl)) + 
   stat_summary(geom="line", fun="mean", alpha=0.5) +
   stat_summary(geom="ribbon", 
                fun.data = mean_se, #mean_cl_normal
-               aes(fill=deciles_frpl), alpha=0.25) +
+               aes(fill=dist_group_frpl), alpha=0.25) +
   labs(title="State Revenue Amount Per Student",
        subtitle = "Regression adjusted for difference of cost factors including district size, 
-       urbanicity/locale, and percent of students enrolled in free and reduced lunch, 
+       urbanicity/locale, and percent of students enrolled in free and reduced price lunch,
        special education and classified as limited English proficient",
-       caption="Note: High and low-poverty districts estimated at the 10th and 90th percentile 
-       of district percentage of students qualifying for free and reduced price lunch, 
-       with an equal number of districts in each quantile\n\n Data Source: F-196")+
+       caption="Note: Student poverty levels calculated by free and reduced price lunch percentages
+       \n\nData Source: F-196")+
   xlab("School Year (Spring)") + 
   ylab("2018 Dollars") + 
   geom_vline(xintercept = "2018", colour='#FFFFFF', linetype="dashed")+
-  theme_uw() +
-  scale_fill_manual(values=c("#4b2e83", "#85754d"), 
+  theme_uw() + 
+  scale_fill_manual(values=c("#9ebcda", "#8c96c6", "#8c6bb1", "#6e016b"), 
                     name="fill")
 
 #LOCAL FRPL
@@ -364,24 +762,31 @@ df_rev_loc_figure_pov <- df_rev_loc%>%
 
 levels(df_rev_loc_figure_pov$deciles_frpl) <- c("Low-Poverty", "High-Poverty")
 
+######
+
+df_rev_loc_figure_pov <- df_rev_loc%>%
+  mutate(dist_group_frpl = as.factor(dist_group_frpl))
+
+levels(df_rev_loc_figure_pov$dist_group_frpl) <- c("0-24%","25-49%","50-74%", "75-100%")
+
+
 ggplot(df_rev_loc_figure_pov, 
-       aes(x=schyear, y=rev_adjusted, group=deciles_frpl)) + 
+       aes(x=schyear, y=rev_adjusted, group=dist_group_frpl)) + 
   stat_summary(geom="line", fun="mean", alpha=0.5) +
   stat_summary(geom="ribbon", 
                fun.data = mean_se, #mean_cl_normal
-               aes(fill=deciles_frpl), alpha=0.25) +
+               aes(fill=dist_group_frpl), alpha=0.25) +
   labs(title="Local Revenue Amount Per Student",
        subtitle = "Regression adjusted for difference of cost factors including district size, 
-       urbanicity/locale, and percent of students enrolled in free and reduced lunch, 
+       urbanicity/locale, and percent of students enrolled in free and reduced price lunch,
        special education and classified as limited English proficient",
-       caption="Note: High and low-poverty districts estimated at the 10th and 90th percentile 
-       of district percentage of students qualifying for free and reduced price lunch, 
-       with an equal number of districts in each quantile\n\n Data Source: F-196")+
+       caption="Note: Student poverty levels calculated by free and reduced price lunch percentages
+       \n\nData Source: F-196")+
   xlab("School Year (Spring)") + 
   ylab("2018 Dollars") + 
   geom_vline(xintercept = "2018", colour='#FFFFFF', linetype="dashed")+
-  theme_uw() +
-  scale_fill_manual(values=c("#4b2e83", "#85754d"), 
+  theme_uw() + 
+  scale_fill_manual(values=c("#9ebcda", "#8c96c6", "#8c6bb1", "#6e016b"), 
                     name="fill")
 
 #TOTAL FRPL
@@ -392,31 +797,43 @@ df_rev_total_figure_pov <- df_rev_total%>%
 
 levels(df_rev_total_figure_pov$deciles_frpl) <- c("Low-Poverty", "High-Poverty")
 
+######
+
+df_rev_total_figure_pov <- df_rev_total%>%
+  mutate(dist_group_frpl = as.factor(dist_group_frpl))
+
+levels(df_rev_total_figure_pov$dist_group_frpl) <- c("0-24%","25-49%","50-74%", "75-100%")
+
 ggplot(df_rev_total_figure_pov, 
-       aes(x=schyear, y=rev_adjusted, group=deciles_frpl)) + 
+       aes(x=schyear, y=rev_adjusted, group=dist_group_frpl)) + 
   stat_summary(geom="line", fun="mean", alpha=0.5) +
   stat_summary(geom="ribbon", 
                fun.data = mean_se, #mean_cl_normal
-               aes(fill=deciles_frpl), alpha=0.25) +
+               aes(fill=dist_group_frpl), alpha=0.25) +
   labs(title="Total Revenue Amount Per Student",
        subtitle = "Regression adjusted for difference of cost factors including district size, 
-       urbanicity/locale, and percent of students enrolled in 
+       urbanicity/locale, and percent of students enrolled in free and reduced price lunch,
        special education and classified as limited English proficient",
-       caption="Note: High and low-poverty districts estimated at the 10th and 90th percentile 
-       of district percentage of students qualifying for free and reduced price lunch, 
-       with an equal number of districts in each quantile\n\n Data Source: F-196")+
+       caption="Note: Student poverty levels calculated by free and reduced price lunch percentages
+       \n\nData Source: F-196")+
   xlab("School Year (Spring)") + 
   ylab("2018 Dollars") + 
   geom_vline(xintercept = "2018", colour='#FFFFFF', linetype="dashed")+
-  theme_uw() +
-  scale_fill_manual(values=c("#4b2e83", "#85754d"), 
+  theme_uw() + 
+  scale_fill_manual(values=c("#9ebcda", "#8c96c6", "#8c6bb1", "#6e016b"), 
                     name="fill")
 
 ```
 
 ## Revenue Breakdown by Category
 
+*NEED TO LOOK AT DATA SOURCE, CURRENTLY NOT SYNCED WITH UPDATED DATA*
+
 ```{r B1_revenue_breakdown_pov}
+
+############
+##### NEED DATA SYNC
+############
 
 #ACCOUNTING GUIDEBOOKS FROM THE STATE
 #AVERAGE STUDENT, WEIGHT BY STUDENTS WITHIN
@@ -503,6 +920,10 @@ df_f195_all_merge_pov_avg%>%
 ## Revenue Source by Time
 ```{r B2_revenue_time_soc}
 
+#######
+## WORKS
+#######
+
 ggplot(df_rev_fed, 
        aes(x=schyear, y=rev_adjusted, group=dist_group_soc)) + 
   stat_summary(geom="line", fun="mean", alpha=0.5) +
@@ -588,6 +1009,10 @@ ggplot(df_rev_total,
 
 ```{r B2_revenue_breakdown_soc}
 
+############
+# NEED DATA SYNC
+###########
+
 df_f195_all_merge <- df_f195_all_merge%>%
   filter(year == 2019 | year==2018)%>% 
   drop_na(dist_group_soc)%>%
@@ -635,7 +1060,6 @@ df_f195_all_merge_avg%>%
   theme_uw()
 ```
         
-
 # B3: Spatial distribution of school funding
 
 ```{r B3_maps_data}
@@ -715,6 +1139,13 @@ wa_mccleary_rev_wide <- left_join(mccleary_rev_wide, wa, by = c("leaid" = "GEOID
 #What percentage higher than lower than state average for the state/local revenue
 #Distribution of dollars -> district that serve large % of SOC/low-income
 
+#Merge dist map
+
+wa_dist_map <- full_join(df_demos_dist, df_leaid, by=c("coudis_s"="coudis_s"))
+
+wa_dist_map$leaid <- as.character(wa_dist_map$leaid)
+
+wa_dist_map <- left_join(wa_dist_map, wa, by = c("leaid" = "GEOID"), copy=TRUE) 
 ```
 
 ## Demographic Maps
@@ -722,7 +1153,7 @@ wa_mccleary_rev_wide <- left_join(mccleary_rev_wide, wa, by = c("leaid" = "GEOID
 
 #Demographic Maps
 
-wa_df196 %>%
+wa_dist_map %>%
   sf::st_as_sf() %>% 
   filter(schyear==2019)%>%
   ggplot() +
@@ -731,7 +1162,7 @@ wa_df196 %>%
   labs(title="Latinx Students Percentage of Total Student Enrollment, 2018-2019 ")+
   theme_uw_map()
 
-wa_df196 %>%
+wa_dist_map %>%
   sf::st_as_sf() %>% 
   filter(schyear==2019)%>%
   ggplot() +
@@ -740,7 +1171,7 @@ wa_df196 %>%
   labs(title="Black Students Percentage of Total Student Enrollment, 2018-2019 ")+
   theme_uw_map()
 
-wa_df196 %>%
+wa_dist_map %>%
   sf::st_as_sf() %>% 
   filter(schyear==2019)%>%
   ggplot() +
@@ -749,7 +1180,7 @@ wa_df196 %>%
   labs(title="Indigenous Students Percentage of Total Student Enrollment, 2018-2019 ")+
   theme_uw_map()
 
-wa_df196 %>%
+wa_dist_map %>%
   sf::st_as_sf() %>% 
   filter(schyear==2019)%>%
   ggplot() +
@@ -758,7 +1189,7 @@ wa_df196 %>%
   labs(title="Asian Students Percentage of Total Student Enrollment, 2018-2019 ")+
   theme_uw_map()
 
-wa_df196 %>%
+wa_dist_map %>%
   sf::st_as_sf() %>% 
   filter(schyear==2019)%>%
   ggplot() +
@@ -796,7 +1227,7 @@ wa_rev_map_merge %>%
   ggplot() +
   geom_sf(aes(fill = rev_fed_pp_18d), size = .25) +
   scale_fill_gradient2(low="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
-  labs(title="Federal Revenue Per Pupil, 2018-2019")+
+  labs(title="Federal Revenue Per Student, 2018-2019")+
   theme_uw_map()
 
 wa_rev_map_merge %>%
@@ -805,7 +1236,7 @@ wa_rev_map_merge %>%
   ggplot() +
   geom_sf(aes(fill = rev_st_pp_18d), size = .25) +
   scale_fill_gradient2(low="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
-  labs(title="State Revenue Per Pupil, 2018-2019")+
+  labs(title="State Revenue Per Student, 2018-2019")+
   theme_uw_map()
 
 wa_rev_map_merge %>%
@@ -814,7 +1245,7 @@ wa_rev_map_merge %>%
   ggplot() +
   geom_sf(aes(fill = rev_loc_pp_18d), size = .25) +
   scale_fill_gradient2(low="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
-  labs(title="Local  Revenue Per Pupil, 2018-2019")+
+  labs(title="Local  Revenue Per Student, 2018-2019")+
   theme_uw_map()
 
 wa_rev_map_merge %>%
@@ -823,7 +1254,7 @@ wa_rev_map_merge %>%
   ggplot() +
   geom_sf(aes(fill = rev_total_pp_18d), size = .25) +
   scale_fill_gradient2(low="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
-  labs(title="Total Revenue Per Pupil, 2018-2019")+
+  labs(title="Total Revenue Per Student, 2018-2019")+
   theme_uw_map()
 
 wa_rev_map_merge %>%
@@ -832,7 +1263,7 @@ wa_rev_map_merge %>%
   ggplot() +
   geom_sf(aes(fill = rev_fed_diff), size = .25) +
   scale_fill_gradient2(low="#FF0000", midpoint = 0, mid="#FFFFFF", high="#4b2e83", name="2018 Dollars") +
-  labs(title="Federal Revenue Per Pupil, 2018-2019",
+  labs(title="Federal Revenue Per Student, 2018-2019",
        subtitle = "Dollar Difference Against State Mean for the School Year")+
   theme_uw_map()
 
